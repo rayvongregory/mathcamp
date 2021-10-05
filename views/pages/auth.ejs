@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+    <link rel="stylesheet" href="/styles/auth.css" />
+  </head>
+  <body>
+    <div class="menu-btn"><div class="menu-btn_burgir"></div></div>
+    <aside><%- include('../partials/aside'); %></aside>
+    <nav><%- include('../partials/nav'); %></nav>
+    <div class="form-section">
+      <% if(type === "login") { %> <%- include('../partials/login_form') %> <% }
+      else if(type === "register") { %> <%- include('../partials/register_form')
+      %> <% } else if(type === "delete") { %> <%-
+      include('../partials/delete_form') %> <% } else { %> <%-
+      include('../partials/info_form') %> <% } %> <%-
+      include('../partials/universal_scripts'); %>
+      <script type="module" src="/scripts/auth.js"></script>
+    </div>
+  </body>
+</html>

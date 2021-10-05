@@ -1,0 +1,75 @@
+.drafts-wrapper {
+    padding: 1rem;
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    margin-bottom: var(--offset);
+}
+
+.drafts-wrapper > * {
+    padding: 0 1rem;
+}
+
+.h3style {
+    font-size: 1.5em;
+}
+
+#drafts___section {
+    display: grid;
+    gap: 30px;
+    padding: 0 1rem 1rem;
+    overflow: unset;
+
+}
+
+#drafts___section > * {
+    width: 100%;
+    list-style: none;
+    text-decoration: none;
+}
+
+#drafts___section li, #drafts___lessons li, #drafts___practices li{
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: -1px 2px 2px 1px rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+    padding: 10px;
+    margin-top: 10px;
+    pointer-events: none;
+}
+
+#drafts___section li > :first-child, #drafts___lessons li > :first-child, #drafts___practices li > :first-child {
+    margin-right: auto;
+}
+
+#drafts___section li > :nth-child(2), #drafts___lessons li > :nth-child(2), #drafts___practices li > :nth-child(2) {
+    margin-left: 3em;
+    pointer-events: all;
+}
+
+#drafts___section li > :nth-child(3), #drafts___lessons li > :nth-child(3), #drafts___practices li > :nth-child(3) {
+    margin-left: 1em;
+    pointer-events: all;
+}
+
+#drafts___section span:hover, #drafts___lessons span:hover, #drafts___practices span:hover {
+    color: var(--accentDark);
+    cursor: pointer;
+}
+
+button {
+    background-color: #EFEFEF; 
+    border: solid black 1px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    #drafts___section {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 20px;
+    }
+
+}

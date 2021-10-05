@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+    <link rel="stylesheet" href="/styles/drafts.css" />
+  </head>
+  <body>
+    <div class="menu-btn"><div class="menu-btn_burgir"></div></div>
+    <aside><%- include('../partials/aside'); %></aside>
+    <nav><%- include('../partials/nav'); %></nav>
+    <header class="secondary"><h1><%=bannerTitle%></h1></header>
+    <div class="msg"><%=msg%></div>
+    <div class="drafts-wrapper">
+      <section id="drafts___section">
+        <ul id="drafts___lessons"></ul>
+        <ul id="drafts___practices"></ul>
+      </section>
+    </div>
+    <footer><%- include('../partials/footer'); %></footer>
+    <%- include('../partials/universal_scripts'); %>
+    <script type="module" src="/scripts/draft.js"></script>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../nav_header.css" />
+    <link rel="stylesheet" href="../../create.css" />
+    <link rel="icon" href="../../../images/logo.png" />
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+      integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm"
+      crossorigin="anonymous"
+      SameSite="None"
+    />
+    <script
+      src="https://cdn.tiny.cloud/1/zif7auwnb58uzq0yk83amfmhxkz9vaj9vq4d5xl43bx5cowx/tinymce/5/tinymce.min.js"
+      referrerpolicy="origin"
+      SameSite="None"
+    ></script>
+    <script src="../../textarea.js"></script>
+    <title>Lamb School | Draft Practice</title>
+  </head>
+  <body>
+    <div class="menu-btn">
+      <div class="menu-btn_burgir"></div>
+    </div>
+    <aside>
+      <div class="name-wrapper">
+        <h3></h3>
+        <i class="fas fa-chevron-circle-down"></i>
+      </div>
+      <ul>
+        <li id="login"><a href="/login">Log in</a></li>
+        <li id="register"><a href="/register">Register</a></li>
+        <li class="hide" id="account"><a href="/account">Account</a></li>
+        <li class="hide" id="createlesson">
+          <a href="/create/lesson">Create Lesson</a>
+        </li>
+        <li class="hide" id="createpractice">
+          <a href="/create/practice">Create Practice</a>
+        </li>
+        <li class="hide" id="drafts">
+          <a href="/draft">See Drafts</a>
+        </li>
+        <li class="hide" id="logout">Log out</li>
+      </ul>
+    </aside>
+    <nav>
+      <div class="buttons">
+        <a href="/"><i class="fas fa-home"></i>Home</a>
+        <a href="/lessons"><i class="fas fa-book-open"></i>Learn</a>
+        <a href="/practice"> <i class="fas fa-pen"></i>Practice </a>
+        <a href="/help"><i class="fas fa-info"></i>Help</a>
+        <button id="nav-search-btn"></button>
+      </div>
+      <div class="nav___search-container">
+        <div class="nav___search">
+          <input class="nav___search-input" type="text" placeholder="Search" />
+          <button id="submit-search" class="btn" type="submit">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <header class="secondary">
+      <h1>Draft Practice</h1>
+    </header>
+    <form id="createlesson" onsubmit="return false;">
+      <div class="infowrapper">
+        <div class="wrapper">
+          <div class="titlewrapper">
+            <label for="title">Title: </label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              placeholder="Create a title for the lesson"
+            />
+          </div>
+          <p id="ptitle"></p>
+        </div>
+        <div class="wrapper">
+          <div class="titlewrapper">
+            <label for="input">Input: </label>
+            <input
+              type="text"
+              name="input"
+              id="input"
+              placeholder="Create tags for the lesson"
+            />
+          </div>
+          <p id="ptag">
+            Click <a href="/tags">here</a> to learn more about tags.
+          </p>
+        </div>
+        <div class="titlewrapper">
+          <label for="tags">Tags: </label>
+          <ul class="hide" id="tags"></ul>
+        </div>
+      </div>
+      <textarea id="mytextarea"></textarea>
+      <div class="button-wrapper">
+        <button class="no-click" id="publish">Publish</button>
+        <button id="draft">Save as Draft</button>
+      </div>
+    </form>
+    <script
+      src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"
+      SameSite="None"
+    ></script>
+    <script src="../../nav_header.js"></script>
+    <script src="../../create.js"></script>
+  </body>
+</html>

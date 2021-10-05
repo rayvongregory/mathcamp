@@ -1,0 +1,19 @@
+.buttons-wrapper {
+    width: fit-content;
+    margin: auto;
+    font-size: 0.65em;
+}
+
+.tox-statusbar__wordcount {
+    pointer-events: none !important;
+}
+
+.need-more {
+    color: darkred !important;
+    margin-right: 2em !important;
+}
+
+.limit-met {
+    color: var(--navGreen) !important;
+    margin-right: 2em !important;
+}

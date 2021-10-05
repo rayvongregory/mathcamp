@@ -1,0 +1,153 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.3.6,
+* Autoprefixer: v10.3.1
+* Browsers: last 4 version
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,500;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+:root {
+    --neutralLight: #F4F7F5;
+    --neutralMid: #a9a9aa;
+    --neutralDark: #6E7476;
+    --navGreen: #2C666E;
+    --heroGreen: #009D88;
+    --accent: #FAB355;
+    --accentDark: #eb890a;
+    --transparent: rgba(0, 0, 0, 0.5);
+    --offset: 100px;
+    --translateX: translateX(-50px);
+    --rotateTranslate: rotate(45deg) translate(35px, -35px);
+    --rotateTranslate2: rotate(-45deg) translate(35px, 35px);
+    --transition: transform 0.3s ease-in-out;
+}
+
+html {
+    font-family: "Urbanist", Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: var(--neutralLight);
+    overflow-x: hidden;
+}
+
+.hide {
+    display: none;
+}
+
+.tox-statusbar__resize-handle {
+    visibility: hidden !important;
+}
+
+.primary {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+}
+
+.primary h1 {
+    position: absolute;
+    top: 25%;
+    right: 0;
+    width: 100%;
+    text-align: center;
+    color: var(--neutralLight);
+    font-size: clamp(2.75rem, 14vw, 4rem);
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
+.primary img {
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+       object-fit: cover;
+    -o-object-position: left;
+       object-position: left;
+}
+
+.secondary {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    width: 100%;
+    height: 10vh;
+    background-color: var(--heroGreen);
+    color: var(--neutralLight);
+    font-size: 1.25rem;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+
+}
+
+.subheader, .msg {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    padding: 0.25em 0;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-style: italic;
+    background-color: var(--accent);
+}
+
+@media (min-width: 320px) { 
+    :root {
+        --offset: 52px;
+    }
+
+    .subheader, .msg {
+        font-size: 0.9rem;
+    }
+}
+
+
+@media (min-width: 576px) {
+    .secondary {
+        height: 20vh;
+        font-size: 2rem;
+    }
+}
+
+@media (min-width: 768px)  { 
+    :root {
+        --offset: 0px;
+    }
+
+    .primary h1 {
+        font-size: clamp(4rem, 7vw, 6rem);
+    }
+}
+
+@media (min-width: 992px) {}
+
+@media (min-width: 1200px) {}
+
+

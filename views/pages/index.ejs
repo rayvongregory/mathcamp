@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %> <%-
+    include('../partials/index_tinymce'); %>
+    <link rel="stylesheet" href="/styles/index.css" />
+  </head>
+  <body>
+    <div class="menu-btn"><div class="menu-btn_burgir"></div></div>
+    <aside><%- include('../partials/aside'); %></aside>
+    <nav><%- include('../partials/nav'); %></nav>
+    <header class="primary">
+      <img src="/images/hero.jpg" alt="" />
+      <h1>Lamb School</h1>
+    </header>
+    <div class="msg">Making math less weird one post at a time.</div>
+    <%- include('../partials/message_board'); %>
+    <footer><%- include('../partials/footer'); %></footer>
+    <%- include('../partials/universal_scripts'); %>
+    <script src="/scripts/message_board.js"></script>
+  </body>
+</html>

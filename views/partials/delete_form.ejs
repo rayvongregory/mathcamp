@@ -1,0 +1,20 @@
+<h1 class="auth-form___header">Delete Account</h1>
+<div class="auth-form">
+  <form id="delete" onsubmit="return false;">
+    <p class="question">
+      Are you sure you want to delete your account? This action cannot be
+      reversed.
+    </p>
+    <div class="flexwrap">
+      <label for="yes">Yes</label>
+      <input type="radio" id="yes" name="answer" value="yes" /><br />
+      <label for="no">No</label>
+      <input type="radio" id="no" name="answer" value="no" checked />
+    </div>
+    <div id="response"></div>
+    <div class="centerwrap">
+      <button id="submit">Submit</button>
+    </div>
+    <p>Here by accident? <a href="/account">Go back</a>.</p>
+  </form>
+</div>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+    <link rel="stylesheet" href="/styles/create.css" />
+    <link rel="stylesheet" href="/styles/create_exercise.css" />
+    <% if(type === "lesson") { %> <%-
+    include('../partials/tinymce_lesson_scripts') %> <% } else { %> <%-
+    include('../partials/tinymce_exercise_scripts') %> <% } %>
+  </head>
+  <body>
+    <div class="menu-btn"><div class="menu-btn_burgir"></div></div>
+    <aside><%- include('../partials/aside'); %></aside>
+    <nav><%- include('../partials/nav'); %></nav>
+    <header class="secondary">
+      <h1><%=bannerTitle%></h1>
+    </header>
+    <div class="too-small">
+      <p>Please enlarge browser window to continue editing this resource.</p>
+    </div>
+    <div class="create-wrapper">
+      <%- include('../partials/resource_title_tags'); %>
+      <div class="three-one-grid">
+        <div>
+          <div class="textarea-wrapper">
+            <label for="create_question">Question: </label>
+            <div class="difficulty">
+              <select name="difficulty" id="choose_difficulty">
+                <option value="no_choice">Select a difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="standard">Standard</option>
+                <option value="hard">Hard</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </div>
+            <textarea id="create_question"></textarea>
+          </div>
+          <%-include('../partials/correct_answer'); %>
+          <div class="textarea-wrapper">
+            <label for="create_choices">Choices: </label>
+            <div class="extra-options">
+              <span
+                id="choice_add"
+                role="button"
+                aria-label="Add choice to question"
+                title="Add choice to question"
+                ><i class="fas fa-plus-circle"></i
+              ></span>
+              <span
+                id="choice_delete"
+                role="button"
+                aria-label="Discard"
+                title="Discard"
+                ><i class="fas fa-trash"></i
+              ></span>
+            </div>
+            <textarea id="create_choices"></textarea>
+          </div>
+          <%-include('../partials/question_choices'); %>
+        </div>
+        <%- include('../partials/publish_question_requirements'); %>
+      </div>
+      <div class="three-two-grid">
+        <%- include('../partials/question_bank'); %> <%-
+        include('../partials/publish_exercise_requirements'); %>
+      </div>
+    </div>
+    <footer><%- include('../partials/footer'); %></footer>
+    <%- include('../partials/universal_scripts'); %>
+    <script type="module" src="/scripts/create_exercise.js"></script>
+  </body>
+</html>
