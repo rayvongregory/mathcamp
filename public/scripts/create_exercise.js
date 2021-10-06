@@ -1,22 +1,10 @@
-const type = window.location.pathname.split("/")[2]
-const html = document.querySelector("html")
-const body = document.querySelector("body")
-const publishBtn = document.querySelector("#publish")
-const draftBtn = document.querySelector("#draft")
-let titleInput = document.querySelector("#title")
-let tagsInput = document.querySelector("#tags_input")
-let tags = document.querySelector("#tags")
-let inputValues = []
-let pTag = document.querySelector("#ptag") //!may need this later but currently not used
-let pTitle = document.querySelector("#ptitle")
-let questionTextArea, correctAnswerTextArea, choicesTextArea, resourceId
 const difficultySelect = document.querySelector("#choose_difficulty")
 const questionAdd = document.querySelector("#question_add")
-const questionDelete = document.querySelector("#question_delete")
+const questionDiscard = document.querySelector("#question_discard")
 const answerAdd = document.querySelector("#answer_add")
-const answerDelete = document.querySelector("#answer_delete")
+const answerDiscard = document.querySelector("#answer_discard")
 const choiceAdd = document.querySelector("#choice_add")
-const choiceDelete = document.querySelector("#choice_delete")
+const choiceDiscard = document.querySelector("#choice_discard")
 const correctAnswerSection = document.querySelector(".correct_answer")
 const questionChoicesSection = document.querySelector(".question_choices")
 const easyQs = document.querySelector(".easy_qs")
@@ -32,8 +20,8 @@ const thirtyStandard = document.querySelector("#thirty_standard")
 const twentyHard = document.querySelector("#twenty_hard")
 const twentyAdv = document.querySelector("#twenty_advanced")
 const allMeetReqs = document.querySelector("#all_meet_reqs")
-let token = localStorage.getItem("token")
-
+let questionTextArea, correctAnswerTextArea, choicesTextArea, resourceId, i
+let choices = {}
 // let lastSave = {
 //   title: "",
 //   text: "",
@@ -63,120 +51,6 @@ const getRole = async () => {
   window.removeEventListener("load", getRole)
 }
 
-const removeInvalidCharacters = (string) => {
-  //this can be an external function
-  let bool = true
-  while (bool) {
-    let firstLetterCode = string.charCodeAt(0)
-    let lastLetterCode = string.charCodeAt(string.length - 1)
-    if (
-      firstLetterCode < 97 ||
-      firstLetterCode > 122 ||
-      lastLetterCode < 97 ||
-      lastLetterCode > 122
-    ) {
-      if (firstLetterCode < 97 || firstLetterCode > 122) {
-        string = string.substring(1, string.length)
-      }
-      if (lastLetterCode < 97 || lastLetterCode > 122) {
-        string = string.substring(0, string.length - 1)
-      }
-    } else {
-      bool = false
-    }
-  }
-
-  for (let index in string) {
-    let code = string.charCodeAt(index)
-    if ((code < 97 || code > 122) && code !== 45 && code !== 39) {
-      string = string.replace(string[index], " ")
-    }
-  }
-  string = string.replaceAll(" ", "")
-  return string
-}
-
-const removeTag = (e) => {
-  let target = e.target
-  let value = target.innerText
-  value = value.substring(0, value.length - 2)
-  inputValues.splice(inputValues.indexOf(value), 1)
-  target.remove()
-  if (inputValues.length === 0) {
-    tags.classList.add("hide")
-  }
-}
-
-const isEqual = (obj1, obj2) => {
-  //this can be an external function
-  for (let key in obj1) {
-    if (key === "tags") {
-      continue
-    } else if (obj1[key] !== obj2[key]) {
-      return false
-    }
-  }
-
-  if (obj1.tags.length !== obj2.tags.length) return false
-
-  for (let index of obj1.tags) {
-    if (obj1.tags[index] !== obj2.tags[index]) {
-      return false
-    }
-  }
-  return true
-}
-
-const addTag = (e) => {
-  let keys = [13, 32, 188]
-  if (keys.includes(e.keyCode)) {
-    let value = tagsInput.value.trim().toLowerCase()
-    value = removeInvalidCharacters(value)
-    if (value.length === 0 || inputValues.includes(value)) {
-      return (tagsInput.value = "")
-    }
-    let tag = document.createElement("li")
-    tag.innerHTML = value
-    let close = document.createElement("span")
-    close.innerHTML = "×"
-    tag.appendChild(close)
-    tag.addEventListener("click", removeTag)
-    inputValues.push(value)
-    if (inputValues.length > 0) {
-      tags.classList.remove("hide")
-    }
-    tags.appendChild(tag)
-    tagsInput.value = ""
-  }
-}
-tagsInput.addEventListener("keyup", addTag)
-
-const unauthorized = (string, element) => {
-  let text = element.innerHTML
-  element.innerHTML = `<p>${string}</p>`
-  element.style.color = "darkred"
-  setTimeout(() => {
-    element.innerHTML = text
-    element.style.color = ""
-  }, 3000)
-}
-
-const addTags = (incomingTags) => {
-  inputValues = incomingTags
-  if (inputValues.length > 0) {
-    tags.classList.remove("hide")
-  }
-  for (let tag of incomingTags) {
-    let newTag = document.createElement("li")
-    newTag.innerHTML = tag
-    let close = document.createElement("span")
-    close.innerHTML = "×"
-    newTag.appendChild(close)
-    newTag.addEventListener("click", removeTag)
-    tags.appendChild(newTag)
-  }
-}
-
 // const getInfo = async (id) => {
 //   try {
 //     const {
@@ -198,19 +72,213 @@ const addTags = (incomingTags) => {
 // }
 
 const addQ = () => {}
-const deleteQ = () => {}
-const addAns = () => {}
-const deleteAns = () => {}
-const addChoice = () => {}
-const deleteChoice = () => {}
+const discardQ = () => {
+  i = poseQ.querySelector("i")
+  questionTextArea.innerHTML = "<p><br></p>"
+  poseQ.classList.replace("satisfied", "not_met")
+  i.classList.replace("fa-check-circle", "fa-times-circle")
+}
+
+const addAns = () => {
+  let correctAnswerItem = correctAnswerSection.querySelector("li")
+  if (!correctAnswerItem) {
+    correctAnswerItem = document.createElement("li")
+    choices.answer = correctAnswerTextArea.innerHTML
+    let p = document.createElement("p")
+    p.innerText = "Answer"
+    let see = document.createElement("span")
+    see.setAttribute("role", "button")
+    see.setAttribute("aria-label", "See answer")
+    see.setAttribute("title", "See answer")
+    see.innerHTML = '<i class="fas fa-eye">'
+    see.addEventListener("pointerup", revealAns)
+    let edit = document.createElement("span")
+    edit.setAttribute("role", "button")
+    edit.setAttribute("aria-label", "Edit answer")
+    edit.setAttribute("title", "Edit answer")
+    edit.innerHTML = '<i class="fas fa-edit">'
+    edit.addEventListener("pointerup", editAns)
+    let del = document.createElement("span")
+    del.setAttribute("role", "button")
+    del.setAttribute("aria-label", "Delete answer")
+    del.setAttribute("title", "Delete answer")
+    del.innerHTML = '<i class="fas fa-trash">'
+    del.addEventListener("pointerup", delAns)
+    correctAnswerItem.appendChild(p)
+    correctAnswerItem.appendChild(see)
+    correctAnswerItem.appendChild(edit)
+    correctAnswerItem.appendChild(del)
+    correctAnswerSection.appendChild(correctAnswerItem)
+    i = createCorrectAns.querySelector("i")
+    i.classList.replace("fa-times-circle", "fa-check-circle")
+    createCorrectAns.classList.replace("not_met", "satisfied")
+    correctAnswerSection.classList.remove("hide")
+    checkForTen()
+  } else {
+    choices.answer = correctAnswerTextArea.innerHTML
+    answerAdd.setAttribute("aria-label", "Add answer to question")
+    answerAdd.setAttribute("title", "Add answer to question")
+  }
+  correctAnswerTextArea.innerHTML = "<p><br></p>"
+}
+
+const revealAns = () => {
+  console.log("revealing answer")
+}
+
+const editAns = (e) => {
+  correctAnswerTextArea.innerHTML = choices.answer
+  console.log("editting answer")
+  answerAdd.setAttribute("aria-label", "Update answer")
+  answerAdd.setAttribute("title", "Update answer")
+}
+
+const delAns = () => {
+  i = createCorrectAns.querySelector("i")
+  i.classList.replace("fa-check-circle", "fa-times-circle")
+  createCorrectAns.classList.replace("satisfied", "not_met")
+  correctAnswerSection.querySelector("li").remove()
+  correctAnswerSection.classList.add("hide")
+  delete choices.answer
+  checkForTen()
+}
+
+const discardAns = () => {
+  correctAnswerTextArea.innerHTML = "<p><br></p>"
+}
+
+const checkForTen = () => {
+  i = tenChoices.querySelector("i")
+  if (Object.keys(choices).length >= 10) {
+    tenChoices.classList.replace("not_met", "satisfied")
+    i.classList.replace("fa-times-circle", "fa-check-circle")
+  } else {
+    tenChoices.classList.replace("satisfied", "not_met")
+    i.classList.replace("fa-check-circle", "fa-times-circle")
+  }
+}
+
+const addChoice = (e) => {
+  let ref = e.target.dataset.ref
+  console.log(ref)
+  if (!ref) {
+    let id
+    do {
+      id = Math.round(Math.random() * 999999)
+    } while (choices[`cid${id}`] !== undefined)
+    choices[`cid${id}`] = choicesTextArea.innerHTML
+    let choiceItem = document.createElement("li")
+    let p = document.createElement("p")
+    choiceItem.dataset.id = `cid${id}`
+    p.innerText = `Choice ID: ${id}`
+    let see = document.createElement("span")
+    see.setAttribute("role", "button")
+    see.setAttribute("aria-label", "See choice")
+    see.setAttribute("title", "See choice")
+    see.innerHTML = '<i class="fas fa-eye">'
+    see.addEventListener("pointerup", revealChoice)
+    let edit = document.createElement("span")
+    edit.setAttribute("role", "button")
+    edit.setAttribute("aria-label", "Edit choice")
+    edit.setAttribute("title", "Edit choice")
+    edit.innerHTML = '<i class="fas fa-edit">'
+    edit.addEventListener("pointerup", editChoice)
+    let copy = document.createElement("span")
+    copy.setAttribute("role", "button")
+    copy.setAttribute("aria-label", "Duplicate choice")
+    copy.setAttribute("title", "Duplicate choice")
+    copy.innerHTML = '<i class="fas fa-copy">'
+    copy.addEventListener("pointerup", copyChoice)
+    let del = document.createElement("span")
+    del.setAttribute("role", "button")
+    del.setAttribute("aria-label", "Delete choice")
+    del.setAttribute("title", "Delete choice")
+    del.innerHTML = '<i class="fas fa-trash">'
+    del.addEventListener("pointerup", deleteChoice)
+    choiceItem.appendChild(p)
+    choiceItem.appendChild(see)
+    choiceItem.appendChild(edit)
+    choiceItem.appendChild(copy)
+    choiceItem.appendChild(del)
+    questionChoicesSection.appendChild(choiceItem)
+    questionChoicesSection.classList.remove("hide")
+    checkForTen()
+  } else {
+    choices[ref] = choicesTextArea.innerHTML
+    delete e.target.dataset.ref
+    choiceAdd.setAttribute("aria-label", "Add choice to question")
+    choiceAdd.setAttribute("title", "Add choice to question")
+  }
+  console.log(choices)
+  choicesTextArea.innerHTML = "<p><br></p>"
+}
+
+const revealChoice = () => {}
+const editChoice = (e) => {
+  let itemID = e.target.parentElement.dataset.id
+  choicesTextArea.innerHTML = choices[itemID]
+  choiceAdd.dataset.ref = itemID
+  choiceAdd.setAttribute("aria-label", "Update choice")
+  choiceAdd.setAttribute("title", "Update choice")
+}
+const copyChoice = () => {}
+const deleteChoice = (e) => {
+  let item = e.target.parentElement
+  let itemID = item.dataset.id
+  item.remove()
+  delete choices[itemID]
+  checkForTen()
+  if (
+    Object.keys(choices).length === 0 ||
+    (Object.keys(choices).length === 1 && choices.answer)
+  ) {
+    questionChoicesSection.classList.add("hide")
+  }
+}
+const discardChoice = () => {
+  choicesTextArea.innerHTML = "<p><br></p>"
+}
+
+const checkList = (e) => {
+  const target = e.target
+  switch (target) {
+    case questionTextArea:
+      i = poseQ.querySelector("i")
+      let text = target.innerText.trim()
+      if (text !== "") {
+        poseQ.classList.replace("not_met", "satisfied")
+        i.classList.replace("fa-times-circle", "fa-check-circle")
+      } else {
+        poseQ.classList.replace("satisfied", "not_met")
+        i.classList.replace("fa-check-circle", "fa-times-circle")
+      }
+      break
+    case difficultySelect:
+      i = pickDifficulty.querySelector("i")
+      if (target.value !== "no_choice") {
+        pickDifficulty.classList.replace("not_met", "satisfied")
+        i.classList.replace("fa-times-circle", "fa-check-circle")
+      } else {
+        pickDifficulty.classList.replace("satisfied", "not_met")
+        i.classList.replace("fa-check-circle", "fa-times-circle")
+      }
+      break
+    default:
+      break
+  }
+}
 
 const defineTextAreas = () => {
   questionTextArea = tinymce.DOM.win[0].document.body
   correctAnswerTextArea = tinymce.DOM.win[1].document.body
   choicesTextArea = tinymce.DOM.win[2].document.body
-  questionTextArea.innerHTML = ""
-  correctAnswerTextArea.innerHTML = ""
-  choicesTextArea.innerHTML = ""
+  questionTextArea.addEventListener("keyup", checkList)
+  questionTextArea.addEventListener("paste", checkList)
+  difficultySelect.addEventListener("pointerup", checkList)
+  difficultySelect.addEventListener("keyup", checkList)
+
+  // this doesn't account for clicking the menu, keying down to focus on an option,
+  // and then clicking outside the menu
 }
 
 const init = () => {
@@ -227,14 +295,13 @@ const init = () => {
   //   }
 }
 
-// window.onload = init()
 window.addEventListener("load", init)
 questionAdd.addEventListener("pointerup", addQ)
-questionDelete.addEventListener("pointerup", deleteQ)
+questionDiscard.addEventListener("pointerup", discardQ)
 answerAdd.addEventListener("pointerup", addAns)
-answerDelete.addEventListener("pointerup", deleteAns)
+answerDiscard.addEventListener("pointerup", discardAns)
 choiceAdd.addEventListener("pointerup", addChoice)
-choiceDelete.addEventListener("pointerup", deleteChoice)
+choiceDiscard.addEventListener("pointerup", discardChoice)
 
 // draftBtn.addEventListener("click", draftText)
 // window.addEventListener("beforeunload", compareText)

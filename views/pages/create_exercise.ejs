@@ -36,27 +36,8 @@
             <textarea id="create_question"></textarea>
           </div>
           <%-include('../partials/correct_answer'); %>
-          <div class="textarea-wrapper">
-            <label for="create_choices">Choices: </label>
-            <div class="extra-options">
-              <span
-                id="choice_add"
-                role="button"
-                aria-label="Add choice to question"
-                title="Add choice to question"
-                ><i class="fas fa-plus-circle"></i
-              ></span>
-              <span
-                id="choice_delete"
-                role="button"
-                aria-label="Discard"
-                title="Discard"
-                ><i class="fas fa-trash"></i
-              ></span>
-            </div>
-            <textarea id="create_choices"></textarea>
-          </div>
-          <%-include('../partials/question_choices'); %>
+          <%-include('../partials/create_choices'); %>
+          <ul class="question_choices hide"></ul>
         </div>
         <%- include('../partials/publish_question_requirements'); %>
       </div>
@@ -67,6 +48,7 @@
     </div>
     <footer><%- include('../partials/footer'); %></footer>
     <%- include('../partials/universal_scripts'); %>
+    <script src="/scripts/create.js"></script>
     <script type="module" src="/scripts/create_exercise.js"></script>
   </body>
 </html>
