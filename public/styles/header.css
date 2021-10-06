@@ -41,7 +41,7 @@ body {
 }
 
 .hide {
-    display: none;
+    display: none !important;
 }
 
 .tox-statusbar__resize-handle {

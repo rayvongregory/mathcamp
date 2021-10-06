@@ -7,13 +7,15 @@ const choiceAdd = document.querySelector("#choice_add")
 const choiceDiscard = document.querySelector("#choice_discard")
 const correctAnswerSection = document.querySelector(".correct_answer")
 const questionChoicesSection = document.querySelector(".question_choices")
-const easyQs = document.querySelector(".easy_qs")
-const standardQs = document.querySelector(".standard_qs")
-const hardQs = document.querySelector(".hard_qs")
-const advancedQs = document.querySelector(".advanced_qs")
+const easyQsSection = document.querySelector(".easy_qs")
+const standardQsSection = document.querySelector(".standard_qs")
+const hardQsSection = document.querySelector(".hard_qs")
+const advancedQsSection = document.querySelector(".advanced_qs")
+const noDiffQsSection = document.querySelector(".no_difficulty_qs")
 const poseQ = document.querySelector("#question")
 const pickDifficulty = document.querySelector("#difficulty")
 const createCorrectAns = document.querySelector("#correct_answer")
+const publishQuestionReqs = document.querySelectorAll(".to_publish_question li")
 const tenChoices = document.querySelector("#ten_choices")
 const thirtyEZ = document.querySelector("#thirty_easy")
 const thirtyStandard = document.querySelector("#thirty_standard")
@@ -22,6 +24,13 @@ const twentyAdv = document.querySelector("#twenty_advanced")
 const allMeetReqs = document.querySelector("#all_meet_reqs")
 let questionTextArea, correctAnswerTextArea, choicesTextArea, resourceId, i
 let choices = {}
+let questions = {
+  easy: {},
+  standard: {},
+  hard: {},
+  advanced: {},
+  no_choice: {},
+}
 // let lastSave = {
 //   title: "",
 //   text: "",
@@ -71,7 +80,127 @@ const getRole = async () => {
 //   }
 // }
 
-const addQ = () => {}
+const addQ = () => {
+  let satisfied = true
+  for (let req of publishQuestionReqs) {
+    if (req.classList.contains("not_met")) {
+      satisfied = false
+      break
+    }
+  }
+  let question = document.createElement("li")
+  let span = document.createElement("span")
+  if (satisfied) {
+    question.classList.add("satisfied")
+    span.innerHTML = '<i class="fas fa-check-circle"></i>'
+  } else {
+    question.classList.add("not_met")
+    span.innerHTML = '<i class="fas fa-times-circle"></i>'
+  }
+  let difficulty = difficultySelect.value
+  let id
+  do {
+    id = Math.round(Math.random() * 999999)
+  } while (questions[difficulty][`qid${id}`] !== undefined)
+  questions[difficulty][`qid${id}`] = {
+    question: questionTextArea.innerHTML,
+    choices,
+  }
+  let p = document.createElement("p")
+  question.dataset.id = `qid${id}`
+  question.dataset.difficulty = difficulty
+  p.innerText = `Question ID: ${id}`
+  let prev = document.createElement("span")
+  prev.setAttribute("role", "button")
+  prev.setAttribute("aria-label", "Preview question")
+  prev.setAttribute("title", "Preview question")
+  prev.innerHTML = '<i class="fas fa-eye"></i>'
+  prev.addEventListener("pointerup", prevQ)
+  let edit = document.createElement("span")
+  edit.setAttribute("role", "button")
+  edit.setAttribute("aria-label", "Edit question")
+  edit.setAttribute("title", "Edit question")
+  edit.innerHTML = '<i class="fas fa-edit">'
+  edit.addEventListener("pointerup", editQ)
+  let copy = document.createElement("span")
+  copy.setAttribute("role", "button")
+  copy.setAttribute("aria-label", "Copy question")
+  copy.setAttribute("title", "Copy question")
+  copy.innerHTML = '<i class="fas fa-copy">'
+  copy.addEventListener("pointerup", copyQ)
+  let del = document.createElement("span")
+  del.setAttribute("role", "button")
+  del.setAttribute("aria-label", "Delete question")
+  del.setAttribute("title", "Delete question")
+  del.innerHTML = '<i class="fas fa-trash">'
+  del.addEventListener("pointerup", delQ)
+  question.appendChild(span)
+  question.appendChild(p)
+  question.appendChild(prev)
+  question.appendChild(edit)
+  question.appendChild(copy)
+  question.appendChild(del)
+
+  switch (difficulty) {
+    case "easy":
+      easyQsSection.appendChild(question)
+      easyQsSection.classList.remove("hide")
+      break
+    case "standard":
+      standardQsSection.appendChild(question)
+      standardQsSection.classList.remove("hide")
+
+      break
+    case "hard":
+      hardQsSection.appendChild(question)
+      hardQsSection.classList.remove("hide")
+
+      break
+    case "advanced":
+      advancedQsSection.appendChild(question)
+      advancedQsSection.classList.remove("hide")
+
+      break
+    default:
+      noDiffQsSection.appendChild(question)
+      noDiffQsSection.classList.remove("hide")
+
+      break
+  }
+  discardQ()
+  discardAns()
+  deleteAns()
+  deleteChoices()
+  resetDifficulty()
+
+  /*
+      <li class="not_met">
+      <span><i class="fas fa-times-circle"></i></span>
+      <p>Add</p>
+      <span role="button" aria-label="Preview question" title="Preview question"
+        ><i class="fas fa-eye"></i
+      ></span>
+      <span role="button" aria-label="Edit question" title="Edit question"
+        ><i class="fas fa-edit"></i
+      ></span>
+      <span
+        role="button"
+        aria-label="Duplicate question"
+        title="Duplicate question"
+        ><i class="fas fa-copy"></i
+      ></span>
+      <span role="button" aria-label="Delete question" title="Delete question"
+        ><i class="fas fa-trash"></i
+      ></span>
+    </li>
+  */
+}
+
+const prevQ = () => {}
+const editQ = () => {}
+const copyQ = () => {}
+const delQ = () => {}
+
 const discardQ = () => {
   i = poseQ.querySelector("i")
   questionTextArea.innerHTML = "<p><br></p>"
@@ -103,7 +232,7 @@ const addAns = () => {
     del.setAttribute("aria-label", "Delete answer")
     del.setAttribute("title", "Delete answer")
     del.innerHTML = '<i class="fas fa-trash">'
-    del.addEventListener("pointerup", delAns)
+    del.addEventListener("pointerup", deleteAns)
     correctAnswerItem.appendChild(p)
     correctAnswerItem.appendChild(see)
     correctAnswerItem.appendChild(edit)
@@ -128,18 +257,20 @@ const revealAns = () => {
 
 const editAns = (e) => {
   correctAnswerTextArea.innerHTML = choices.answer
-  console.log("editting answer")
   answerAdd.setAttribute("aria-label", "Update answer")
   answerAdd.setAttribute("title", "Update answer")
 }
 
-const delAns = () => {
-  i = createCorrectAns.querySelector("i")
-  i.classList.replace("fa-check-circle", "fa-times-circle")
-  createCorrectAns.classList.replace("satisfied", "not_met")
-  correctAnswerSection.querySelector("li").remove()
-  correctAnswerSection.classList.add("hide")
-  delete choices.answer
+const deleteAns = () => {
+  let item = correctAnswerSection.querySelector("li")
+  if (item) {
+    item.remove()
+    i = createCorrectAns.querySelector("i")
+    i.classList.replace("fa-check-circle", "fa-times-circle")
+    createCorrectAns.classList.replace("satisfied", "not_met")
+    correctAnswerSection.classList.add("hide")
+    delete choices.answer
+  }
   checkForTen()
 }
 
@@ -158,9 +289,13 @@ const checkForTen = () => {
   }
 }
 
+const resetDifficulty = () => {
+  difficultySelect.value = "no_choice"
+  difficultySelect.dispatchEvent(new Event("pointerup"))
+}
+
 const addChoice = (e) => {
   let ref = e.target.dataset.ref
-  console.log(ref)
   if (!ref) {
     let id
     do {
@@ -209,7 +344,6 @@ const addChoice = (e) => {
     choiceAdd.setAttribute("aria-label", "Add choice to question")
     choiceAdd.setAttribute("title", "Add choice to question")
   }
-  console.log(choices)
   choicesTextArea.innerHTML = "<p><br></p>"
 }
 
@@ -237,6 +371,14 @@ const deleteChoice = (e) => {
 }
 const discardChoice = () => {
   choicesTextArea.innerHTML = "<p><br></p>"
+}
+const deleteChoices = () => {
+  let choicesList = questionChoicesSection.querySelectorAll("li")
+  for (let choice of choicesList) {
+    delete choices[choice.dataset.id]
+    choice.remove()
+  }
+  console.log(choices)
 }
 
 const checkList = (e) => {
