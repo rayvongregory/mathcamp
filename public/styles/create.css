@@ -97,13 +97,13 @@ html {
     align-items: center;
     font-size: 0.75em;
     width: fit-content;
-    background-color: #ddd;
+    background-color: var(--accent);
     padding-left: 0.5em;
     margin: 0.25em;
 }
 
 #tags li:hover, #tags span:hover{
-    background-color: orange;
+    background-color: var(--tinymceGray);
     cursor: pointer; 
 }
 

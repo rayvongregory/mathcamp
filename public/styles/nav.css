@@ -123,6 +123,7 @@ span, i {
     outline: none;
 }
 
+
 button:not(.no-edit):not(.no-click):hover {
     filter: brightness(0.9);
     cursor: pointer;

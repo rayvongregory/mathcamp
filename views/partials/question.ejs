@@ -1,5 +1,5 @@
 <div class="textarea-wrapper">
-  <label for="create_question">Question: </label>
+  <label id="top" for="create_question">Question: </label>
   <div class="extra-options">
     <select name="difficulty" id="choose_difficulty">
       <option value="no_choice">Select a difficulty</option>
@@ -20,16 +20,5 @@
     ></span>
   </div>
   <textarea id="create_question"></textarea>
-  <ul class="question_section hide">
-    <li>
-      <p>Question</p>
-      <span role="button" aria-label="See question" title="See question"
-        ><i class="fas fa-eye"></i></span
-      ><span role="button" aria-label="Edit question" title="Edit question"
-        ><i class="fas fa-edit"></i></span
-      ><span role="button" aria-label="Delete question" title="Delete question"
-        ><i class="fas fa-trash"></i
-      ></span>
-    </li>
-  </ul>
+  <ul class="question_section hide pop-top"></ul>
 </div>

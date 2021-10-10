@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <%- include('../partials/head'); %>
-    <link rel="stylesheet" href="/styles/create.css" />
     <link rel="stylesheet" href="/styles/create_exercise.css" />
+    <link rel="stylesheet" href="/styles/create.css" />
     <% if(type === "lesson") { %> <%-
     include('../partials/tinymce_lesson_scripts') %> <% } else { %> <%-
     include('../partials/tinymce_exercise_scripts') %> <% } %>
@@ -25,12 +25,12 @@
           <%-include('../partials/question'); %>
           <%-include('../partials/correct_answer'); %>
           <%-include('../partials/create_choices'); %>
-          <ul class="question_choices hide"></ul>
+          <ul class="question_choices pop-top hide"></ul>
         </div>
         <%- include('../partials/publish_question_requirements'); %>
       </div>
       <div class="three-two-grid">
-        <%- include('../partials/question_bank'); %> <%-
+        <%- include('../partials/problem_set'); %> <%-
         include('../partials/publish_exercise_requirements'); %>
       </div>
     </div>
