@@ -96,7 +96,8 @@ const getRole = async () => {
 // }
 
 const addAll = (e) => {
-  let dataset = e.target.dataset
+  let target = e.target
+  let dataset = target.dataset
   let refId = dataset.refId
   let refDiff = dataset.refDiff
   if (!refId) {
@@ -119,7 +120,10 @@ const addAll = (e) => {
     let difficulty = difficultySelect.value
     let id
     do {
-      id = Math.round(Math.random() * 999)
+      id = String(Math.round(Math.random() * 999))
+      if (id.length !== 3) {
+        id = id.padStart(3, "0")
+      }
     } while (problems[difficulty][`qid${id}`] !== undefined)
     problems[difficulty][`qid${id}`] = {
       question: questionTextArea.innerHTML,
@@ -129,7 +133,7 @@ const addAll = (e) => {
     let p = document.createElement("p")
     q.dataset.id = `qid${id}`
     q.dataset.difficulty = difficulty
-    p.innerText = `Question ID: ${id}`
+    p.innerText = `Problem ID: ${id}`
     let prev = document.createElement("span")
     prev.setAttribute("role", "button")
     prev.setAttribute("aria-label", "Preview problem")
@@ -192,6 +196,12 @@ const addAll = (e) => {
       }
     }
     discardAll()
+    let problem = document.querySelector(`[data-id="${refId}"]`)
+    if (problem.dataset.id === refId) {
+      problem.classList.remove("editing")
+      let p = problem.querySelector("p")
+      p.innerText = `Problem ID: ${refId.substring(3)}`
+    }
     addAllBtn.setAttribute("aria-label", "Add all to exercise")
     addAllBtn.setAttribute("title", "Add all to exercise")
     let p = addAllBtn.querySelector("p")
@@ -245,23 +255,48 @@ const editProblem = (e) => {
     delete addAllBtn.dataset.action
     return
   }
+  let target = e.target
+  let li = target.parentElement
+  let targetId = li.dataset.id
+
+  if (li.classList.contains("editing")) {
+    li.classList.remove("editing")
+    let p = li.querySelector("p")
+    p.innerText = `Problem ID: ${targetId.substring(3)}`
+    addAllBtn.setAttribute("aria-label", "Add all to exercise")
+    addAllBtn.setAttribute("title", "Add all to exercise")
+    delete addAllBtn.dataset.refId
+    delete addAllBtn.dataset.refDiff
+    p = addAllBtn.querySelector("p")
+    p.innerText = "Add All"
+    discardAllBtn.setAttribute("aria-label", "Discard all")
+    discardAllBtn.setAttribute("title", "Discard all")
+    p = discardAllBtn.querySelector("p")
+    p.innerText = "Discard All"
+    discardAll()
+    // console.log(choices, problems)
+    return
+  }
+
   titleInput.scrollIntoView()
-  let target = e.target.parentElement
-  let targetId = target.dataset.id
-  let targetDiff = target.dataset.difficulty
+  //add edit styles
+  li.classList.add("editing")
+  let p = li.querySelector("p")
+  p.innerText = `Problem ID: ${targetId.substring(3)} (editing)`
+  let targetDiff = li.dataset.difficulty
   // store info refs in addAllBtn btn
   addAllBtn.dataset.refId = targetId
   addAllBtn.dataset.refDiff = targetDiff
   // change text and labels on add/delete btns
-  addAllBtn.setAttribute("aria-label", "Update question")
-  addAllBtn.setAttribute("title", "Update question")
-  let p = addAllBtn.querySelector("p")
-  p.innerText = "Update Question"
+  addAllBtn.setAttribute("aria-label", "Update problem")
+  addAllBtn.setAttribute("title", "Update problem")
+  p = addAllBtn.querySelector("p")
+  p.innerText = "Update Problem"
   discardAllBtn.setAttribute("aria-label", "Discard changes")
   discardAllBtn.setAttribute("title", "Discard changes")
   p = discardAllBtn.querySelector("p")
   p.innerText = "Discard Changes"
-  console.log(problems)
+  // console.log(problems)
   let q = problems[targetDiff][targetId]
   // locate info and add to DOM
   //add question
@@ -286,7 +321,7 @@ const editProblem = (e) => {
   }
   //add choices
   let keys = Object.keys(q.choices)
-  console.log(q.choices)
+  // console.log(q.choices)
   choices = q.choices
   for (let key of keys) {
     if (key.startsWith("cid")) {
@@ -299,7 +334,7 @@ const editProblem = (e) => {
   }
 }
 const copyProblem = (e) => {
-  console.log(e.target.previousElementSibling)
+  // console.log(e.target.previousElementSibling)
   addAllBtn.dataset.action = "copying"
   // EZ, let editProblem put all info in fields, then call addAll to add it to the bank
   e.target.previousElementSibling.dispatchEvent(new Event("pointerup"))
@@ -323,11 +358,24 @@ const delProblem = (e) => {
   }
   let qId = item.dataset.id
   let qDiff = item.dataset.difficulty
+  if (qId === addAllBtn.dataset.refId) {
+    addAllBtn.setAttribute("aria-label", "Add all to exercise")
+    addAllBtn.setAttribute("title", "Add all to exercise")
+    let p = addAllBtn.querySelector("p")
+    p.innerText = "Add all"
+    discardAllBtn.setAttribute("aria-label", "Discard all")
+    discardAllBtn.setAttribute("title", "Discard all")
+    p = discardAllBtn.querySelector("p")
+    p.innerText = "Discard All"
+    delete addAllBtn.dataset.refId
+    delete addAllBtn.dataset.refDiff
+  }
   delete problems[qDiff][qId]
   item.remove()
 }
 
 const discardAll = () => {
+  let problem = document.querySelectorAll("li.editing")
   discardQBtn.dispatchEvent(new Event("pointerup"))
   deleteQ()
   discardAns()
@@ -564,7 +612,10 @@ const addChoice = (e) => {
   let refId = e.target.dataset.refId
   if (!refId) {
     do {
-      id = Math.round(Math.random() * 999)
+      id = String(Math.round(Math.random() * 999))
+      if (id.length !== 3) {
+        id = id.padStart(3, "0")
+      }
     } while (choices[`cid${id}`] !== undefined)
     choices[`cid${id}`] = choicesTextArea.innerHTML
     let choiceItem = document.createElement("li")
@@ -614,7 +665,7 @@ const addChoice = (e) => {
     addChoiceBtn.setAttribute("aria-label", "Add choice to question")
     addChoiceBtn.setAttribute("title", "Add choice to question")
     delete e.target.dataset.refId
-    console.log(choices)
+    // console.log(choices)
   }
 
   choicesTextArea.innerHTML = "<p><br></p>"
@@ -683,7 +734,11 @@ const discardChoice = () => {
 }
 const deleteChoices = () => {
   let choicesList = questionChoicesSection.querySelectorAll("li")
+  // console.log(choices)
+  // console.log(choicesList)
+
   for (let choice of choicesList) {
+    console.log(choice.dataset.id)
     delete choices[choice.dataset.id]
     choice.remove()
   }
