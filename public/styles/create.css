@@ -25,7 +25,6 @@ html {
 .too-small {
     margin: 1rem;
     justify-content: center;
-    display: none;
 }
 
 .flex-wrapper {
@@ -162,7 +161,7 @@ html {
     background-color: var(--tinymceGrayActive);
     cursor: not-allowed;
 }
-/* 
+
 @media screen and (min-width: 768px) and (min-height: 500px) {
     .too-small {
         display: none;
@@ -181,4 +180,4 @@ html {
     .create-wrapper {
         display: none;
     }
-} */
+}
