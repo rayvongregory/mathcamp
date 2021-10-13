@@ -101,6 +101,17 @@ const addAll = (e, obj = null) => {
     let question = obj.problem.question
     let diff = obj.diff
     let choices = obj.problem.choices
+    let newId
+    for (let key in choices) {
+      do {
+        newId = String(Math.round(Math.random() * 999))
+        if (newId.length !== 3) {
+          newId = newId.padStart(3, "0")
+        }
+      } while (choices[`cid${newId}`] !== undefined)
+      choices[`cid${newId}`] = choices[key]
+      delete choices[key]
+    }
     // question = problem.question
     // choices = problem.choices
     // difficultySelect.value = diff
@@ -859,7 +870,6 @@ const discardChoice = () => {
   choicesTextArea.innerHTML = "<p><br></p>"
   let refId = addChoiceBtn.dataset.refId
   if (refId) {
-    delete addChoiceBtn.dataset.refId
     addChoiceBtn.setAttribute("aria-label", "Add choice to question")
     addChoiceBtn.setAttribute("title", "Add choice to question")
     discardChoiceBtn.setAttribute("aria-label", "Discard")
@@ -871,6 +881,7 @@ const discardChoice = () => {
     edit.setAttribute("title", "Edit choice")
     let p = li.querySelector("p")
     p.innerText = `Choice ID: ${refId.substring(3)}`
+    delete addChoiceBtn.dataset.refId
   }
 }
 const deleteChoices = () => {
@@ -879,6 +890,7 @@ const deleteChoices = () => {
     delete choices[choice.dataset.id]
     choice.remove()
   }
+  if (addChoiceBtn.dataset.refId) delete addChoiceBtn.dataset.refId
   questionChoicesSection.classList.add("hide")
   choicesTextArea.innerHTML = "<p><br></p>"
 }
