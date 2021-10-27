@@ -1,3 +1,7 @@
+const overlay = document.querySelector(".overlay")
+const overlayCloseBtn = overlay.querySelector(".close")
+let overlayHeader = overlay.querySelector("h3")
+let overlayContent = overlay.querySelector(".overlay___content")
 const difficultySelect = document.querySelector("#choose_difficulty")
 const addAllBtn = document.querySelector("#add_all")
 const discardAllBtn = document.querySelector("#discard_all")
@@ -12,6 +16,7 @@ const extraOptions_0 = document.querySelectorAll(".extra-options")[0]
 const correctAnswerSection = document.querySelector(".correct_answer")
 const extraOptions_1 = document.querySelectorAll(".extra-options")[1]
 const questionChoicesSection = document.querySelector(".question_choices")
+const extraOptions_2 = document.querySelectorAll(".extra-options")[2]
 const problemSet = document.querySelector(".problem_set")
 const easyProblemsSection = document.querySelector("#easy_problems")
 const standardProblemsSection = document.querySelector("#standard_problems")
@@ -95,12 +100,16 @@ const getRole = async () => {
 //   }
 // }
 
+const closeOverlay = () => {
+  overlayContent.innerHTML = ""
+  overlay.classList.add("hide")
+}
+
 const addAll = (e, obj = null) => {
   if (obj) {
     let id = obj.id.substring(3)
-    let question = obj.problem.question
-    let diff = obj.diff
-    let choices = obj.problem.choices
+    let { question, choices } = obj.problem
+    let { diff } = obj
     let newId
     for (let key in choices) {
       do {
@@ -112,18 +121,13 @@ const addAll = (e, obj = null) => {
       choices[`cid${newId}`] = choices[key]
       delete choices[key]
     }
-    // question = problem.question
-    // choices = problem.choices
-    // difficultySelect.value = diff
-    // addAll(e, diff)
-
     let q = document.createElement("li")
     let span = document.createElement("span")
     q.classList.add("not_met")
     span.innerHTML = '<i class="fas fa-times-circle"></i>'
     let p = document.createElement("p")
     q.dataset.id = `pid${id}`
-    q.dataset.difficulty = diff
+    q.dataset.diff = diff
     p.innerText = `Problem ID: ${id}`
     let prev = document.createElement("span")
     prev.setAttribute("role", "button")
@@ -137,12 +141,12 @@ const addAll = (e, obj = null) => {
     edit.setAttribute("title", "Edit problem")
     edit.innerHTML = '<i class="fas fa-edit"></i>'
     edit.addEventListener("pointerup", editProblem)
-    let copy = document.createElement("span")
-    copy.setAttribute("role", "button")
-    copy.setAttribute("aria-label", "Copy problem")
-    copy.setAttribute("title", "Copy problem")
-    copy.innerHTML = '<i class="fas fa-copy"></i>'
-    copy.addEventListener("pointerup", copyProblem)
+    // let copy = document.createElement("span")
+    // copy.setAttribute("role", "button")
+    // copy.setAttribute("aria-label", "Copy problem")
+    // copy.setAttribute("title", "Copy problem")
+    // copy.innerHTML = '<i class="fas fa-copy"></i>'
+    // copy.addEventListener("pointerup", copyProblem)
     let del = document.createElement("span")
     del.setAttribute("role", "button")
     del.setAttribute("aria-label", "Delete problem")
@@ -153,20 +157,13 @@ const addAll = (e, obj = null) => {
     q.appendChild(p)
     q.appendChild(prev)
     q.appendChild(edit)
-    q.appendChild(copy)
+    // q.appendChild(copy)
     q.appendChild(del)
     appendThisToThat(q, diff)
-    //
-    //
-
-    console.log(id, question, diff, choices)
     return
   }
 
-  let target = e.target
-  let dataset = target.dataset
-  let refId = dataset.refId
-  let refDiff = dataset.refDiff
+  let { refId, refDiff } = e.target.dataset
   if (!refId) {
     let satisfied = true
     for (let req of publishQuestionReqs) {
@@ -198,7 +195,7 @@ const addAll = (e, obj = null) => {
     }
     let p = document.createElement("p")
     q.dataset.id = `pid${id}`
-    q.dataset.difficulty = difficulty
+    q.dataset.diff = difficulty
     p.innerText = `Problem ID: ${id}`
     let prev = document.createElement("span")
     prev.setAttribute("role", "button")
@@ -212,12 +209,12 @@ const addAll = (e, obj = null) => {
     edit.setAttribute("title", "Edit problem")
     edit.innerHTML = '<i class="fas fa-edit"></i>'
     edit.addEventListener("pointerup", editProblem)
-    let copy = document.createElement("span")
-    copy.setAttribute("role", "button")
-    copy.setAttribute("aria-label", "Copy problem")
-    copy.setAttribute("title", "Copy problem")
-    copy.innerHTML = '<i class="fas fa-copy"></i>'
-    copy.addEventListener("pointerup", copyProblem)
+    // let copy = document.createElement("span")
+    // copy.setAttribute("role", "button")
+    // copy.setAttribute("aria-label", "Copy problem")
+    // copy.setAttribute("title", "Copy problem")
+    // copy.innerHTML = '<i class="fas fa-copy"></i>'
+    // copy.addEventListener("pointerup", copyProblem)
     let del = document.createElement("span")
     del.setAttribute("role", "button")
     del.setAttribute("aria-label", "Delete problem")
@@ -228,7 +225,7 @@ const addAll = (e, obj = null) => {
     q.appendChild(p)
     q.appendChild(prev)
     q.appendChild(edit)
-    q.appendChild(copy)
+    // q.appendChild(copy)
     q.appendChild(del)
     appendThisToThat(q, difficulty)
     discardAll()
@@ -238,17 +235,17 @@ const addAll = (e, obj = null) => {
     extraOptions_0.classList.remove("hide")
   } else {
     let newDiff = difficultySelect.value
+    let qDOM = document.querySelector(`[data-id="${refId}"]`)
+    let icon = qDOM.querySelector("span")
     if (newDiff !== refDiff) {
-      let qToEdit = problems[refDiff][refId]
       problems[newDiff][refId] = {
         question: question,
         choices: { ...choices },
       }
       delete problems[refDiff][refId]
-      let qDOM = document.querySelector(`[data-id="${refId}"]`)
-      let span = qDOM.querySelectorAll("span")[4]
-      span.dispatchEvent(new Event("pointerup"))
-      qDOM.dataset.difficulty = newDiff
+      let del = qDOM.querySelectorAll("span")[3]
+      del.dispatchEvent(new Event("pointerup"))
+      qDOM.dataset.diff = newDiff
       appendThisToThat(qDOM, newDiff)
     } else {
       problems[refDiff][refId] = {
@@ -256,6 +253,24 @@ const addAll = (e, obj = null) => {
         choices: { ...choices },
       }
     }
+
+    let satisfied = true
+    for (let req of publishQuestionReqs) {
+      if (req.classList.contains("not_met")) {
+        satisfied = false
+        break
+      }
+    }
+    if (satisfied) {
+      qDOM.classList.remove("not_met")
+      qDOM.classList.add("satisfied")
+      icon.innerHTML = '<i class="fas fa-check-circle"></i>'
+    } else {
+      qDOM.classList.remove("satisfied")
+      qDOM.classList.add("not_met")
+      icon.innerHTML = '<i class="fas fa-times-circle"></i>'
+    }
+
     discardAll()
     let problem = document.querySelector(`[data-id="${refId}"]`)
     if (problem.dataset.id === refId) {
@@ -305,15 +320,57 @@ const appendThisToThat = (el, diff) => {
   }
 }
 
-const prevProblem = () => {
+const prevProblem = (e) => {
+  let { id, diff } = e.target.parentElement.dataset
+  let problem = problems[diff][id]
+  let pcs = problem.choices
+
+  overlayHeader.innerText = `Problem ID: ${id.substring(3)}`
+  let q = document.createElement("p")
+  q.innerHTML = problem.question
+  let options = []
+  let pcKeys = Object.keys(pcs)
+  if (problem.answer) {
+    options.push(problem.answer)
+    pcKeys.splice(pcKeys.indexOf("answer"), 1)
+  }
+  let rnd
+  let count = 0
+  while (options.length < 5 && count < 20) {
+    rnd = Math.floor(Math.random() * pcKeys.length)
+    let c = pcKeys[rnd]
+    count++
+    if (options.includes(pcs[c])) {
+      continue
+    }
+    options.push(pcs[c])
+  }
+  console.log(options, count)
+
+  for (let x of options) {
+  }
+  //get all choices
+
+  //pick any 3
+
+  let ul = document.createElement("ul")
+  let l1 = document.createElement("li")
+  let l2 = document.createElement("li")
+  let l3 = document.createElement("li")
+  let l4 = document.createElement("li")
+
+  overlayContent.appendChild(q)
+
+  overlay.classList.remove("hide")
+
   console.log("previewing question")
 }
+
 const editProblem = (e) => {
   if (questionChoicesSection.querySelector("li")) deleteChoices()
-  let target = e.target
-  console.log(target)
+  let { target } = e
   let li = target.parentElement
-  let targetId = li.dataset.id
+  let { id: targetId } = li.dataset
   if (li.classList.contains("editing")) {
     li.classList.remove("editing")
     let p = li.querySelector("p")
@@ -333,13 +390,13 @@ const editProblem = (e) => {
     discardAll()
     return
   }
-  let refId = addAllBtn.dataset.refId
+  let { refId } = addAllBtn.dataset
   if (refId && refId !== targetId) {
     let li = problemSet.querySelector("li.editing")
     let edit = li.querySelectorAll("span")[2]
     edit.setAttribute("aria-label", "Edit problem")
     edit.setAttribute("title", "Edit problem")
-    let id = li.dataset.id
+    let { id } = li.dataset
     li.classList.remove("editing")
     let p = li.querySelector("p")
     p.innerText = `Problem ID: ${id.substring(3)}`
@@ -350,7 +407,7 @@ const editProblem = (e) => {
   li.classList.add("editing")
   let p = li.querySelector("p")
   p.innerText = `Problem ID: ${targetId.substring(3)} (editing)`
-  let targetDiff = li.dataset.difficulty
+  let { diff: targetDiff } = li.dataset
   // store info refs in addAllBtn btn
   addAllBtn.dataset.refId = targetId
   addAllBtn.dataset.refDiff = targetDiff
@@ -376,6 +433,8 @@ const editProblem = (e) => {
     poseQ.classList.replace("not_met", "satisfied")
     i = poseQ.querySelector("i")
     i.classList.replace("fa-times-circle", "fa-check-circle")
+    addQBtn.dataset.refId = targetId
+    addQBtn.dataset.refDiff = targetDiff
     addQ()
   }
   //set difficulty
@@ -384,7 +443,7 @@ const editProblem = (e) => {
   //add answer
   if (q.choices.answer) {
     correctAnswerTextArea.innerHTML = q.choices.answer
-    addAns()
+    addAnsBtn.dispatchEvent(new Event("pointerup"))
   }
   //add choices
   let keys = Object.keys(q.choices)
@@ -392,40 +451,33 @@ const editProblem = (e) => {
   for (let key of keys) {
     if (key.startsWith("cid")) {
       choicesTextArea.innerHTML = q.choices[key]
-      addChoiceBtn.dataset.ref = key
+      addChoiceBtn.dataset.refId = key
       addChoiceBtn.dispatchEvent(new Event("pointerup"))
-      // addChoice(new Event("pointerup"), key)
     }
   }
 }
-const copyProblem = (e) => {
-  // get id of problem being copied
-  let target = e.target
-  let li = target.parentElement
-  let refId = li.dataset.id
-  let diff = li.dataset.difficulty
-  // locate that problem in the problems object
-  let id
-  let qToCopy = problems[diff][refId]
-  do {
-    id = String(Math.round(Math.random() * 999))
-    if (id.length !== 3) {
-      id = id.padStart(3, "0")
-    }
-  } while (problems[diff][`pid${id}`] !== undefined)
-  problems[diff][`pid${id}`] = {
-    question: qToCopy.question,
-    choices: { ...qToCopy.choices },
-  }
 
-  addAll(e, { id: `pid${id}`, diff, problem: problems[diff][`pid${id}`] })
+// const copyProblem = (e) => {
+//   // get id of problem being copied
+//   let { target } = e
+//   let li = target.parentElement
+//   let { id: refId, diff } = li.dataset
+//   // locate that problem in the problems object
+//   let id
+//   let qToCopy = problems[diff][refId]
+//   do {
+//     id = String(Math.round(Math.random() * 999))
+//     if (id.length !== 3) {
+//       id = id.padStart(3, "0")
+//     }
+//   } while (problems[diff][`pid${id}`] !== undefined)
+//   problems[diff][`pid${id}`] = {
+//     question: qToCopy.question,
+//     choices: { ...qToCopy.choices },
+//   }
+//   addAll(e, { id: `pid${id}`, diff, problem: problems[diff][`pid${id}`] })
+// }
 
-  //
-
-  // EZ, let editProblem put all info in fields, then call addAll to add it to the bank
-  // e.target.previousElementSibling.dispatchEvent(new Event("pointerup"))
-  console.log("copying problem")
-}
 const delProblem = (e) => {
   let item = e.target.parentElement
   let section = item.parentElement
@@ -443,8 +495,7 @@ const delProblem = (e) => {
   if (hide) {
     noProblemsYet.classList.remove("hide")
   }
-  let qId = item.dataset.id
-  let qDiff = item.dataset.difficulty
+  let { id: qId, diff: qDiff } = item.dataset
   if (qId === addAllBtn.dataset.refId) {
     addAllBtn.setAttribute("aria-label", "Add all to exercise")
     addAllBtn.setAttribute("title", "Add all to exercise")
@@ -487,19 +538,65 @@ const discardAll = () => {
   deleteAns()
 }
 
+const uniqueQ = (text) => {
+  if (text === "<p><br></p>" || text === '<p><br data-mce-bogus="1"></p>') {
+    return false
+  }
+  let ez = problems.easy
+  let s = problems.standard
+  let h = problems.hard
+  let a = problems.advanced
+  let nc = problems.no_choice
+  let { refId, refDiff } = addQBtn.dataset
+  // check ez
+  for (let id in ez) {
+    if (ez[id].question === text && refDiff !== "easy" && refId !== id)
+      return false
+  }
+
+  // check standard
+  for (let id in s) {
+    if (s[id].question === text && refDiff !== "standard" && refId !== id)
+      return false
+  }
+  // check hard
+  for (let id in h) {
+    if (h[id].question === text && refDiff !== "hard" && refId !== id)
+      return false
+  }
+  // check advanced
+  for (let id in a) {
+    if (a[id].question === text && refDiff !== "advanced" && refId !== id)
+      return false
+  }
+  // check no_diff
+  for (let id in nc) {
+    if (nc[id].question === text && refDiff !== "no_choice" && refId !== id)
+      return false
+  }
+  return true
+}
+
 const addQ = () => {
+  if (!uniqueQ(questionTextArea.innerHTML)) {
+    extraOptions_0.classList.add("not_met")
+    let p = extraOptions_0.querySelector("p")
+    p.classList.remove("hide")
+    setTimeout(() => {
+      extraOptions_0.classList.remove("not_met")
+      p.classList.add("hide")
+    }, 2000)
+    delete addQBtn.dataset.refId
+    delete addQBtn.dataset.refDiff
+    return
+  }
+
   question = questionTextArea.innerHTML
   let questionItem = questionSection.querySelector("li")
   if (!questionItem) {
     questionItem = document.createElement("li")
     let p = document.createElement("p")
     p.innerText = "Question"
-    let see = document.createElement("span")
-    see.setAttribute("role", "button")
-    see.setAttribute("aria-label", "See question")
-    see.setAttribute("title", "See question")
-    see.innerHTML = '<i class="fas fa-eye"></i>'
-    see.addEventListener("pointerup", revealQ)
     let edit = document.createElement("span")
     edit.setAttribute("role", "button")
     edit.setAttribute("aria-label", "Edit question")
@@ -513,7 +610,6 @@ const addQ = () => {
     del.innerHTML = '<i class="fas fa-trash"></i>'
     del.addEventListener("pointerup", deleteQ)
     questionItem.appendChild(p)
-    questionItem.appendChild(see)
     questionItem.appendChild(edit)
     questionItem.appendChild(del)
     questionSection.appendChild(questionItem)
@@ -541,15 +637,17 @@ const addQ = () => {
   questionSection.classList.remove("hide")
   questionTextAreaDiv.classList.add("hide")
   extraOptions_0.classList.add("hide")
-}
-
-const revealQ = () => {
-  console.log("revealing question")
+  delete addQBtn.dataset.refId
+  delete addQBtn.dataset.refDiff
 }
 
 const editQ = (e) => {
-  let target = e.target
+  let { target } = e
   let li = target.parentElement
+  if (addAllBtn.dataset.refId) {
+    addQBtn.dataset.refId = addAllBtn.dataset.refId
+    addQBtn.dataset.refDiff = addAllBtn.dataset.refDiff
+  }
   let p = li.querySelector("p")
   if (li.classList.contains("editing")) {
     li.classList.remove("editing")
@@ -597,7 +695,7 @@ const deleteQ = () => {
 }
 
 const discardQ = (e) => {
-  let target = e.target
+  let { target } = e
   questionTextArea.innerHTML = "<p><br></p>"
   let li = questionSection.querySelector("li")
   if (li) {
@@ -618,19 +716,24 @@ const discardQ = (e) => {
   }
 }
 
-const addAns = () => {
+const addAns = (e) => {
+  let { refId: ref } = e.target.dataset
+  if (!uniqueChoice(correctAnswerTextArea.innerHTML, ref)) {
+    extraOptions_1.classList.add("not_met")
+    let p = extraOptions_1.querySelector("p")
+    p.classList.remove("hide")
+    setTimeout(() => {
+      extraOptions_1.classList.remove("not_met")
+      p.classList.add("hide")
+    }, 2000)
+    return
+  }
   let correctAnswerItem = correctAnswerSection.querySelector("li")
   if (!correctAnswerItem) {
     correctAnswerItem = document.createElement("li")
     choices.answer = correctAnswerTextArea.innerHTML
     let p = document.createElement("p")
     p.innerText = "Answer"
-    let see = document.createElement("span")
-    see.setAttribute("role", "button")
-    see.setAttribute("aria-label", "See answer")
-    see.setAttribute("title", "See answer")
-    see.innerHTML = '<i class="fas fa-eye"></i>'
-    see.addEventListener("pointerup", revealAns)
     let edit = document.createElement("span")
     edit.setAttribute("role", "button")
     edit.setAttribute("aria-label", "Edit answer")
@@ -644,7 +747,6 @@ const addAns = () => {
     del.innerHTML = '<i class="fas fa-trash"></i>'
     del.addEventListener("pointerup", deleteAns)
     correctAnswerItem.appendChild(p)
-    correctAnswerItem.appendChild(see)
     correctAnswerItem.appendChild(edit)
     correctAnswerItem.appendChild(del)
     correctAnswerSection.appendChild(correctAnswerItem)
@@ -653,6 +755,7 @@ const addAns = () => {
     createCorrectAns.classList.replace("not_met", "satisfied")
     correctAnswerSection.classList.remove("hide")
     checkForTen()
+    // addAnsBtn.dataset.ansRef = "ans"
   } else {
     choices.answer = correctAnswerTextArea.innerHTML
     correctAnswerItem.classList.remove("editing")
@@ -668,12 +771,12 @@ const addAns = () => {
   correctAnswerTextArea.innerHTML = "<p><br></p>"
 }
 
-const revealAns = () => {
-  console.log("revealing answer")
-}
-
 const editAns = (e) => {
-  let target = e.target
+  let { target } = e
+  // if (addAllBtn.dataset.refId) {
+  //   addAnsBtn.dataset.refId = addAllBtn.dataset.refId
+  //   addAnsBtn.dataset.refDiff = addAllBtn.dataset.refDiff
+  // }
   let li = target.parentElement
   let p = li.querySelector("p")
   if (li.classList.contains("editing")) {
@@ -713,12 +816,13 @@ const deleteAns = () => {
     addAnsBtn.setAttribute("title", "Add answer")
     discardAnsBtn.setAttribute("aria-label", "Discard")
     discardAnsBtn.setAttribute("title", "Discard")
+    // delete addAnsBtn.dataset.ansRef
   }
   checkForTen()
 }
 
 const discardAns = (e) => {
-  let target = e.target
+  let { target } = e
   correctAnswerTextArea.innerHTML = "<p><br></p>"
   let li = correctAnswerSection.querySelector("li")
   if (li) {
@@ -750,9 +854,52 @@ const checkForTen = () => {
   }
 }
 
+const uniqueChoice = (text) => {
+  let { refId } = addChoiceBtn.dataset
+  if (text === "<p><br></p>" || text === '<p><br data-mce-bogus="1"></p>') {
+    return false
+  }
+  for (let choice in choices) {
+    if (choices[choice] === text && choice !== refId) {
+      return false
+    }
+  }
+  return true
+}
+
 const addChoice = (e) => {
+  // try finding a choice (or answer) with the same innerHTML. if found, don't add
+  if (!uniqueChoice(choicesTextArea.innerHTML)) {
+    extraOptions_2.classList.add("not_met")
+    let p = extraOptions_2.querySelector("p")
+    p.classList.remove("hide")
+    setTimeout(() => {
+      extraOptions_2.classList.remove("not_met")
+      p.classList.add("hide")
+    }, 2000)
+    return
+  }
+
+  // check for dom el
+  let { refId: ref } = e.target.dataset
+  let li = questionChoicesSection.querySelector(`[data-id="${ref}"]`)
+  if (li) {
+    // if dom el exists, update choices obj
+    choices[ref] = choicesTextArea.innerHTML
+    li.classList.remove("editing")
+    let p = li.querySelector("p")
+    p.innerText = `Choice ID: ${ref.substring(3)}`
+    addChoiceBtn.setAttribute("aria-label", "Add choice")
+    addChoiceBtn.setAttribute("title", "Add choice")
+    discardChoiceBtn.setAttribute("aria-label", "Discard")
+    discardChoiceBtn.setAttribute("aria-label", "Discard")
+    delete e.target.dataset.refId
+    choicesTextArea.innerHTML = "<p><br></p>"
+
+    return
+  }
   let id
-  let ref = e.target.dataset.ref
+  // create id or use ref
   if (!ref) {
     do {
       id = String(Math.round(Math.random() * 999))
@@ -762,30 +909,28 @@ const addChoice = (e) => {
     } while (choices[`cid${id}`] !== undefined)
   } else {
     id = ref.substring(3)
+    delete e.target.dataset.refId
   }
+
+  //if dom el doesn't exist, create dom el
+
   choices[`cid${id}`] = choicesTextArea.innerHTML
   let choiceItem = document.createElement("li")
   let p = document.createElement("p")
   choiceItem.dataset.id = `cid${id}`
   p.innerText = `Choice ID: ${id}`
-  let see = document.createElement("span")
-  see.setAttribute("role", "button")
-  see.setAttribute("aria-label", "See choice")
-  see.setAttribute("title", "See choice")
-  see.innerHTML = '<i class="fas fa-eye"></i>'
-  see.addEventListener("pointerup", revealChoice)
   let edit = document.createElement("span")
   edit.setAttribute("role", "button")
   edit.setAttribute("aria-label", "Edit choice")
   edit.setAttribute("title", "Edit choice")
   edit.innerHTML = '<i class="fas fa-edit"></i>'
   edit.addEventListener("pointerup", editChoice)
-  let copy = document.createElement("span")
-  copy.setAttribute("role", "button")
-  copy.setAttribute("aria-label", "Duplicate choice")
-  copy.setAttribute("title", "Duplicate choice")
-  copy.innerHTML = '<i class="fas fa-copy"></i>'
-  copy.addEventListener("pointerup", copyChoice)
+  // let copy = document.createElement("span")
+  // copy.setAttribute("role", "button")
+  // copy.setAttribute("aria-label", "Duplicate choice")
+  // copy.setAttribute("title", "Duplicate choice")
+  // copy.innerHTML = '<i class="fas fa-copy"></i>'
+  // copy.addEventListener("pointerup", copyChoice)
   let del = document.createElement("span")
   del.setAttribute("role", "button")
   del.setAttribute("aria-label", "Delete choice")
@@ -793,29 +938,24 @@ const addChoice = (e) => {
   del.innerHTML = '<i class="fas fa-trash"></i>'
   del.addEventListener("pointerup", deleteChoice)
   choiceItem.appendChild(p)
-  choiceItem.appendChild(see)
   choiceItem.appendChild(edit)
-  choiceItem.appendChild(copy)
+  // choiceItem.appendChild(copy)
   choiceItem.appendChild(del)
   questionChoicesSection.appendChild(choiceItem)
   questionChoicesSection.classList.remove("hide")
   checkForTen()
-  delete e.target.dataset.ref
   choicesTextArea.innerHTML = "<p><br></p>"
 }
 
-const revealChoice = () => {
-  console.log("revealing choice")
-}
 const editChoice = (e) => {
   let btn = e.target
   let target = btn.parentElement
-  let itemID = target.dataset.id
+  let { id: itemID } = target.dataset
   let li = questionChoicesSection.querySelector("li.editing")
   if (li && li !== target) {
     li.classList.remove("editing")
     let p = li.querySelector("p")
-    let id = li.dataset.id
+    let { id } = li.dataset
     p.innerText = `Choice ID: ${id.substring(3)}`
   } else if (li && li === target) {
     li.classList.remove("editing")
@@ -825,7 +965,7 @@ const editChoice = (e) => {
     addChoiceBtn.setAttribute("aria-label", "Add choice to question")
     addChoiceBtn.setAttribute("title", "Add choice to question")
     let p = li.querySelector("p")
-    let id = li.dataset.id
+    let { id } = li.dataset
     p.innerText = `Choice ID: ${id.substring(3)}`
     delete addChoiceBtn.dataset.refId
     discardChoice()
@@ -843,12 +983,14 @@ const editChoice = (e) => {
   discardChoiceBtn.setAttribute("aria-label", "Discard changes")
   discardChoiceBtn.setAttribute("title", "Discard changes")
 }
-const copyChoice = (e) => {
-  console.log("copying choice")
-}
+
+// const copyChoice = (e) => {
+//   console.log("copying choice")
+// }
+
 const deleteChoice = (e) => {
   let item = e.target.parentElement
-  let itemID = item.dataset.id
+  let { id: itemID } = item.dataset
   if (itemID === addChoiceBtn.dataset.refId) {
     delete addChoiceBtn.dataset.refId
     addChoiceBtn.setAttribute("aria-label", "Add choice to question")
@@ -868,7 +1010,7 @@ const deleteChoice = (e) => {
 }
 const discardChoice = () => {
   choicesTextArea.innerHTML = "<p><br></p>"
-  let refId = addChoiceBtn.dataset.refId
+  let { refId } = addChoiceBtn.dataset
   if (refId) {
     addChoiceBtn.setAttribute("aria-label", "Add choice to question")
     addChoiceBtn.setAttribute("title", "Add choice to question")
@@ -896,7 +1038,7 @@ const deleteChoices = () => {
 }
 
 const checkList = (e) => {
-  const target = e.target
+  const { target } = e
   i = pickDifficulty.querySelector("i")
   if (target.value !== "no_choice") {
     pickDifficulty.classList.replace("not_met", "satisfied")
@@ -916,8 +1058,53 @@ const defineTextAreas = () => {
   questionTextArea = tinymce.DOM.win[0].document.body
   correctAnswerTextArea = tinymce.DOM.win[1].document.body
   choicesTextArea = tinymce.DOM.win[2].document.body
+  questionTextArea.innerHTML = "<p><br></p>"
+  correctAnswerTextArea.innerHTML = "<p><br></p>"
+  choicesTextArea.innerHTML = "<p><br></p>"
   difficultySelect.addEventListener("pointerup", checkList)
+  difficultySelect.addEventListener("click", checkList) // for moz
   difficultySelect.addEventListener("keyup", checkList)
+}
+
+const saveExercise = async (status) => {
+  try {
+    const { data } = await axios.post("/api/v1/exercises", {
+      title: titleInput.value.trim(),
+      tags: inputValues,
+      problems,
+      status,
+    })
+    console.log(data)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const publishExercise = (e) => {
+  let value = titleInput.value.trim()
+  if (!value) {
+    titleInput.value = ""
+    nav.scrollIntoView()
+    return unauthorized("Create to title to save this exercise.", pTitle)
+  }
+  if (inputValues.length === 0) {
+    nav.scrollIntoView()
+    return unauthorized(
+      "Create at least one tag to publish this exercise.",
+      pTag
+    )
+  }
+  saveExercise("published")
+}
+
+const draftExercise = () => {
+  let value = titleInput.value.trim()
+  if (!value) {
+    titleInput.value = ""
+    nav.scrollIntoView()
+    return unauthorized("Create to title to save this exercise", pTitle)
+  }
+  saveExercise("draft")
 }
 
 const init = () => {
@@ -935,6 +1122,7 @@ const init = () => {
 }
 
 window.addEventListener("load", init)
+overlayCloseBtn.addEventListener("pointerup", closeOverlay)
 addAllBtn.addEventListener("pointerup", addAll)
 discardAllBtn.addEventListener("pointerup", discardAll)
 addQBtn.addEventListener("pointerup", addQ)
@@ -943,3 +1131,6 @@ addAnsBtn.addEventListener("pointerup", addAns)
 discardAnsBtn.addEventListener("pointerup", discardAns)
 addChoiceBtn.addEventListener("pointerup", addChoice)
 discardChoiceBtn.addEventListener("pointerup", discardChoice)
+draftBtn.addEventListener("pointerup", draftExercise)
+//remove styles on publishBtn when the reqs are met and then add the event listener
+// remove event listener if the reqs are no longer being met

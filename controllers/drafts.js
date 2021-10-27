@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes")
 const Lesson = require("../models/Lesson")
-const Practice = require("../models/Practice")
+const Practice = require("../models/Exercise")
 
 const getAllDrafts = async (req, res) => {
   const lessons = await Lesson.find({ status: "draft" }, "id title")

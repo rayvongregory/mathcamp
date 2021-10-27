@@ -58,6 +58,11 @@ const getDisplayName = async () => {
         createExerciseButton.classList.remove("hide")
         draftsButton.classList.remove("hide")
       }
+      let nameWrapWidth = nameWrap.offsetWidth
+      console.log(nameWrapWidth)
+      if (nameWrapWidth > 163) {
+        asideUL.style.width = `${nameWrapWidth}px`
+      }
     } catch (error) {
       console.log(error)
       localStorage.removeItem("token")
@@ -182,6 +187,7 @@ const checkWindowSize = () => {
     }
     resetMenuBtn()
   }
+  console.log(currentWindowSize)
   switch (currentWindowSize) {
     case "tiny":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
@@ -207,12 +213,25 @@ const checkWindowSize = () => {
       navSearchContainer.classList.remove("hide")
       asideUL.classList.remove("hide")
       aside.classList.remove("slide")
+      // if aside is child of nav, remove and append after menubtn
+      if (navSearchContainer.nextElementSibling === aside) {
+        // console.log("big")
+
+        aside.remove()
+        menuBtn.insertAdjacentElement("afterend", aside)
+      }
       root.setProperty("--offset", "0px")
       break
     case "large":
       navSearchContainer.classList.remove("hide")
       asideUL.classList.add("hide")
       asideUL.classList.remove("slide-down")
+      // if aside is the next sibling of menubtn, remove and append to nav
+      if (menuBtn.nextElementSibling === aside) {
+        // console.log("large")
+        aside.remove()
+        nav.appendChild(aside)
+      }
       nameWrapI.classList.remove("rotate")
       break
     default:

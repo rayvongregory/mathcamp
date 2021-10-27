@@ -1,17 +1,12 @@
 const mongoose = require("mongoose")
 const { Schema } = mongoose
 
-const practiceSchema = new Schema(
+const exerciseSchema = new Schema(
   {
     title: {
       type: String,
       unique: true,
       required: [true, "Please provide lesson title"],
-    },
-
-    text: {
-      type: String,
-      default: "",
     },
     tags: {
       type: Array,
@@ -21,11 +16,15 @@ const practiceSchema = new Schema(
       enum: ["draft", "published"],
       default: "draft",
     },
+    problems: {
+      type: Object,
+      required: [true, "Please provide a set of problems"],
+    },
   },
   { timestamps: true }
 )
 
-module.exports = mongoose.model("Practice", practiceSchema)
+module.exports = mongoose.model("Exercise", exerciseSchema)
 
 //! When a user enters a search, we look through the activities db.
 //! This db will be a collection of all the articles and problem sets.

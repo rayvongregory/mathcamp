@@ -1,7 +1,7 @@
 aside {
     visibility: hidden;
     position: absolute;
-    z-index: 2;
+    z-index: 1;
     width: 200px;
     left: -200px;
     display: block;
@@ -17,13 +17,14 @@ aside {
 
 aside h3 {
     display: block;
-    width: 170px;
+    width: 150px;
     padding: 1.2rem 0 0.5em 0.5rem;
     font-size: 1.25em;
     text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    /* text-transform: uppercase; */
 }
 
 aside ul {
@@ -61,13 +62,13 @@ aside a {
 
 .name-wrapper i {
     display: none;
-    margin-left: 10px;
+    margin: 5px 0 5px 10px;
     font-size: 1.125rem;
     color: black;
 }
 
 .slide {
-    left: 0px;
+    left: 0;
     opacity: 1;
 }
 
@@ -76,7 +77,7 @@ aside a {
     top: 14px;
     left: 14px;
     right: unset;
-    z-index: 3;
+    z-index: 2;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -162,10 +163,15 @@ aside a {
 
 
 @media (min-width: 576px) { 
+    aside {
+        z-index: 2;
+    }
+
     .menu-btn {
         left: unset;
         top: 3px;
         right: 10px;
+        z-index: 3;
     }
     
     .menu-btn_burgir,
@@ -224,7 +230,7 @@ aside a {
 
     .slide {
         left: unset;
-        right: 0px;
+        right: 0;
         opacity: 1;
     
     }
@@ -239,32 +245,35 @@ aside a {
     }
 
     aside {
-        top: 43px;
+        position: relative;
+        right: unset;
         height: unset;
-        right: 0%;
-        width: 225px;
+        margin-right: auto;
+        margin-left: 1rem;
         padding-left: 0;
         padding-right: 0;
+        width: unset;
+        z-index: unset;
         transition: unset;
     -webkit-transition: unset;
     -o-transition: unset;
     opacity: 1;
     background-color: transparent;
-
     }  
+
     aside ul {
-        right: 4em;
+        position: absolute;
+        top: 38px;
+        min-width: 163px;
         max-height: 0;
-        padding: 0.5rem 0 0.5rem 1rem;
+        padding: 0.5rem 1.5rem;
         background-color: var(--transparent);
         opacity: 0;
         transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
-    }
+    
+}
 
     .name-wrapper {
-        position: absolute;
-        top: -2.25em;
-        height: 1.7rem;
         left: 0;
         border: 1px solid rgba(0, 0, 0, 0.15);
         box-shadow: -1px 2px 2px 1px rgba(0, 0, 0, 0.15);
@@ -277,9 +286,10 @@ aside a {
 
     .name-wrapper h3 {
         width: unset;
-        max-width: 170px;
-        text-align: right;
-        padding: unset;
+        min-width: 95px;
+        max-width: 150px;
+        text-align: center;
+        padding: 0;
     }
 
     .name-wrapper i {
@@ -289,26 +299,15 @@ aside a {
 
     .name-wrapper img {
         display: unset;
-        margin-right: 0.5rem;
+        margin: 5px 10px 5px 0;
     }
+
     .name-wrapper:hover *, aside:hover .name-wrapper * {
         color: var(--heroGreen)
     }
 
     .rotate {
         transform: rotate(180deg);
-    }
-}
-
-
-@media (min-width: 1200px) {
-    aside {
-        width: 18.75%;
-        max-width: 375px;
-    }
-    
-    aside ul {
-        padding-top: 0.5rem;
     }
 }
 

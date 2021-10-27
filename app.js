@@ -3,7 +3,7 @@ require("ejs")
 const connectDB = require("./db/connect")
 const refreshTokens = require("./db/redis-cache")
 const lessonsRouter = require("./routes/lessons")
-const practiceRouter = require("./routes/practice")
+const exercisesRouter = require("./routes/exercise")
 const draftsRouter = require("./routes/drafts")
 const helpRouter = require("./routes/help")
 const authRouter = require("./routes/auth")
@@ -21,7 +21,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 app.use("/api/v1/lessons", lessonsRouter) //protect this route
-app.use("/api/v1/practices", practiceRouter) //protect this route
+app.use("/api/v1/exercises", exercisesRouter) //protect this route
 app.use("/api/v1/drafts", draftsRouter) //protect this route
 app.use("/api/v1/help", helpRouter)
 app.use("/api/v1/token", tokenRouter)

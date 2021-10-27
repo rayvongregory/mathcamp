@@ -3,9 +3,8 @@ const html = document.querySelector("html")
 const body = document.querySelector("body")
 const form = document.querySelectorAll("input:not(.nav___search-input)")
 const buttons = document.querySelectorAll(
-  "button:not(#nav-search-btn):not(#submit-search)"
+  "button:not(#nav-search-btn):not(#submit-search):not(#submit)"
 )
-console.log(buttons)
 const submit = document.querySelector("#submit")
 const response = document.querySelector("#response")
 const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
@@ -51,6 +50,7 @@ const getFields = () => {
 
 const togglePasswordFields = (e) => {
   const target = e.target
+  console.log(target)
   const currentPassword = target.previousElementSibling.previousElementSibling
   const newPassword = target.parentElement.nextElementSibling
   const confirmPassword = newPassword.nextElementSibling
@@ -116,13 +116,13 @@ const addListeners = (string = "") => {
     for (let input of fields) {
       input.addEventListener("keydown", (e) => {
         if (e.code === "Enter") {
-          submit.click()
+          submit.dispatchEvent(new Event("pointerup"))
         }
       })
     }
   } else {
     for (let button of buttons) {
-      if (button.id) {
+      if (button.id === "password") {
         button.addEventListener("click", togglePasswordFields)
       } else if (!button.classList.contains("no-edit")) {
         button.addEventListener("click", toggleField)
