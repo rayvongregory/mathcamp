@@ -32,15 +32,15 @@ app.use("/drafts", draftRouter)
 
 app.use("/account", (req, res, next) => {
   res.render("pages/auth", {
-    type: "account",
     title: "Account",
+    bannerTitle: "Account",
   })
 })
 
 app.use("/delete", (req, res, next) => {
   res.render("pages/auth", {
-    type: "delete",
     title: "Delete",
+    bannerTitle: "Account",
   })
 })
 
@@ -60,8 +60,8 @@ app.use("/learn", (req, res, next) => {
 })
 app.use("/login", (req, res, next) => {
   res.render("pages/auth", {
-    type: "login",
     title: "Login",
+    bannerTitle: "Login",
   })
 })
 app.use("/practice", (req, res, next) => {
@@ -73,8 +73,8 @@ app.use("/practice", (req, res, next) => {
 })
 app.use("/register", (req, res, next) => {
   res.render("pages/auth", {
-    type: "register",
     title: "Register",
+    bannerTitle: "Register",
   })
 })
 app.use("/", (req, res, next) => {

@@ -23,6 +23,8 @@
     --heroGreen: #009D88;
     --accent: #FAB355;
     --accentDark: #eb890a;
+    --tinymceGray: #ccc;
+    --tinymceGrayActive: #b4b7ba;
     --transparent: rgba(0, 0, 0, 0.7);
     --offset: 100px;
     --translateX: translateX(-50px);
@@ -42,10 +44,6 @@ body {
 
 .hide {
     display: none !important;
-}
-
-.tox-statusbar__resize-handle {
-    visibility: hidden !important;
 }
 
 .primary {

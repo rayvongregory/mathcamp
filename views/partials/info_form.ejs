@@ -1,92 +1,106 @@
-<h1 class="auth-form___header">Account Information</h1>
-<div class="auth-form">
-  <form id="form" onsubmit="return false;">
+<div class="msg">View and edit your account information.</div>
+<section class="grid">
+  <div class="infowrap">
+    <label for="fname">First Name</label>
     <div class="flexwrap">
-      <label for="fname">First Name:</label>
       <input
-        type="name"
         id="fname"
+        class="hide"
+        type="name"
         placeholder="Enter first name"
-        class="hide"
       />
       <p></p>
-      <button>Edit</button>
+      <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
     </div>
+  </div>
+  <div class="infowrap">
+    <label for="lname">Last Name</label>
     <div class="flexwrap">
-      <label for="lname">Last Name:</label>
       <input
-        type="name"
         id="lname"
-        placeholder="Enter last name"
         class="hide"
-      />
-      <p></p>
-      <button>Edit</button>
-    </div>
-    <div class="flexwrap">
-      <label for="dname">Display Name:</label>
-      <input
         type="name"
+        placeholder="Enter last name"
+      />
+      <p></p>
+      <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
+    </div>
+  </div>
+  <!-- <div class="infowrap">
+    <label for="email">Email</label>
+    <div class="flexwrap">
+      <p>rayvongregory@gmail.com</p>
+    </div>
+  </div> -->
+  <div class="infowrap">
+    <label for="email">Email:</label>
+    <div class="flexwrap">
+      <input type="email" id="email" placeholder="Enter email" class="hide" />
+      <p></p>
+      <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
+    </div>
+  </div>
+  <div class="infowrap">
+    <label for="dname">Display Name</label>
+    <div class="flexwrap">
+      <input
         id="dname"
-        placeholder="Enter new display name"
         class="hide"
+        type="name"
+        placeholder="Enter display name"
       />
       <p></p>
-      <button>Edit</button>
+      <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
     </div>
+  </div>
+  <div class="infowrap">
+    <label>Password</label>
     <div class="flexwrap">
-      <label for="email">Email:</label>
-      <input
-        type="email"
-        id="email"
-        placeholder="This does nothing but perserve the layout"
-        class="hide"
-      />
-      <p></p>
-      <button class="no-edit">Edit</button>
+      <p>Edit password</p>
+      <div class="fdc hide">
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter current password"
+        />
+        <input type="password" id="password" placeholder="Enter new password" />
+        <input
+          type="password"
+          id="password"
+          placeholder="Re-enter new password"
+        />
+      </div>
+      <span id="password" aria-label="Edit" title="Edit"
+        ><i class="fas fa-edit"></i
+      ></span>
     </div>
-    <div class="flexwrap">
-      <label for="cemail">Contact email:</label>
-      <input type="email" id="cemail" placeholder="Enter email" class="hide" />
-      <p></p>
-      <button>Edit</button>
-    </div>
-    <div class="flexwrap">
-      <label for="cpassword">Current password:</label>
-      <input
-        type="password"
-        id="cpassword"
-        placeholder="Enter your current password"
-        autocomplete="off"
-        class="hide"
-      />
-      <p>✱✱✱✱✱✱✱✱✱</p>
-      <button id="password">Edit</button>
-    </div>
-    <div class="flexwrap hide">
-      <label for="npassword">New password:</label>
-      <input
-        type="password"
-        id="npassword"
-        placeholder="Enter a new password"
-        autocomplete="off"
-      />
-      <!-- <p></p> -->
-    </div>
-    <div class="flexwrap hide">
-      <label for="cnpassword">Confirm new password:</label>
-      <input
-        type="password"
-        id="cnpassword"
-        placeholder="Re-enter your new password"
-        autocomplete="off"
-      />
-      <!-- <p></p> -->
-    </div>
-    <div id="response"></div>
-    <div class="centerwrap">
-      <button id="submit" class="no-click">Update</button>
-    </div>
-    <p>Want to delete your account? <a href="/delete">Click here</a>.</p>
-  </form>
-</div>
+  </div>
+  <div class="save_discard_buttons hide">
+    <!-- only reveal when an update can be made -->
+    <span
+      id="submit"
+      role="button"
+      aria-label="Save changes"
+      title="Save changes"
+      ><i class="fas fa-save"></i>
+      <p>Save Changes</p></span
+    >
+    <span
+      id="discard_all"
+      role="button"
+      aria-label="Discard changes"
+      title="Discard changes"
+      ><i class="fas fa-trash"></i>
+      <p>Discard Changes</p></span
+    >
+  </div>
+  <div id="response"></div>
+  <div class="delete">
+    <button><h5>Delete Account</h5></button>
+  </div>
+</section>
+
+<!-- <div class="centerwrap">
+    <button id="submit" class="no-click">Update</button>
+  </div>
+  <p>Want to delete your account? <a href="/delete">Click here</a>.</p> -->

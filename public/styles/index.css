@@ -54,6 +54,10 @@
     border-radius: 10px !important;
 }
 
+.tox-statusbar__resize-handle {
+    visibility: hidden !important;
+}
+
 .messages___header {
     border-bottom: 1px solid var(--neutralMid);
 }

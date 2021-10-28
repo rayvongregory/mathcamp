@@ -1,11 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,500;1,500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
 
-:root {
-    --tinymceGray: #ccc;
-    --tinymceGrayActive: #b4b7ba;
-}
-
 html {
     visibility: hidden;
 }

@@ -169,7 +169,7 @@ aside a {
 
     .menu-btn {
         left: unset;
-        top: 3px;
+        top: 5px;
         right: 10px;
         z-index: 3;
     }
@@ -277,6 +277,7 @@ aside a {
         left: 0;
         border: 1px solid rgba(0, 0, 0, 0.15);
         box-shadow: -1px 2px 2px 1px rgba(0, 0, 0, 0.15);
+        background-color: white;
         border-radius: 15px;
         padding: 0 5px;
         color: black;

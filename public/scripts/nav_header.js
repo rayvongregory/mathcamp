@@ -59,7 +59,6 @@ const getDisplayName = async () => {
         draftsButton.classList.remove("hide")
       }
       let nameWrapWidth = nameWrap.offsetWidth
-      console.log(nameWrapWidth)
       if (nameWrapWidth > 163) {
         asideUL.style.width = `${nameWrapWidth}px`
       }
@@ -69,7 +68,6 @@ const getDisplayName = async () => {
       location.reload()
     }
   } else {
-    // avatar.classList.add("hide")
     nameWrapH3.innerHTML = "Guest"
   }
   nav.style.visibility = "visible"
@@ -187,19 +185,26 @@ const checkWindowSize = () => {
     }
     resetMenuBtn()
   }
-  console.log(currentWindowSize)
   switch (currentWindowSize) {
     case "tiny":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
       navSearchContainer.classList.remove("hide")
       aside.classList.remove("slide")
       root.setProperty("--offset", "100px")
+      if (navSearchContainer.nextElementSibling === aside) {
+        aside.remove()
+        menuBtn.insertAdjacentElement("afterend", aside)
+      }
       break
     case "small":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span>Search</span>'
       navSearchContainer.classList.add("hide")
       aside.classList.remove("slide")
       root.setProperty("--offset", "90px")
+      if (navSearchContainer.nextElementSibling === aside) {
+        aside.remove()
+        menuBtn.insertAdjacentElement("afterend", aside)
+      }
       break
     case "medium":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
@@ -207,16 +212,17 @@ const checkWindowSize = () => {
       aside.classList.remove("slide")
       root.setProperty("--offset", "90px")
       root.setProperty("--offset", "0px")
+      if (navSearchContainer.nextElementSibling === aside) {
+        aside.remove()
+        menuBtn.insertAdjacentElement("afterend", aside)
+      }
       break
     case "big":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
       navSearchContainer.classList.remove("hide")
       asideUL.classList.remove("hide")
       aside.classList.remove("slide")
-      // if aside is child of nav, remove and append after menubtn
       if (navSearchContainer.nextElementSibling === aside) {
-        // console.log("big")
-
         aside.remove()
         menuBtn.insertAdjacentElement("afterend", aside)
       }
@@ -226,9 +232,7 @@ const checkWindowSize = () => {
       navSearchContainer.classList.remove("hide")
       asideUL.classList.add("hide")
       asideUL.classList.remove("slide-down")
-      // if aside is the next sibling of menubtn, remove and append to nav
       if (menuBtn.nextElementSibling === aside) {
-        // console.log("large")
         aside.remove()
         nav.appendChild(aside)
       }

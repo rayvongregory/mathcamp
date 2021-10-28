@@ -2,9 +2,8 @@ const path = window.location.pathname
 const html = document.querySelector("html")
 const body = document.querySelector("body")
 const form = document.querySelectorAll("input:not(.nav___search-input)")
-const buttons = document.querySelectorAll(
-  "button:not(#nav-search-btn):not(#submit-search):not(#submit)"
-)
+const buttons = document.querySelectorAll(".flexwrap span")
+const sdb = document.querySelector(".save_discard_buttons")
 const submit = document.querySelector("#submit")
 const response = document.querySelector("#response")
 const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
@@ -12,9 +11,9 @@ const firstName = document.querySelector("#fname+p")
 const lastName = document.querySelector("#lname+p")
 const displayName = document.querySelector("#dname+p")
 const accountEmail = document.querySelector("#email+p")
-const contactEmail = document.querySelector("#cemail+p")
+// const contactEmail = document.querySelector("p+#cemail")
 let formData = {}
-let fields = []
+let fields, pws
 
 const unauthorized = (string, remove = false) => {
   response.classList.remove("success")
@@ -42,59 +41,44 @@ const backHome = (string = "Redirecting to home page...") => {
   }, 1000)
 }
 
-const getFields = () => {
-  form.forEach((field) => {
-    fields.push(field)
-  })
-}
-
 const togglePasswordFields = (e) => {
-  const target = e.target
-  console.log(target)
-  const currentPassword = target.previousElementSibling.previousElementSibling
-  const newPassword = target.parentElement.nextElementSibling
-  const confirmPassword = newPassword.nextElementSibling
-  if (newPassword.classList.contains("hide")) {
-    e.target.innerHTML = "Discard changes"
-    currentPassword.nextElementSibling.classList.add("hide")
-    currentPassword.classList.remove("hide")
-    newPassword.classList.remove("hide")
-    confirmPassword.classList.remove("hide")
+  const { target } = e
+  let i = target.querySelector("i")
+  let pFields = target.previousElementSibling
+  let p = pFields.previousElementSibling
+  p.classList.toggle("hide")
+  pFields.classList.toggle("hide")
+  if (i.classList.contains("fa-edit")) {
+    i.classList.replace("fa-edit", "fa-trash")
+    target.setAttribute("aria-label", "Discard changes")
+    target.setAttribute("title", "Discard changes")
   } else {
-    e.target.innerHTML = "Edit"
-    currentPassword.nextElementSibling.classList.remove("hide")
-    currentPassword.classList.add("hide")
-    currentPassword.value = ""
-    currentPassword.dispatchEvent(new KeyboardEvent("keyup"))
-    newPassword.classList.add("hide")
-    newPassword.children[1].value = ""
-    newPassword.children[1].dispatchEvent(new KeyboardEvent("keyup"))
-    confirmPassword.classList.add("hide")
-    confirmPassword.children[1].value = ""
-    confirmPassword.children[1].dispatchEvent(new KeyboardEvent("keyup"))
-  }
-  if (window.innerWidth >= 576) {
-    e.target.style.marginLeft = "8px"
-  } else {
-    e.target.style.marginLeft = "0px"
+    i.classList.replace("fa-trash", "fa-edit")
+    target.setAttribute("aria-label", "Edit")
+    target.setAttribute("title", "Edit")
+    for (let pw of pws) {
+      pw.value = ""
+      pw.dispatchEvent(new KeyboardEvent("keyup"))
+    }
   }
 }
 
 const toggleField = (e) => {
-  let placeholderValue = e.target.previousElementSibling.innerHTML
-  let field = e.target.previousElementSibling.previousElementSibling
+  let { target } = e
+  let i = target.querySelector("i")
+  let p = target.previousElementSibling
+  let field = p.previousElementSibling
   if (field.classList.contains("hide")) {
-    e.target.innerHTML = "Discard changes"
-    field.classList.remove("hide")
-    field.placeholder = placeholderValue
+    i.classList.replace("fa-edit", "fa-trash")
+    target.setAttribute("aria-label", "Discard changes")
+    target.setAttribute("title", "Discard changes")
+    field.placeholder = p.innerHTML
     field.nextElementSibling.classList.add("hide")
-    if (window.innerWidth >= 576) {
-      e.target.style.marginLeft = "8px"
-    } else {
-      e.target.style.marginLeft = "0px"
-    }
+    field.classList.remove("hide")
   } else {
-    e.target.innerHTML = "Edit"
+    i.classList.replace("fa-trash", "fa-edit")
+    target.setAttribute("aria-label", "Edit")
+    target.setAttribute("title", "Edit")
     field.classList.add("hide")
     field.value = ""
     field.dispatchEvent(new KeyboardEvent("keyup"))
@@ -102,16 +86,17 @@ const toggleField = (e) => {
   }
 }
 const allowUpdate = () => {
-  for (let field of form) {
+  for (let field of fields) {
+    console.log(field)
     if (field.value.trim() !== "") {
-      return submit.classList.remove("no-click")
+      return sdb.classList.remove("hide")
     }
   }
-  submit.classList.add("no-click")
+  sdb.classList.add("hide")
 }
 
 const addListeners = (string = "") => {
-  getFields()
+  fields = Array.from(form)
   if (!string) {
     for (let input of fields) {
       input.addEventListener("keydown", (e) => {
@@ -121,6 +106,7 @@ const addListeners = (string = "") => {
       })
     }
   } else {
+    pws = fields.slice(4, 7)
     for (let button of buttons) {
       if (button.id === "password") {
         button.addEventListener("click", togglePasswordFields)
@@ -128,12 +114,14 @@ const addListeners = (string = "") => {
         button.addEventListener("click", toggleField)
       }
     }
-
     for (let field of form) {
       if (field.id !== "email") {
         field.addEventListener("keyup", allowUpdate)
       }
     }
+    // for (let pw of pws) {
+    //   pw.addEventListener("keyup", allowUpdate)
+    // }
   }
 }
 
@@ -148,7 +136,7 @@ const checkToken = () => {
     }
   }
   html.style.visibility = "visible"
-  body.style.backgroundColor = "var(--accent)"
+  body.style.backgroundColor = "var(--neutralLight)"
 }
 
 const handleData = () => {
@@ -207,8 +195,7 @@ const handleLogin = async () => {
     }
   }
   response.innerHTML = "Logging in..."
-  const email = formData.email
-  const password = formData.password
+  const { email, password } = formData
   try {
     const { data } = await axios.post(`/api/v1/auth${path}`, {
       email,
@@ -232,7 +219,7 @@ const getAccountInfo = async () => {
     lastName.innerHTML = lname
     displayName.innerHTML = dname
     accountEmail.innerHTML = email
-    contactEmail.innerHTML = cemail
+    // contactEmail.innerHTML = cemail
   } catch (err) {
     console.error(err)
   }
@@ -370,25 +357,4 @@ switch (path) {
     break
 }
 
-const setStyles = () => {
-  if (path === "/account") {
-    const width = window.innerWidth
-    buttons.forEach((button) => {
-      if (width < 576) {
-        button.style.marginLeft = "0px"
-      } else {
-        button.style.marginLeft = "8px"
-      }
-    })
-    // if (width < 576) {
-    //   // asideUL.classList.add("hide")
-    //   menuBtn.classList.add("hide")
-    // } else {
-    //   // asideUL.classList.remove("hide")
-    //   menuBtn.classList.remove("hide")
-    // }
-  }
-}
-
-window.addEventListener("resize", setStyles)
 window.dispatchEvent(new Event("resize"))
