@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="invis" lang="en">
   <head>
     <%- include('../partials/head'); %>
     <link rel="stylesheet" href="/styles/create.css" />
@@ -8,9 +8,7 @@
     include('../partials/tinymce_exercise_scripts') %> <% } %>
   </head>
   <body>
-    <div class="menu-btn"><div class="menu-btn_burgir"></div></div>
-    <aside><%- include('../partials/aside'); %></aside>
-    <nav><%- include('../partials/nav'); %></nav>
+    <%- include('../partials/aside'); %> <%- include('../partials/nav'); %>
     <header class="secondary">
       <h1><%=bannerTitle%></h1>
     </header>

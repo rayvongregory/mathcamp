@@ -1,35 +1,40 @@
+:root {
+    --transparent: rgba(0, 0, 0, 0.7);
+    --translateX: translateX(-50px);
+    --rotateTranslate: rotate(45deg) translate(35px, -35px);
+    --rotateTranslate2: rotate(-45deg) translate(35px, 35px);
+    --transition: transform 0.3s ease-in-out;
+}
+
 aside {
-    visibility: hidden;
     position: absolute;
     z-index: 1;
-    width: 200px;
-    left: -200px;
-    display: block;
-    height: 100vh;
-    padding-left: 3.5rem;
+    width: 230px;
+    left: -230px;
+    display: grid;
+    grid-template-columns: 65px auto;
+    grid-auto-rows: minmax(min-content, max-content);
+    min-height: 100%;
     color: var(--neutralLight);
     background-color: var(--transparent);
-    -webkit-transition: left 0.3s ease-out, opacity 0.4s ease-out;
-    -o-transition: left 0.3s ease-out, opacity 0.4s ease-out;
-    transition: left 0.3s ease-out, opacity 0.4s ease-out;
-    opacity: 0;
+      -webkit-transition: left 0.3s ease-out;
+    -o-transition: left 0.3s ease-out;
+    transition: left 0.3s ease-out;
 }
 
 aside h3 {
     display: block;
-    width: 150px;
-    padding: 1.2rem 0 0.5em 0.5rem;
     font-size: 1.25em;
     text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    /* text-transform: uppercase; */
 }
 
 aside ul {
     list-style: none;
-    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+    grid-column: 2;
 }
 
 aside li {
@@ -46,6 +51,14 @@ aside a {
     cursor: pointer;
 }
 
+.name-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: fit-content;
+    height: -moz-fit-content;
+}
+
 .name-wrapper img {
     width: 1.125rem;
     height: 1.125rem;
@@ -53,12 +66,6 @@ aside a {
     display: none;
 }
 
-.name-wrapper {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-   
-}
 
 .name-wrapper i {
     display: none;
@@ -72,11 +79,35 @@ aside a {
     opacity: 1;
 }
 
-.menu-btn {
+.abs {
     position: absolute;
-    top: 14px;
-    left: 14px;
+    left: unset;
+    right: -50px;
+    pointer-events: all;
+}
+
+.fixed {
+    position: fixed;
     right: unset;
+    left: 15px;
+    pointer-events: none;
+}
+
+.sticky {
+    position: sticky;
+    right: unset;
+    left: 14.5px;
+    pointer-events: all;
+}
+
+.sticky-div {
+    grid-column: 2;
+    position: sticky;
+    top: 18px;
+}
+
+.menu-btn {
+    top: 14px;
     z-index: 2;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -99,6 +130,7 @@ aside a {
     z-index: 3;
     width: 30px;
     height: 3px;
+    flex-shrink: 0;
     background-color: white;
     border-radius: 5px;
     -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -161,19 +193,51 @@ aside a {
     cursor: pointer;
 }
 
-
 @media (min-width: 576px) { 
+    :root {
+        --translateX: translateX(10px);
+    --rotateTranslate: rotate(-45deg) translate(0px, 0px);
+    --rotateTranslate2: rotate(45deg) translate(0px, 0px);
+    --transition: transform 0.3s ease-in-out, background-color 0.5s ease-out;
+    }
+
+    .slide {
+        left: unset;
+        right: 0;
+    }
+
     aside {
+        grid-template-columns: 55px auto;
+        left: unset;
+        right: -230px;
+        -webkit-transition: right 0.45s ease-out, opacity 0.4s ease-out;
+        -o-transition: right 0.45s ease-out, opacity 0.4s ease-out;
+        transition: right 0.45s ease-in-out, opacity 0.4s ease-out;
         z-index: 2;
     }
 
+    aside h3 {
+        font-size: 1.25em;
+        padding-top: 0.6rem;
+    }
+
+    .sticky-div {
+        top: 0px;
+    }
+    
+
     .menu-btn {
-        left: unset;
-        top: 5px;
-        right: 10px;
+        left: -45px;
+        top: 3px;
         z-index: 3;
     }
     
+    .fixed {
+        position: fixed;
+        left: unset;
+        right: 10px;
+    }
+
     .menu-btn_burgir,
     .menu-btn_burgir::after,
     .menu-btn_burgir::before {
@@ -184,60 +248,45 @@ aside a {
 
     .menu-btn.open .menu-btn_burgir::before, 
     .menu-btn.open .menu-btn_burgir::after {
+        background-color: black;
+    }
+
+    .menu-btn.open.sticky .menu-btn_burgir::before, 
+    .menu-btn.open.sticky .menu-btn_burgir::after {
+        background-color: white;
+    }
+
+    .menu-btn.fixed .menu-btn_burgir::before, 
+    .menu-btn.fixed .menu-btn_burgir::after {
         background-color: white;
     }
 
     .menu-btn.open .menu-btn_burgir {
-        -webkit-transform: translateX(50px);
-            -ms-transform: translateX(50px);
-                transform: translateX(50px);
+        -webkit-transform: var(--translateX);
+            -ms-transform: var(--translateX);
+                transform: var(--translateX);
         -webkit-box-shadow: none;
                 box-shadow: none;
     }
     
     .menu-btn.open .menu-btn_burgir::before {
-        -webkit-transform: rotate(45deg) translate(-35px, 35px);
-            -ms-transform: rotate(45deg) translate(-35px, 35px);
-                transform: rotate(45deg) translate(-35px, 35px);
+        -webkit-transform: var(--rotateTranslate);
+            -ms-transform: var(--rotateTranslate);
+                transform: var(--rotateTranslate);
     }
     
     .menu-btn.open .menu-btn_burgir::after {
-        -webkit-transform: rotate(-45deg) translate(-35px, -35px);
-            -ms-transform: rotate(-45deg) translate(-35px, -35px);
-                transform: rotate(-45deg) translate(-35px, -35px);
-    }
-
-    aside {
-        left: unset;
-        right: -200px;
-        padding-left: unset;
-        padding-right: 3rem;
-        -webkit-transition: right 0.3s ease-out, opacity 0.4s ease-out;
-        -o-transition: right 0.3s ease-out, opacity 0.4s ease-out;
-        transition: right 0.3s ease-out, opacity 0.4s ease-out;
-    }
-
-    aside h3 {
-        font-size: 1.25em;
-        padding-top: 0.6rem;
-        padding-left: 1rem;
-    }
-
-    aside ul {
-        padding: 0 0 1rem 1rem;
-        list-style: none;
-    }
-
-    .slide {
-        left: unset;
-        right: 0;
-        opacity: 1;
-    
+        -webkit-transform: var(--rotateTranslate2);
+            -ms-transform: var(--rotateTranslate2);
+                transform: var(--rotateTranslate2);
     }
 }
 
-@media (min-width: 768px)  { }
-
+@media (min-width: 768px)  {
+    .menu-btn {
+        top: 5px;
+    }
+ }
 
 @media (min-width: 992px) { 
     .menu-btn {
@@ -245,6 +294,7 @@ aside a {
     }
 
     aside {
+        display: unset;
         position: relative;
         right: unset;
         height: unset;
@@ -264,7 +314,7 @@ aside a {
     aside ul {
         position: absolute;
         top: 38px;
-        min-width: 163px;
+        min-width: 165px;
         max-height: 0;
         padding: 0.5rem 1.5rem;
         background-color: var(--transparent);
@@ -287,8 +337,8 @@ aside a {
 
     .name-wrapper h3 {
         width: unset;
-        min-width: 95px;
-        max-width: 150px;
+        min-width: 100px;
+        max-width: 155px;
         text-align: center;
         padding: 0;
     }

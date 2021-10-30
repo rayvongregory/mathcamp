@@ -1,8 +1,11 @@
+const html = document.querySelector("html")
+const body = document.querySelector("body")
 const nav = document.querySelector("nav")
 const navSearch = document.querySelector("#nav-search-btn")
 const navSearchContainer = document.querySelector(".nav___search-container")
 const aside = document.querySelector("aside")
 const asideUL = aside.querySelector("ul")
+const stickyDiv = document.querySelector(".sticky-div")
 const menuBtn = document.querySelector(".menu-btn")
 const menuBtnBurgir = menuBtn.querySelector("*")
 const nameWrap = document.querySelector(".name-wrapper")
@@ -24,10 +27,6 @@ let justLoaded = true
 let breakpoints = { tiny: 320, small: 576, medium: 768, big: 992, large: 1200 }
 let lastWindowSize = 1,
   currentWindowSize = 1
-let tx = "translateX(-50px)"
-let rt = "rotate(45deg) translate(35px, -35px)"
-let rt2 = "rotate(-45deg) translate(35px, 35px)"
-let t = "transform 0.3s ease-in-out"
 
 logoutButton.addEventListener("pointerup", async () => {
   try {
@@ -58,10 +57,6 @@ const getDisplayName = async () => {
         createExerciseButton.classList.remove("hide")
         draftsButton.classList.remove("hide")
       }
-      let nameWrapWidth = nameWrap.offsetWidth
-      if (nameWrapWidth > 163) {
-        asideUL.style.width = `${nameWrapWidth}px`
-      }
     } catch (error) {
       console.log(error)
       localStorage.removeItem("token")
@@ -70,8 +65,7 @@ const getDisplayName = async () => {
   } else {
     nameWrapH3.innerHTML = "Guest"
   }
-  nav.style.visibility = "visible"
-  aside.style.visibility = "visible"
+  html.classList.remove("invis")
 }
 
 nameWrap.addEventListener("pointerup", () => {
@@ -92,49 +86,70 @@ nameWrap.addEventListener("pointerup", () => {
 })
 
 const resetMenuBtn = () => {
-  menuBtn.classList.replace("open", "no-transitions")
+  menuBtn.classList.add("no-transitions")
   menuBtnBurgir.classList.add("no-transitions")
-  root.setProperty("--translateX", "0")
-  root.setProperty("--rotateTranslate", "0")
-  root.setProperty("--rotateTranslate2", "0")
-  root.setProperty("--transition", "none")
+  if (menuBtn.classList.contains("sticky")) {
+    menuBtn.classList.replace("sticky", "abs")
+  }
+  if (menuBtn.classList.contains("open")) {
+    menuBtn.classList.remove("open")
+  }
   setTimeout(() => {
     menuOpen = false
     menuBtn.classList.remove("no-transitions")
     menuBtnBurgir.classList.remove("no-transitions")
-    root.setProperty("--translateX", tx)
-    root.setProperty("--rotateTranslate", rt)
-    root.setProperty("--rotateTranslate2", rt2)
-    root.setProperty("--transition", t)
   }, 0)
 }
 
 menuBtn.addEventListener("pointerup", () => {
-  aside.classList.toggle("slide")
-  if (lastWindowSize !== "big") {
-    navSearchContainer.classList.add("hide")
+  if (
+    lastWindowSize !== "large" &&
+    aside.style.height !== `${body.scrollHeight}px`
+  ) {
+    aside.style.height = `${body.scrollHeight}px`
   }
-  if (lastWindowSize === "small") {
-    navSearch.innerHTML = '<i class="fas fa-search"></i><span>Search</span>'
-  } else if (currentWindowSize === "medium") {
-    navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
-  }
-  if (!menuOpen) {
-    menuBtn.classList.add("open")
-    menuOpen = true
-  } else {
-    menuBtn.classList.remove("open")
-    menuOpen = false
+  if (lastWindowSize === "tiny" || lastWindowSize === "small") {
+    if (!menuOpen) {
+      aside.classList.toggle("slide")
+      menuBtn.classList.add("open")
+      menuBtn.classList.replace("abs", "fixed")
+      setTimeout(() => {
+        menuBtn.classList.replace("fixed", "sticky")
+      }, 300)
+      menuOpen = true
+    } else {
+      menuBtn.classList.remove("open")
+      setTimeout(() => {
+        aside.classList.toggle("slide")
+        menuBtn.classList.replace("sticky", "fixed")
+      }, 300)
+      setTimeout(() => {
+        menuBtn.classList.replace("fixed", "abs")
+      }, 600)
+      menuOpen = false
+    }
+  } else if (lastWindowSize === "medium" || lastWindowSize === "big") {
+    if (!menuOpen) {
+      menuBtn.classList.add("open")
+      menuBtn.classList.replace("abs", "fixed")
+      aside.classList.toggle("slide")
+      setTimeout(() => {
+        menuBtn.classList.replace("fixed", "sticky")
+      }, 102)
+      menuOpen = true
+    } else {
+      menuBtn.classList.remove("open")
+      aside.classList.toggle("slide")
+      setTimeout(() => {
+        menuBtn.classList.replace("sticky", "abs")
+      }, 195)
+      menuOpen = false
+    }
   }
 })
 
 navSearch.addEventListener("pointerup", () => {
   navSearchContainer.classList.toggle("hide")
-  aside.classList.replace("slide", "no-transitions")
-  setTimeout(() => {
-    aside.classList.remove("no-transitions")
-  }, 0)
-  resetMenuBtn()
   if (lastWindowSize === "medium") {
     if (navSearch.innerHTML === '<i class="fas fa-times"></i><span></span>') {
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
@@ -149,11 +164,11 @@ navSearch.addEventListener("pointerup", () => {
     } else {
       navSearch.innerHTML = '<i class="fas fa-times"></i><span>Search</span>'
     }
-    if (root.getPropertyValue("--offset") !== "100px") {
-      root.setProperty("--offset", "100px")
-    } else {
-      root.setProperty("--offset", "90px")
-    }
+    // if (root.getPropertyValue("--offset") !== "100px") {
+    //   root.setProperty("--offset", "100px")
+    // } else {
+    //   root.setProperty("--offset", "90px")
+    // }
   }
 })
 
@@ -190,31 +205,31 @@ const checkWindowSize = () => {
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
       navSearchContainer.classList.remove("hide")
       aside.classList.remove("slide")
-      root.setProperty("--offset", "100px")
+      // root.setProperty("--offset", "100px")
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
-        menuBtn.insertAdjacentElement("afterend", aside)
+        nav.insertAdjacentElement("beforebegin", aside)
       }
       break
     case "small":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span>Search</span>'
       navSearchContainer.classList.add("hide")
       aside.classList.remove("slide")
-      root.setProperty("--offset", "90px")
+      // root.setProperty("--offset", "90px")
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
-        menuBtn.insertAdjacentElement("afterend", aside)
+        nav.insertAdjacentElement("beforebegin", aside)
       }
       break
     case "medium":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
       navSearchContainer.classList.add("hide")
       aside.classList.remove("slide")
-      root.setProperty("--offset", "90px")
-      root.setProperty("--offset", "0px")
+      // root.setProperty("--offset", "90px")
+      // root.setProperty("--offset", "0px")
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
-        menuBtn.insertAdjacentElement("afterend", aside)
+        nav.insertAdjacentElement("beforebegin", aside)
       }
       break
     case "big":
@@ -224,17 +239,20 @@ const checkWindowSize = () => {
       aside.classList.remove("slide")
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
-        menuBtn.insertAdjacentElement("afterend", aside)
+        nav.insertAdjacentElement("beforebegin", aside)
       }
-      root.setProperty("--offset", "0px")
+      // root.setProperty("--offset", "0px")
       break
     case "large":
       navSearchContainer.classList.remove("hide")
       asideUL.classList.add("hide")
       asideUL.classList.remove("slide-down")
-      if (menuBtn.nextElementSibling === aside) {
+      if (aside.nextElementSibling === nav) {
         aside.remove()
         nav.appendChild(aside)
+      }
+      if (aside.style.height) {
+        aside.style.height = ""
       }
       nameWrapI.classList.remove("rotate")
       break

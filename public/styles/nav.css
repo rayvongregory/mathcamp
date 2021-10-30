@@ -1,8 +1,12 @@
+:root {
+    --offset: 70px;
+}
+
 nav {
-    visibility: hidden;
     position: fixed;
     bottom: 0;
     z-index: 3;
+    isolation: isolate;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -16,6 +20,7 @@ nav {
 }
 
 .buttons {
+    position: relative;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -40,6 +45,7 @@ nav {
     font-size: 1rem;
     text-decoration: none;
     color: inherit;
+    z-index: 2;
 }
 
 #nav-search-btn {
@@ -60,6 +66,7 @@ nav {
     border: none;
     background-color: var(--navGreen);
     color: var(--neutralLight);
+    z-index: 2;
 }
 
 #nav-search-btn:hover, .btn:hover{
@@ -71,7 +78,7 @@ span, i {
 }
 
 .nav___search-container {
-    position: relative;
+    position: absolute;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -83,6 +90,7 @@ span, i {
             align-items: center;
     width: 100%;
     background-color:var(--navGreen);
+    z-index: -1;
 }
 
 .nav___search {

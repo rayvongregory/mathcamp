@@ -28,28 +28,40 @@ const getUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-  //a user should only be about to get themselves
+  //a user should only be able to get themselves
   const { token } = req.params
-  let email = jwt.decode(token).email //! decode does not verify, nor does it require the secret string
-  const user = await User.findOne({ email })
+  let em = jwt.decode(token).email //! decode does not verify, nor does it require the secret string
+  const user = await User.findOne({ email: em })
   if (!user) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ msg: "No user user" })
+    return res.status(StatusCodes.BAD_REQUEST).json({ msg: "No such user" })
   }
-  const { name, displayName, contactEmail, currentPassword, newPassword } =
-    req.body
+  const { name, displayName, email, currentPassword, newPassword } = req.body
   if (name || displayName) {
     user.name = name || user.name
     user.displayName = displayName || user.displayName
     await user.save()
     const accessToken = user.generateAccessToken()
-    return res.status(StatusCodes.OK).json({ accessToken, msg: "Info updated" })
+    return res
+      .status(StatusCodes.OK)
+      .json({ accessToken, msg: "Name(s) updated" })
   }
 
-  if (contactEmail) {
+  if (email) {
+    let otherUser = await User.findOne({ email })
+    if (otherUser && otherUser.id !== user.id) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        msg: "There is already an account associated with this email address.",
+      })
+    }
     //! We should really be sending an email to the given email address for the user to confirm...
-    user.contactEmail = contactEmail
+    user.email = email
     await user.save()
+    const accessToken = user.generateAccessToken()
+    return res
+      .status(StatusCodes.OK)
+      .json({ accessToken, msg: "Email updated" })
   }
+
   if (currentPassword && newPassword) {
     const match = await user.matchPasswords(currentPassword)
     if (!match) {
@@ -60,9 +72,8 @@ const updateUser = async (req, res) => {
     user.password = newPassword
     await user.hashPassword()
     await user.save()
+    return res.status(StatusCodes.OK).json({ msg: "Password updated" })
   }
-
-  res.status(StatusCodes.OK).json({ msg: "Info updated" })
 }
 
 const deleteUser = async (req, res) => {

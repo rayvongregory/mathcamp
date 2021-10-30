@@ -33,14 +33,6 @@
     </div>
   </div> -->
   <div class="infowrap">
-    <label for="email">Email:</label>
-    <div class="flexwrap">
-      <input type="email" id="email" placeholder="Enter email" class="hide" />
-      <p></p>
-      <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
-    </div>
-  </div>
-  <div class="infowrap">
     <label for="dname">Display Name</label>
     <div class="flexwrap">
       <input
@@ -49,6 +41,14 @@
         type="name"
         placeholder="Enter display name"
       />
+      <p></p>
+      <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
+    </div>
+  </div>
+  <div class="infowrap">
+    <label for="email">Email:</label>
+    <div class="flexwrap">
+      <input type="email" id="email" placeholder="Enter email" class="hide" />
       <p></p>
       <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
     </div>
@@ -63,10 +63,14 @@
           id="password"
           placeholder="Enter current password"
         />
-        <input type="password" id="password" placeholder="Enter new password" />
         <input
           type="password"
-          id="password"
+          id="npassword"
+          placeholder="Enter new password"
+        />
+        <input
+          type="password"
+          id="cnpassword"
           placeholder="Re-enter new password"
         />
       </div>
@@ -75,7 +79,8 @@
       ></span>
     </div>
   </div>
-  <div class="save_discard_buttons hide">
+  <!-- <div class="save_discard_buttons hide"> -->
+  <div class="save_discard_buttons">
     <!-- only reveal when an update can be made -->
     <span
       id="submit"

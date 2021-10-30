@@ -28,14 +28,14 @@ const userSchema = new Schema(
     avatar: {
       type: String,
     },
-    contactEmail: {
-      type: String,
-      match: [
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        "This email address is not valid",
-      ],
-      default: this.email,
-    },
+    // contactEmail: {
+    //   type: String,
+    //   match: [
+    //     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    //     "This email address is not valid",
+    //   ],
+    //   default: this.email,
+    // },
     password: {
       type: String,
       // match: [
@@ -78,9 +78,9 @@ userSchema.methods.getAvatar = function () {
   )
 }
 
-userSchema.methods.createContactEmail = function () {
-  this.contactEmail = this.email
-}
+// userSchema.methods.createContactEmail = function () {
+//   this.contactEmail = this.email
+// }
 
 userSchema.methods.hashPassword = async function () {
   this.password = await bcrypt.hash(this.password, 10)

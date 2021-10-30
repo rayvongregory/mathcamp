@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="invis" lang="en">
   <head>
     <%- include('../partials/head'); %>
     <link rel="stylesheet" href="/styles/drafts.css" />
   </head>
   <body>
-    <div class="menu-btn"><div class="menu-btn_burgir"></div></div>
-    <aside><%- include('../partials/aside'); %></aside>
-    <nav><%- include('../partials/nav'); %></nav>
+    <%- include('../partials/aside'); %> <%- include('../partials/nav'); %>
     <header class="secondary"><h1><%=bannerTitle%></h1></header>
     <div class="msg"><%=msg%></div>
     <div class="drafts-wrapper">

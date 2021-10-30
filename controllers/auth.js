@@ -64,7 +64,7 @@ const registerUser = async (req, res) => {
   await user.hashPassword()
   user.createDisplayName()
   user.getAvatar()
-  user.createContactEmail()
+  // user.createContactEmail()
   const refreshToken = user.generateRefreshToken()
   const accessToken = user.generateAccessToken()
   await user.save()

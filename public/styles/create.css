@@ -1,13 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,500;1,500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
-
-html {
-    visibility: hidden;
-}
-
 .tox-toolbar {
     justify-content: space-between !important;
-    
 }
 
 .create-wrapper {
@@ -126,7 +118,6 @@ footer {
     background-color: white;
     border: 1px solid var(--tinymceGray);
 }
-
 
 .publish_save_buttons span {
     display: flex;
