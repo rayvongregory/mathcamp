@@ -7,7 +7,10 @@ const aside = document.querySelector("aside")
 const asideUL = aside.querySelector("ul")
 const stickyDiv = document.querySelector(".sticky-div")
 const menuBtn = document.querySelector(".menu-btn")
-const menuBtnBurgir = menuBtn.querySelector("*")
+const menuBtnBurgirLines = menuBtn.querySelectorAll("*")
+const menuBtnBurgirB = menuBtnBurgirLines[0]
+const menuBtnBurgir = menuBtnBurgirLines[1]
+const menuBtnBurgirA = menuBtnBurgirLines[2]
 const nameWrap = document.querySelector(".name-wrapper")
 const nameWrapI = nameWrap.querySelector("i")
 const nameWrapH3 = nameWrap.querySelector("h3")
@@ -85,22 +88,6 @@ nameWrap.addEventListener("pointerup", () => {
   }
 })
 
-const resetMenuBtn = () => {
-  menuBtn.classList.add("no-transitions")
-  menuBtnBurgir.classList.add("no-transitions")
-  if (menuBtn.classList.contains("sticky")) {
-    menuBtn.classList.replace("sticky", "abs")
-  }
-  if (menuBtn.classList.contains("open")) {
-    menuBtn.classList.remove("open")
-  }
-  setTimeout(() => {
-    menuOpen = false
-    menuBtn.classList.remove("no-transitions")
-    menuBtnBurgir.classList.remove("no-transitions")
-  }, 0)
-}
-
 menuBtn.addEventListener("pointerup", () => {
   if (
     lastWindowSize !== "large" &&
@@ -119,13 +106,29 @@ menuBtn.addEventListener("pointerup", () => {
       menuOpen = true
     } else {
       menuBtn.classList.remove("open")
+      menuBtn.style.pointerEvents = "none"
+      // setTimeout(() => {
+      //   aside.classList.toggle("slide")
+      //   menuBtn.classList.replace("sticky", "fixed")
+      // }, 300)
+      // setTimeout(() => {
+      //   menuBtn.classList.replace("fixed", "abs")
+      //   menuBtn.style.pointerEvents = ""
+      // }, 600)
       setTimeout(() => {
         aside.classList.toggle("slide")
+        menuBtnBurgir.style.backgroundColor = "transparent"
+        menuBtnBurgirB.style.backgroundColor = "transparent"
+        menuBtnBurgirA.style.backgroundColor = "transparent"
         menuBtn.classList.replace("sticky", "fixed")
       }, 300)
       setTimeout(() => {
         menuBtn.classList.replace("fixed", "abs")
-      }, 600)
+        menuBtnBurgir.style.backgroundColor = ""
+        menuBtnBurgirB.style.backgroundColor = ""
+        menuBtnBurgirA.style.backgroundColor = ""
+        menuBtn.style.pointerEvents = ""
+      }, 1000)
       menuOpen = false
     }
   } else if (lastWindowSize === "medium" || lastWindowSize === "big") {
@@ -138,11 +141,39 @@ menuBtn.addEventListener("pointerup", () => {
       }, 102)
       menuOpen = true
     } else {
+      let top
       menuBtn.classList.remove("open")
-      aside.classList.toggle("slide")
+      menuBtn.classList.add("no-transitions")
+      menuBtn.style.pointerEvents = "none"
+      setTimeout(() => {
+        aside.classList.toggle("slide")
+      }, 200)
+      setTimeout(() => {
+        menuBtnBurgir.classList.add("no-transitions")
+        menuBtnBurgirB.classList.add("no-transitions")
+        menuBtnBurgirA.classList.add("no-transitions")
+      }, 300)
       setTimeout(() => {
         menuBtn.classList.replace("sticky", "abs")
-      }, 195)
+        top = menuBtn.getBoundingClientRect().top
+        menuBtn.classList.replace("abs", "fixed")
+      }, 500)
+      setTimeout(() => {
+        menuBtn.classList.replace("fixed", "abs")
+        if (lastWindowSize === "medium") {
+          menuBtn.style.top = `${top * -1 + 6}px`
+        } else {
+          menuBtn.style.top = `${top * -1 + 10}px`
+        }
+        menuBtnBurgir.classList.remove("no-transitions")
+        menuBtnBurgirB.classList.remove("no-transitions")
+        menuBtnBurgirA.classList.remove("no-transitions")
+      }, 645)
+      setTimeout(() => {
+        menuBtn.classList.remove("no-transitions")
+        menuBtn.style.top = ""
+        menuBtn.style.pointerEvents = ""
+      }, 745)
       menuOpen = false
     }
   }
@@ -198,7 +229,6 @@ const checkWindowSize = () => {
     if (currentWindowSize === lastWindowSize) {
       return
     }
-    resetMenuBtn()
   }
   switch (currentWindowSize) {
     case "tiny":
@@ -259,23 +289,32 @@ const checkWindowSize = () => {
     default:
       break
   }
-  if (breakpoints[currentWindowSize] > 992) {
-    aside.classList.add("no-transitions")
-    asideUL.classList.add("no-transitions")
-    asideUL.classList.add("hide")
-    setTimeout(() => {
-      aside.classList.remove("no-transitions")
-      asideUL.classList.remove("no-transitions")
-    }, 0)
-  } else {
-    aside.classList.add("no-transitions")
-    asideUL.classList.add("no-transitions")
-    asideUL.classList.remove("hide")
-    setTimeout(() => {
-      aside.classList.remove("no-transitions")
-      asideUL.classList.remove("no-transitions")
-    }, 0)
+  aside.classList.add("no-transitions")
+  asideUL.classList.add("no-transitions")
+  menuBtn.classList.add("no-transitions")
+  menuBtnBurgirB.classList.add("no-transitions")
+  menuBtnBurgir.classList.add("no-transitions")
+  menuBtnBurgirA.classList.add("no-transitions")
+  if (menuBtn.classList.contains("sticky")) {
+    menuBtn.classList.replace("sticky", "abs")
   }
+  if (menuBtn.classList.contains("open")) {
+    menuBtn.classList.remove("open")
+  }
+  if (breakpoints[currentWindowSize] > 992) {
+    asideUL.classList.add("hide")
+  } else {
+    asideUL.classList.remove("hide")
+  }
+  setTimeout(() => {
+    aside.classList.remove("no-transitions")
+    asideUL.classList.remove("no-transitions")
+    menuBtn.classList.remove("no-transitions")
+    menuBtnBurgirB.classList.remove("no-transitions")
+    menuBtnBurgir.classList.remove("no-transitions")
+    menuBtnBurgirA.classList.remove("no-transitions")
+    menuOpen = false
+  }, 0)
   lastWindowSize = currentWindowSize
   currentWindowSize = ""
 }

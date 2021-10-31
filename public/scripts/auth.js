@@ -64,7 +64,6 @@ const checkToken = () => {
     }
   }
   html.style.visibility = "visible"
-  body.style.backgroundColor = "var(--neutralLight)"
 }
 
 const handleData = () => {

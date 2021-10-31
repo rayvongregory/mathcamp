@@ -1,9 +1,9 @@
 :root {
     --transparent: rgba(0, 0, 0, 0.7);
     --translateX: translateX(-50px);
-    --rotateTranslate: rotate(45deg) translate(35px, -35px);
-    --rotateTranslate2: rotate(-45deg) translate(35px, 35px);
-    --transition: transform 0.3s ease-in-out;
+    --rotateTranslate: rotate(45deg) translate(5px, 5px);
+    --rotateTranslate2: rotate(-45deg) translate(6px, -6px);
+    --transition: transform 0.3s ease-in-out, background-color 0.2s ease-out;
 }
 
 aside {
@@ -17,7 +17,7 @@ aside {
     min-height: 100%;
     color: var(--neutralLight);
     background-color: var(--transparent);
-      -webkit-transition: left 0.3s ease-out;
+    -webkit-transition: left 0.3s ease-out;
     -o-transition: left 0.3s ease-out;
     transition: left 0.3s ease-out;
 }
@@ -65,7 +65,6 @@ aside a {
     clip-path: circle(50%);
     display: none;
 }
-
 
 .name-wrapper i {
     display: none;
@@ -118,54 +117,29 @@ aside a {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
+    flex-direction: column;
+    gap: 5px;
     width: 35px;
     height: 35px;
+
     cursor: pointer;
-    -webkit-transition: transform 0.3s ease-in-out;
-    -o-transition: transform 0.3s ease-in-out;
-    transition: transform 0.3s ease-in-out;
+    -webkit-transition: var(--transition);
+    -o-transition: var(--transition);
+    transition: var(--transition);
 }
 
-.menu-btn_burgir {
+.menu-btn_burgir,
+.menu-btn_burgir-before,
+.menu-btn_burgir-after {
     z-index: 3;
     width: 30px;
     height: 3px;
     flex-shrink: 0;
     background-color: white;
     border-radius: 5px;
-    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    -webkit-transition: transform 0.3s ease-in-out;
-    -o-transition: transform 0.3s ease-in-out;
-    transition: transform 0.3s ease-in-out;
-}
-
-.menu-btn_burgir::after,
-.menu-btn_burgir::before {
-    content: "";
-    position: absolute;
-    z-index: 3;
-    width: 30px;
-    height: 3px;
-    background-color: white;
-    border-radius: 5px;
-    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     -webkit-transition: var(--transition);
     -o-transition: var(--transition);
     transition: var(--transition);
-}
-
-.menu-btn_burgir::before {
-    -webkit-transform: translateY(-8px);
-        -ms-transform: translateY(-8px);
-            transform: translateY(-8px);
-}
-
-.menu-btn_burgir::after {
-    -webkit-transform: translateY(8px);
-        -ms-transform: translateY(8px);
-            transform: translateY(8px);
 }
 
 .menu-btn.open .menu-btn_burgir {
@@ -177,13 +151,13 @@ aside a {
             box-shadow: none;
 }
 
-.menu-btn.open .menu-btn_burgir::before {
+.menu-btn.open .menu-btn_burgir-before {
     -webkit-transform: var(--rotateTranslate);
         -ms-transform: var(--rotateTranslate);
             transform: var(--rotateTranslate);
 }
 
-.menu-btn.open .menu-btn_burgir::after {
+.menu-btn.open .menu-btn_burgir-after {
     -webkit-transform: var(--rotateTranslate2);
         -ms-transform: var(--rotateTranslate2);
             transform: var(--rotateTranslate2);
@@ -195,10 +169,8 @@ aside a {
 
 @media (min-width: 576px) { 
     :root {
-        --translateX: translateX(10px);
-    --rotateTranslate: rotate(-45deg) translate(0px, 0px);
-    --rotateTranslate2: rotate(45deg) translate(0px, 0px);
-    --transition: transform 0.3s ease-in-out, background-color 0.5s ease-out;
+        --translateX: translateX(50px);
+        --transition: transform 0.3s ease-in-out, background-color 0.5s ease-out, top 1s;
     }
 
     .slide {
@@ -207,9 +179,10 @@ aside a {
     }
 
     aside {
-        grid-template-columns: 55px auto;
         left: unset;
         right: -230px;
+        grid-template-columns: 55px auto;
+        padding-left: 10px;
         -webkit-transition: right 0.45s ease-out, opacity 0.4s ease-out;
         -o-transition: right 0.45s ease-out, opacity 0.4s ease-out;
         transition: right 0.45s ease-in-out, opacity 0.4s ease-out;
@@ -239,43 +212,47 @@ aside a {
     }
 
     .menu-btn_burgir,
-    .menu-btn_burgir::after,
-    .menu-btn_burgir::before {
+    .menu-btn_burgir-after,
+    .menu-btn_burgir-before {
         background-color: black;
     -webkit-box-shadow: none;
             box-shadow: none;
     }
 
-    .menu-btn.open .menu-btn_burgir::before, 
-    .menu-btn.open .menu-btn_burgir::after {
+    .menu-btn.open .menu-btn_burgir-before, 
+    .menu-btn.open .menu-btn_burgir-after {
+        background-color: white;
+    }
+
+    .menu-btn.sticky:not(.menu-btn.open) .menu-btn_burgir-before, 
+    .menu-btn.sticky:not(.menu-btn.open) .menu-btn_burgir, 
+    .menu-btn.sticky:not(.menu-btn.open) .menu-btn_burgir-after {
+        background-color: white;
+    }
+
+    .menu-btn.open.fixed .menu-btn_burgir-before, 
+    .menu-btn.open.fixed .menu-btn_burgir-after {
+        background-color: white;
+    }
+
+    .menu-btn.fixed:not(.open) .menu-btn_burgir-before, 
+    .menu-btn.fixed:not(.open) .menu-btn_burgir-after {
         background-color: black;
     }
 
-    .menu-btn.open.sticky .menu-btn_burgir::before, 
-    .menu-btn.open.sticky .menu-btn_burgir::after {
-        background-color: white;
-    }
-
-    .menu-btn.fixed .menu-btn_burgir::before, 
-    .menu-btn.fixed .menu-btn_burgir::after {
-        background-color: white;
-    }
-
-    .menu-btn.open .menu-btn_burgir {
-        -webkit-transform: var(--translateX);
-            -ms-transform: var(--translateX);
-                transform: var(--translateX);
-        -webkit-box-shadow: none;
-                box-shadow: none;
-    }
+    /* .menu-btn.open .menu-btn_burgir {
+        -webkit-transform: var(--rotateTranslate);
+            -ms-transform: var(--rotateTranslate);
+                transform: var(--rotateTranslate);
+    } */
     
-    .menu-btn.open .menu-btn_burgir::before {
+    .menu-btn.open .menu-btn_burgir-before {
         -webkit-transform: var(--rotateTranslate);
             -ms-transform: var(--rotateTranslate);
                 transform: var(--rotateTranslate);
     }
     
-    .menu-btn.open .menu-btn_burgir::after {
+    .menu-btn.open .menu-btn_burgir-after {
         -webkit-transform: var(--rotateTranslate2);
             -ms-transform: var(--rotateTranslate2);
                 transform: var(--rotateTranslate2);
@@ -320,7 +297,6 @@ aside a {
         background-color: var(--transparent);
         opacity: 0;
         transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
-    
 }
 
     .name-wrapper {
