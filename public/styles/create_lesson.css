@@ -1,5 +1,6 @@
 .buttons-wrapper {
     width: fit-content;
+    width: -moz-fit-content;
     margin: auto;
     font-size: 0.65em;
 }

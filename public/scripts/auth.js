@@ -63,7 +63,6 @@ const checkToken = () => {
       return (window.location.href = "/")
     }
   }
-  html.style.visibility = "visible"
 }
 
 const handleData = () => {

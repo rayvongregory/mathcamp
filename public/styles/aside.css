@@ -147,8 +147,6 @@ aside a {
         -ms-transform: var(--translateX);
             transform: var(--translateX);
     background-color: transparent;
-    -webkit-box-shadow: none;
-            box-shadow: none;
 }
 
 .menu-btn.open .menu-btn_burgir-before {
@@ -170,7 +168,7 @@ aside a {
 @media (min-width: 576px) { 
     :root {
         --translateX: translateX(50px);
-        --transition: transform 0.3s ease-in-out, background-color 0.5s ease-out, top 1s;
+        --transition: transform 0.3s ease-in-out, background-color 0.5s ease-out, top 0.75s;
     }
 
     .slide {
@@ -198,7 +196,6 @@ aside a {
         top: 0px;
     }
     
-
     .menu-btn {
         left: -45px;
         top: 3px;
@@ -215,37 +212,18 @@ aside a {
     .menu-btn_burgir-after,
     .menu-btn_burgir-before {
         background-color: black;
-    -webkit-box-shadow: none;
-            box-shadow: none;
     }
 
     .menu-btn.open .menu-btn_burgir-before, 
-    .menu-btn.open .menu-btn_burgir-after {
-        background-color: white;
-    }
-
+    .menu-btn.open .menu-btn_burgir-after,
     .menu-btn.sticky:not(.menu-btn.open) .menu-btn_burgir-before, 
     .menu-btn.sticky:not(.menu-btn.open) .menu-btn_burgir, 
-    .menu-btn.sticky:not(.menu-btn.open) .menu-btn_burgir-after {
-        background-color: white;
-    }
-
+    .menu-btn.sticky:not(.menu-btn.open) .menu-btn_burgir-after,
     .menu-btn.open.fixed .menu-btn_burgir-before, 
     .menu-btn.open.fixed .menu-btn_burgir-after {
         background-color: white;
     }
-
-    .menu-btn.fixed:not(.open) .menu-btn_burgir-before, 
-    .menu-btn.fixed:not(.open) .menu-btn_burgir-after {
-        background-color: black;
-    }
-
-    /* .menu-btn.open .menu-btn_burgir {
-        -webkit-transform: var(--rotateTranslate);
-            -ms-transform: var(--rotateTranslate);
-                transform: var(--rotateTranslate);
-    } */
-    
+   
     .menu-btn.open .menu-btn_burgir-before {
         -webkit-transform: var(--rotateTranslate);
             -ms-transform: var(--rotateTranslate);
@@ -276,7 +254,7 @@ aside a {
         right: unset;
         height: unset;
         margin-right: auto;
-        margin-left: 1rem;
+        margin-left: 1.5rem;
         padding-left: 0;
         padding-right: 0;
         width: unset;
@@ -301,8 +279,8 @@ aside a {
 
     .name-wrapper {
         left: 0;
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        box-shadow: -1px 2px 2px 1px rgba(0, 0, 0, 0.15);
+        border: var(--border);
+        box-shadow: var(--boxShadow);
         background-color: white;
         border-radius: 15px;
         padding: 0 5px;

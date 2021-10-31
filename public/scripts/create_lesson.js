@@ -55,8 +55,6 @@ const getRole = async () => {
       data: { role },
     } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
     if (role === "admin") {
-      html.style.visibility = "visible"
-      body.style.backgroundColor = "var(--neutralLight)"
       fullscreenBtn = document.querySelector('[aria-label="Fullscreen"]')
       fullscreenBtn.addEventListener("pointerup", changeTextAreaSize)
       changeTextAreaSize()

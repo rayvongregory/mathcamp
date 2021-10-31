@@ -1,6 +1,4 @@
 const type = window.location.pathname.split("/")[2]
-const html = document.querySelector("html")
-const body = document.querySelector("body")
 const publishBtn = document.querySelector("#publish")
 const draftBtn = document.querySelector("#draft")
 let titleInput = document.querySelector("#title")

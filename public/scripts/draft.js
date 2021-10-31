@@ -59,8 +59,6 @@ const getDrafts = async () => {
     const {
       data: { lessons, exercises },
     } = await axios.get("/api/v1/drafts")
-    console.log(lessons, exercises)
-
     if (lessons.length === 0 && exercises.length > 0) {
       addH3("Exercises")
       return addTo(draftsSection, exercises, "exercise")

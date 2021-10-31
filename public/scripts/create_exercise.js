@@ -68,8 +68,6 @@ const getRole = async () => {
       data: { role },
     } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
     if (role === "admin") {
-      html.style.visibility = "visible"
-      body.style.backgroundColor = "var(--neutralLight)"
     } else {
       window.location.href = "/"
     }

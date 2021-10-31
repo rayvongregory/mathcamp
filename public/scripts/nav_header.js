@@ -1,6 +1,7 @@
 const html = document.querySelector("html")
 const body = document.querySelector("body")
 const nav = document.querySelector("nav")
+const buttons = nav.querySelector(".buttons")
 const navSearch = document.querySelector("#nav-search-btn")
 const navSearchContainer = document.querySelector(".nav___search-container")
 const aside = document.querySelector("aside")
@@ -69,6 +70,10 @@ const getDisplayName = async () => {
     nameWrapH3.innerHTML = "Guest"
   }
   html.classList.remove("invis")
+  let noClass = document.querySelectorAll('[class=""]')
+  noClass.forEach((el) => {
+    el.removeAttribute("class")
+  })
 }
 
 nameWrap.addEventListener("pointerup", () => {
@@ -107,14 +112,6 @@ menuBtn.addEventListener("pointerup", () => {
     } else {
       menuBtn.classList.remove("open")
       menuBtn.style.pointerEvents = "none"
-      // setTimeout(() => {
-      //   aside.classList.toggle("slide")
-      //   menuBtn.classList.replace("sticky", "fixed")
-      // }, 300)
-      // setTimeout(() => {
-      //   menuBtn.classList.replace("fixed", "abs")
-      //   menuBtn.style.pointerEvents = ""
-      // }, 600)
       setTimeout(() => {
         aside.classList.toggle("slide")
         menuBtnBurgir.style.backgroundColor = "transparent"
@@ -128,7 +125,7 @@ menuBtn.addEventListener("pointerup", () => {
         menuBtnBurgirB.style.backgroundColor = ""
         menuBtnBurgirA.style.backgroundColor = ""
         menuBtn.style.pointerEvents = ""
-      }, 1000)
+      }, 600)
       menuOpen = false
     }
   } else if (lastWindowSize === "medium" || lastWindowSize === "big") {
@@ -180,8 +177,8 @@ menuBtn.addEventListener("pointerup", () => {
 })
 
 navSearch.addEventListener("pointerup", () => {
-  navSearchContainer.classList.toggle("hide")
   if (lastWindowSize === "medium") {
+    navSearchContainer.classList.toggle("hide")
     if (navSearch.innerHTML === '<i class="fas fa-times"></i><span></span>') {
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
     } else {
@@ -192,8 +189,10 @@ navSearch.addEventListener("pointerup", () => {
       navSearch.innerHTML === '<i class="fas fa-times"></i><span>Search</span>'
     ) {
       navSearch.innerHTML = '<i class="fas fa-search"></i><span>Search</span>'
+      navSearchContainer.style.bottom = "14px"
     } else {
       navSearch.innerHTML = '<i class="fas fa-times"></i><span>Search</span>'
+      navSearchContainer.style.bottom = ""
     }
     // if (root.getPropertyValue("--offset") !== "100px") {
     //   root.setProperty("--offset", "100px")
@@ -233,19 +232,45 @@ const checkWindowSize = () => {
   switch (currentWindowSize) {
     case "tiny":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
-      navSearchContainer.classList.remove("hide")
-      aside.classList.remove("slide")
-      // root.setProperty("--offset", "100px")
+      navSearchContainer.classList.add("no-transitions")
+      if (navSearchContainer.classList.contains("hide")) {
+        navSearchContainer.classList.remove("hide")
+      }
+      if (navSearchContainer.style.bottom) {
+        navSearchContainer.removeAttribute("style")
+      }
+      if (aside.classList.contains("slide")) {
+        aside.classList.remove("slide")
+      }
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
       }
+      if (buttons.nextElementSibling === navSearchContainer) {
+        navSearchContainer.remove()
+        nav.insertAdjacentElement("afterend", navSearchContainer)
+      }
       break
     case "small":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span>Search</span>'
-      navSearchContainer.classList.add("hide")
-      aside.classList.remove("slide")
-      // root.setProperty("--offset", "90px")
+      if (navSearchContainer.classList.contains("hide")) {
+        navSearchContainer.classList.remove("hide")
+      }
+      if (buttons.nextElementSibling === navSearchContainer) {
+        navSearchContainer.remove()
+        nav.insertAdjacentElement("afterend", navSearchContainer)
+      }
+      if (buttons.nextElementSibling === aside) {
+        aside.remove()
+        nav.insertAdjacentElement("beforebegin", aside)
+      }
+      if (!navSearchContainer.style.bottom) {
+        navSearchContainer.classList.add("no-transitions")
+        navSearchContainer.style.bottom = "14px"
+      }
+      if (aside.classList.contains("slide")) {
+        aside.classList.remove("slide")
+      }
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
@@ -253,10 +278,15 @@ const checkWindowSize = () => {
       break
     case "medium":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
-      navSearchContainer.classList.add("hide")
-      aside.classList.remove("slide")
-      // root.setProperty("--offset", "90px")
-      // root.setProperty("--offset", "0px")
+      if (!navSearchContainer.classList.contains("hide")) {
+        navSearchContainer.classList.add("hide")
+      }
+      if (navSearchContainer.style) {
+        navSearchContainer.removeAttribute("style")
+      }
+      if (aside.classList.contains("slide")) {
+        aside.classList.remove("slide")
+      }
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
@@ -264,25 +294,50 @@ const checkWindowSize = () => {
       break
     case "big":
       navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
-      navSearchContainer.classList.remove("hide")
-      asideUL.classList.remove("hide")
-      aside.classList.remove("slide")
+      if (navSearchContainer.classList.contains("hide")) {
+        navSearchContainer.classList.remove("hide")
+      }
+      if (navSearchContainer.style) {
+        navSearchContainer.removeAttribute("style")
+      }
+      if (asideUL.classList.contains("hide")) {
+        asideUL.classList.remove("hide")
+      }
+      if (aside.classList.contains("slide")) {
+        aside.classList.remove("slide")
+      }
+      if (nav.nextElementSibling === navSearchContainer) {
+        navSearchContainer.remove()
+        nav.appendChild(navSearchContainer)
+      }
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
       }
-      // root.setProperty("--offset", "0px")
       break
     case "large":
-      navSearchContainer.classList.remove("hide")
-      asideUL.classList.add("hide")
-      asideUL.classList.remove("slide-down")
+      if (navSearchContainer.classList.contains("hide")) {
+        navSearchContainer.classList.remove("hide")
+      }
+      if (navSearchContainer.style) {
+        navSearchContainer.removeAttribute("style")
+      }
+      if (!asideUL.classList.contains("hide")) {
+        asideUL.classList.add("hide")
+      }
+      if (asideUL.classList.contains("slide-down")) {
+        asideUL.classList.remove("slide-down")
+      }
+      if (nav.nextElementSibling === navSearchContainer) {
+        navSearchContainer.remove()
+        nav.appendChild(navSearchContainer)
+      }
       if (aside.nextElementSibling === nav) {
         aside.remove()
         nav.appendChild(aside)
       }
-      if (aside.style.height) {
-        aside.style.height = ""
+      if (aside.style) {
+        aside.removeAttribute("style")
       }
       nameWrapI.classList.remove("rotate")
       break
@@ -314,6 +369,9 @@ const checkWindowSize = () => {
     menuBtnBurgir.classList.remove("no-transitions")
     menuBtnBurgirA.classList.remove("no-transitions")
     menuOpen = false
+    if (navSearchContainer.classList.contains("no-transitions")) {
+      navSearchContainer.classList.remove("no-transitions")
+    }
   }, 0)
   lastWindowSize = currentWindowSize
   currentWindowSize = ""
