@@ -25,8 +25,8 @@ const addTo = (location, values, type) => {
   for (let value of values) {
     let item = document.createElement("li")
     let p = document.createElement("p")
-    let edit = document.createElement("span")
-    let trash = document.createElement("span")
+    let edit = document.createElement("button")
+    let trash = document.createElement("button")
     item.dataset.id = value._id
     item.dataset.type = type
     p.innerText = value.title

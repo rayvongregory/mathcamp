@@ -14,5 +14,14 @@
     include('../partials/info_form') %> <% } %> <%-
     include('../partials/universal_scripts'); %>
     <script type="module" src="/scripts/auth.js"></script>
+
+    <% if(title === "Login") { %>
+    <canvas class="background"></canvas>
+    <% } else if(title === "Register") { %>
+    <canvas class="background r"></canvas>
+    <% } %>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.2/particles.min.js
+      "></script>
   </body>
 </html>

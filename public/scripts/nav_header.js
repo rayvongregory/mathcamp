@@ -5,7 +5,7 @@ const buttons = nav.querySelector(".buttons")
 const navSearch = document.querySelector("#nav-search-btn")
 const navSearchContainer = document.querySelector(".nav___search-container")
 const aside = document.querySelector("aside")
-const asideUL = aside.querySelector("ul")
+const asideLinks = aside.querySelector(".links")
 const stickyDiv = document.querySelector(".sticky-div")
 const menuBtn = document.querySelector(".menu-btn")
 const menuBtnBurgirLines = menuBtn.querySelectorAll("*")
@@ -16,13 +16,13 @@ const nameWrap = document.querySelector(".name-wrapper")
 const nameWrapI = nameWrap.querySelector("i")
 const nameWrapH3 = nameWrap.querySelector("h3")
 const avatar = nameWrap.querySelector("img")
-const loginButton = document.querySelector("#login")
-const registerButton = document.querySelector("#register")
-const accountButton = document.querySelector("#account")
-const createLessonButton = document.querySelector("#createlesson")
-const createExerciseButton = document.querySelector("#createexercise")
-const draftsButton = document.querySelector("#drafts")
-const logoutButton = document.querySelector("#logout")
+const loginBtn = document.querySelector("[href='/login']")
+const registerBtn = document.querySelector("[href='/register']")
+const accountBtn = document.querySelector("[href='/account']")
+const createLessonBtn = document.querySelector("[href='/create/lesson']")
+const createExerciseBtn = document.querySelector("[href='/create/exercise']")
+const draftsBtn = document.querySelector("[href='/drafts']")
+const logoutBtn = document.querySelector("#logout")
 let root = document.documentElement.style
 let role = "user"
 let menuOpen = false
@@ -32,13 +32,13 @@ let breakpoints = { tiny: 320, small: 576, medium: 768, big: 992, large: 1200 }
 let lastWindowSize = 1,
   currentWindowSize = 1
 
-logoutButton.addEventListener("pointerup", async () => {
+logoutBtn.addEventListener("pointerup", async () => {
   try {
     const { data } = await axios.patch("/api/v1/auth/logout", {
       token,
     })
     localStorage.removeItem("token")
-    location.reload()
+    window.location.href = "/login"
   } catch (err) {
     console.error(err)
   }
@@ -52,14 +52,14 @@ const getDisplayName = async () => {
       avatar.classList.remove("hide")
       avatar.src = data.avatar
       role = data.role
-      loginButton.classList.add("hide")
-      registerButton.classList.add("hide")
-      accountButton.classList.remove("hide")
-      logoutButton.classList.remove("hide")
+      loginBtn.classList.add("hide")
+      registerBtn.classList.add("hide")
+      accountBtn.classList.remove("hide")
+      logoutBtn.classList.remove("hide")
       if (role === "admin") {
-        createLessonButton.classList.remove("hide")
-        createExerciseButton.classList.remove("hide")
-        draftsButton.classList.remove("hide")
+        createLessonBtn.classList.remove("hide")
+        createExerciseBtn.classList.remove("hide")
+        draftsBtn.classList.remove("hide")
       }
     } catch (error) {
       console.log(error)
@@ -78,15 +78,15 @@ const getDisplayName = async () => {
 
 nameWrap.addEventListener("pointerup", () => {
   if (lastWindowSize === "large") {
-    if (asideUL.classList.contains("slide-down")) {
-      asideUL.classList.toggle("slide-down")
+    if (asideLinks.classList.contains("slide-down")) {
+      asideLinks.classList.toggle("slide-down")
       setTimeout(() => {
-        asideUL.classList.toggle("hide")
+        asideLinks.classList.toggle("hide")
       }, 300)
     } else {
-      asideUL.classList.toggle("hide")
+      asideLinks.classList.toggle("hide")
       setTimeout(() => {
-        asideUL.classList.toggle("slide-down")
+        asideLinks.classList.toggle("slide-down")
       }, 0)
     }
     nameWrapI.classList.toggle("rotate")
@@ -160,7 +160,7 @@ menuBtn.addEventListener("pointerup", () => {
         if (lastWindowSize === "medium") {
           menuBtn.style.top = `${top * -1 + 6}px`
         } else {
-          menuBtn.style.top = `${top * -1 + 10}px`
+          menuBtn.style.top = `${top * -1 + 14}px`
         }
         menuBtnBurgir.classList.remove("no-transitions")
         menuBtnBurgirB.classList.remove("no-transitions")
@@ -179,19 +179,20 @@ menuBtn.addEventListener("pointerup", () => {
 navSearch.addEventListener("pointerup", () => {
   if (lastWindowSize === "medium") {
     navSearchContainer.classList.toggle("hide")
-    if (navSearch.innerHTML === '<i class="fas fa-times"></i><span></span>') {
-      navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
+    if (navSearch.innerHTML === '<i class="fas fa-times"></i>') {
+      navSearch.innerHTML = '<i class="fas fa-search"></i>'
     } else {
-      navSearch.innerHTML = '<i class="fas fa-times"></i><span></span>'
+      navSearch.innerHTML = '<i class="fas fa-times"></i>'
     }
   } else if (lastWindowSize === "small") {
-    if (
-      navSearch.innerHTML === '<i class="fas fa-times"></i><span>Search</span>'
-    ) {
-      navSearch.innerHTML = '<i class="fas fa-search"></i><span>Search</span>'
-      navSearchContainer.style.bottom = "14px"
+    if (navSearchContainer.classList.contains("no-transitions")) {
+      navSearchContainer.classList.remove("no-transitions")
+    }
+    if (navSearch.innerHTML === '<i class="fas fa-times"></i>Search') {
+      navSearch.innerHTML = '<i class="fas fa-search"></i>Search'
+      navSearchContainer.style.bottom = "11px"
     } else {
-      navSearch.innerHTML = '<i class="fas fa-times"></i><span>Search</span>'
+      navSearch.innerHTML = '<i class="fas fa-times"></i>Search'
       navSearchContainer.style.bottom = ""
     }
     // if (root.getPropertyValue("--offset") !== "100px") {
@@ -231,7 +232,7 @@ const checkWindowSize = () => {
   }
   switch (currentWindowSize) {
     case "tiny":
-      navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
+      navSearch.innerHTML = '<i class="fas fa-search"></i>'
       navSearchContainer.classList.add("no-transitions")
       if (navSearchContainer.classList.contains("hide")) {
         navSearchContainer.classList.remove("hide")
@@ -241,6 +242,9 @@ const checkWindowSize = () => {
       }
       if (aside.classList.contains("slide")) {
         aside.classList.remove("slide")
+      }
+      if (asideLinks.classList.contains("slide-down")) {
+        asideLinks.classList.remove("slide-down")
       }
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
@@ -252,7 +256,7 @@ const checkWindowSize = () => {
       }
       break
     case "small":
-      navSearch.innerHTML = '<i class="fas fa-search"></i><span>Search</span>'
+      navSearch.innerHTML = '<i class="fas fa-search"></i>Search'
       if (navSearchContainer.classList.contains("hide")) {
         navSearchContainer.classList.remove("hide")
       }
@@ -266,10 +270,13 @@ const checkWindowSize = () => {
       }
       if (!navSearchContainer.style.bottom) {
         navSearchContainer.classList.add("no-transitions")
-        navSearchContainer.style.bottom = "14px"
+        navSearchContainer.style.bottom = "11px"
       }
       if (aside.classList.contains("slide")) {
         aside.classList.remove("slide")
+      }
+      if (asideLinks.classList.contains("slide-down")) {
+        asideLinks.classList.remove("slide-down")
       }
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
@@ -277,7 +284,7 @@ const checkWindowSize = () => {
       }
       break
     case "medium":
-      navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
+      navSearch.innerHTML = '<i class="fas fa-search"></i>'
       if (!navSearchContainer.classList.contains("hide")) {
         navSearchContainer.classList.add("hide")
       }
@@ -287,21 +294,27 @@ const checkWindowSize = () => {
       if (aside.classList.contains("slide")) {
         aside.classList.remove("slide")
       }
+      if (asideLinks.classList.contains("slide-down")) {
+        asideLinks.classList.remove("slide-down")
+      }
       if (navSearchContainer.nextElementSibling === aside) {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
       }
       break
     case "big":
-      navSearch.innerHTML = '<i class="fas fa-search"></i><span></span>'
+      navSearch.innerHTML = '<i class="fas fa-search"></i>'
       if (navSearchContainer.classList.contains("hide")) {
         navSearchContainer.classList.remove("hide")
       }
       if (navSearchContainer.style) {
         navSearchContainer.removeAttribute("style")
       }
-      if (asideUL.classList.contains("hide")) {
-        asideUL.classList.remove("hide")
+      if (asideLinks.classList.contains("hide")) {
+        asideLinks.classList.remove("hide")
+      }
+      if (asideLinks.classList.contains("slide-down")) {
+        asideLinks.classList.remove("slide-down")
       }
       if (aside.classList.contains("slide")) {
         aside.classList.remove("slide")
@@ -314,6 +327,7 @@ const checkWindowSize = () => {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
       }
+
       break
     case "large":
       if (navSearchContainer.classList.contains("hide")) {
@@ -322,11 +336,11 @@ const checkWindowSize = () => {
       if (navSearchContainer.style) {
         navSearchContainer.removeAttribute("style")
       }
-      if (!asideUL.classList.contains("hide")) {
-        asideUL.classList.add("hide")
+      if (!asideLinks.classList.contains("hide")) {
+        asideLinks.classList.add("hide")
       }
-      if (asideUL.classList.contains("slide-down")) {
-        asideUL.classList.remove("slide-down")
+      if (asideLinks.classList.contains("slide-down")) {
+        asideLinks.classList.remove("slide-down")
       }
       if (nav.nextElementSibling === navSearchContainer) {
         navSearchContainer.remove()
@@ -345,7 +359,7 @@ const checkWindowSize = () => {
       break
   }
   aside.classList.add("no-transitions")
-  asideUL.classList.add("no-transitions")
+  asideLinks.classList.add("no-transitions")
   menuBtn.classList.add("no-transitions")
   menuBtnBurgirB.classList.add("no-transitions")
   menuBtnBurgir.classList.add("no-transitions")
@@ -357,21 +371,18 @@ const checkWindowSize = () => {
     menuBtn.classList.remove("open")
   }
   if (breakpoints[currentWindowSize] > 992) {
-    asideUL.classList.add("hide")
+    asideLinks.classList.add("hide")
   } else {
-    asideUL.classList.remove("hide")
+    asideLinks.classList.remove("hide")
   }
   setTimeout(() => {
     aside.classList.remove("no-transitions")
-    asideUL.classList.remove("no-transitions")
+    asideLinks.classList.remove("no-transitions")
     menuBtn.classList.remove("no-transitions")
     menuBtnBurgirB.classList.remove("no-transitions")
     menuBtnBurgir.classList.remove("no-transitions")
     menuBtnBurgirA.classList.remove("no-transitions")
     menuOpen = false
-    if (navSearchContainer.classList.contains("no-transitions")) {
-      navSearchContainer.classList.remove("no-transitions")
-    }
   }, 0)
   lastWindowSize = currentWindowSize
   currentWindowSize = ""

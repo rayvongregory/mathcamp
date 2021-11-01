@@ -96,20 +96,24 @@
     margin-right: 5px;
 }
 
-.extra-options span, .extra-options select {
+.extra-options button, 
+.extra-options select {
     pointer-events: all;
 }
 
-.extra-options span {
+.extra-options button {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 34px;
     height: 34px;
     border-radius: 3px;
+    border: none;
+    background-color: transparent;
 }
 
-.extra-options span:hover, .add_delete_q_buttons span:hover {
+.extra-options button:hover, 
+.add_delete_q_buttons button:hover {
     background-color: var(--tinymceGray);
     cursor: pointer;
 }
@@ -118,7 +122,10 @@
     cursor: pointer;
 }
 
-.extra-options span:active, .extra-options span:focus, .add_delete_q_buttons span:active, .add_delete_q_buttons span:focus {
+.extra-options button:active, 
+.extra-options button:focus, 
+.add_delete_q_buttons button:active, 
+.add_delete_q_buttons button:focus {
     background-color: var(--tinymceGrayActive);
 }
 
@@ -135,7 +142,8 @@
     top: 0;
 }
 
-.to_publish_question, .to_publish_exercise {
+.to_publish_question, 
+.to_publish_exercise {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -156,14 +164,16 @@
     height: -moz-fit-content;
 }
 
-.to_publish_question h4, .to_publish_exercise h4 {
+.to_publish_question h4, 
+.to_publish_exercise h4 {
     font-size: 1rem;
     white-space: nowrap;
     padding-bottom: 10px;
 
 }
 
-.to_publish_question li, .to_publish_exercise li {
+.to_publish_question li, 
+.to_publish_exercise li {
     border: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
@@ -175,7 +185,8 @@
     font-size: 1.125em;   
 }
 
-.to_publish_question li + li, .to_publish_exercise li + li {
+.to_publish_question li + li, 
+.to_publish_exercise li + li {
     margin-top: 5px;
 }
 
@@ -183,7 +194,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
     margin: 10px auto auto;
     padding: 5px; 
     width: 100%;
@@ -191,19 +201,17 @@
     border: 1px solid var(--tinymceGray);
 }
 
-.add_delete_q_buttons span {
+.add_delete_q_buttons button {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 5px;
-    width: 95px;
+    margin: 5px;
+    width: 90px;
+    border: var(--border);
     border-radius: 3px;
     pointer-events: all;
-}
-
-.add_delete_q_buttons p {
-    pointer-events: none;
 }
 
 .add_delete_q_buttons i {
@@ -214,7 +222,8 @@
 .add_delete_q_buttons p {
     padding-top: 5px;
     white-space: nowrap;
-    font-size: 1.125em;
+    font-size: 0.85em;
+    pointer-events: none;
 }
 
 .problem_set {
@@ -238,7 +247,8 @@
     border: 1px solid var(--tinymceGray);
 }
 
-.correct_answer, .question_section {
+.correct_answer, 
+.question_section {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -265,13 +275,17 @@
     text-decoration: none;
 }
 
-.correct_answer > li, .question_section > li {
+.correct_answer > li, 
+.question_section > li {
     width: 50%;
     list-style: none;
     text-decoration: none;
 }
 
-.problem_set li, .question_choices li, .correct_answer li, .question_section li {
+.problem_set li, 
+.question_choices li, 
+.correct_answer li, 
+.question_section li {
     display: flex;
     align-items: center;
     border: 1px solid rgba(0, 0, 0, 0.05);
@@ -284,7 +298,9 @@
     margin-top: 10px;
 }
 
-.problem_set li > :nth-child(2), .correct_answer li > :nth-child(1), .question_section li > :nth-child(1) {
+.problem_set li > :nth-child(2), 
+.correct_answer li > :nth-child(1), 
+.question_section li > :nth-child(1) {
     margin-right: auto;
 }
 
@@ -292,12 +308,18 @@
     margin-right: auto;
 }
 
-.question_choices li > *:not(:first-child), .problem_set li > *:not(:first-child), .correct_answer li > *, .question_section li > * {
+.question_choices li > *:not(:first-child), 
+.problem_set li > *:not(:first-child), 
+.correct_answer li > *, 
+.question_section li > * {
     margin-left: 1em;
     pointer-events: all;
 }
 
-.question_choices span:hover, .problem_set span:hover, .correct_answer span:hover, .question_section span:hover {
+.question_choices button:hover, 
+.problem_set button:hover, 
+.correct_answer button:hover, 
+.question_section button:hover {
     filter: brightness(1.25);
     cursor: pointer;
 }
@@ -321,11 +343,16 @@
     color: darkred;
 }
 
-.problem_set li.editing, .question_choices li.editing, .correct_answer li.editing, .question_section li.editing {
+.problem_set li.editing, 
+.question_choices li.editing, 
+.correct_answer li.editing, 
+.question_section li.editing {
     background-color: var(--accentDark);
     color: white;
 }
 
-.question_section.pop-top, .correct_answer.pop-top, .question_choices.pop-top {
+.question_section.pop-top, 
+.correct_answer.pop-top, 
+.question_choices.pop-top {
     border-top: none;
 }

@@ -28,7 +28,9 @@
     text-decoration: none;
 }
 
-#drafts___section li, #drafts___lessons li, #drafts___practices li{
+#drafts___section li,
+ #drafts___lessons li, 
+ #drafts___practices li{
     display: flex;
     align-items: center;
     border: var(--border);
@@ -40,33 +42,55 @@
     pointer-events: none;
 }
 
-#drafts___section li > :first-child, #drafts___lessons li > :first-child, #drafts___practices li > :first-child {
+#drafts___section li > :first-child, 
+#drafts___lessons li > :first-child, 
+#drafts___practices li > :first-child {
     margin-right: auto;
 }
 
-#drafts___section li > :nth-child(2), #drafts___lessons li > :nth-child(2), #drafts___practices li > :nth-child(2) {
+#drafts___section li > :nth-child(2), 
+#drafts___lessons li > :nth-child(2), 
+#drafts___practices li > :nth-child(2) {
     margin-left: 3em;
     pointer-events: all;
 }
 
-#drafts___section li > :nth-child(3), #drafts___lessons li > :nth-child(3), #drafts___practices li > :nth-child(3) {
+#drafts___section li > :nth-child(3), 
+#drafts___lessons li > :nth-child(3), 
+#drafts___practices li > :nth-child(3) {
     margin-left: 1em;
     pointer-events: all;
 }
 
-#drafts___section span:hover, #drafts___lessons span:hover, #drafts___practices span:hover {
+#drafts___section button, 
+#drafts___lessons button, 
+#drafts___practices button {
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+}
+
+#drafts___section button:hover, 
+#drafts___lessons button:hover, 
+#drafts___practices button:hover,
+#drafts___section button:focus, 
+#drafts___lessons button:focus, 
+#drafts___practices button:focus {
     color: var(--accentDark);
     cursor: pointer;
 }
 
-/*! why this button here?? */
+#drafts___section button:active, 
+#drafts___lessons button:active, 
+#drafts___practices button:active {
+    color: var(--accentActive);
 
-button {
-    background-color: #EFEFEF; 
-    border: solid black 1px;
-    padding: 1px 5px;
-    border-radius: 2px;
-    white-space: nowrap;
+}
+
+#drafts___section button i, 
+#drafts___lessons button i, 
+#drafts___practices button i {
+    pointer-events: none;
 }
 
 

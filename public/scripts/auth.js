@@ -2,9 +2,14 @@ const path = window.location.pathname
 const html = document.querySelector("html")
 const body = document.querySelector("body")
 const form = document.querySelectorAll("input:not(.nav___search-input)")
-const buttons = document.querySelectorAll(".flexwrap span")
+const buttons = document.querySelectorAll(".flexwrap button")
 const sdb = document.querySelector(".save_discard_buttons")
-const delBtn = document.querySelector(".delete")
+const delBtn = document.querySelector("#db")
+const cancBtn = document.querySelector("#cancel")
+const procBtn = document.querySelector("#proceed")
+const backBtn = document.querySelector("#back")
+const delPasswrd = document.querySelector("#delpassword")
+const confBtn = document.querySelector("#confirm")
 const submit = document.querySelector("#submit")
 const response = document.querySelector("#response")
 const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
@@ -72,14 +77,13 @@ const handleData = () => {
   form.forEach((field) => {
     formData[field.id] = field.value.trim()
   })
-  console.log(formData)
 }
 
 const handleRegistration = async () => {
   handleData()
   for (let value in formData) {
     if (!formData[value]) {
-      return unauthorized("Please fill out all the fields.")
+      return unauthorized("Please fill out all the fields to continue.", true)
     }
   }
 
@@ -120,7 +124,7 @@ const handleLogin = async () => {
   handleData()
   for (let value in formData) {
     if (!formData[value]) {
-      return unauthorized("Please fill out all fields.")
+      return unauthorized("Please fill out all fields to continue.", true)
     }
   }
   response.innerHTML = "Logging in..."
@@ -176,7 +180,7 @@ const handleAccount = async () => {
       if (dname) {
         displayName.innerHTML = dname
         nameWrapH3.innerHTML = dname
-        asideUL.style.width = `${nameWrap.offsetWidth}px`
+        asideLinks.style.width = `${nameWrap.offsetWidth}px`
       }
       authorized(data.msg)
       localStorage.setItem("token", data.accessToken)
@@ -271,8 +275,27 @@ const handleAccount = async () => {
   // }
 }
 
-const handleDelete = async () => {
-  console.log("deleting the account")
+const handleDelete = async (e) => {
+  const { target } = e
+  switch (target) {
+    case delBtn:
+      procBtn.scrollIntoView()
+      break
+    case cancBtn:
+      delBtn.scrollIntoView()
+      break
+    case procBtn:
+      confBtn.scrollIntoView()
+      break
+    case backBtn:
+      cancBtn.scrollIntoView()
+    case confBtn:
+      // when the deleting actually happens
+      break
+    default:
+      break
+  }
+
   // if (fields[0].checked) {
   //   try {
   //     await axios.delete(`/api/v1/users/${token.split(" ")[1]}`)
@@ -368,6 +391,11 @@ const addListeners = (string = "") => {
       }
     }
     delBtn.addEventListener("pointerup", handleDelete)
+    procBtn.addEventListener("pointerup", handleDelete)
+    cancBtn.addEventListener("pointerup", handleDelete)
+    backBtn.addEventListener("pointerup", handleDelete)
+    confBtn.addEventListener("pointerup", handleDelete)
+
     // for (let pw of pws) {
     //   pw.addEventListener("keyup", allowUpdate)
     // }
@@ -389,13 +417,78 @@ const getAccountInfo = async () => {
   }
 }
 
+const particleInit = () => {
+  Particles.init({
+    selector: ".background",
+    maxParticles: 50,
+    sizeVariations: 50,
+    connectParticles: true,
+    color: [
+      "#FF6138",
+      "#EB890A",
+      "#FAB355",
+      "#FFFF9D",
+      "#BEEB9F",
+      "#79BD8F",
+      "#00A388",
+    ],
+    // options for breakpoints
+    responsive: [
+      {
+        breakpoint: 1200,
+        options: {
+          maxParticles: 50,
+          sizeVariations: 40,
+        },
+      },
+      {
+        breakpoint: 992,
+        options: {
+          maxParticles: 50,
+          sizeVariations: 30,
+        },
+      },
+      {
+        breakpoint: 768,
+        options: {
+          maxParticles: 40,
+          sizeVariations: 30,
+        },
+      },
+      {
+        breakpoint: 576,
+        options: {
+          maxParticles: 40,
+          sizeVariations: 20,
+        },
+      },
+      {
+        breakpoint: 320,
+        options: {
+          maxParticles: 30,
+          sizeVariations: 20,
+        },
+      },
+      {
+        breakpoint: 320,
+        options: {
+          maxParticles: 30,
+          sizeVariations: 10,
+        },
+      },
+    ],
+  })
+}
+
 switch (path) {
   case "/register":
+    window.onload = particleInit()
     checkToken()
     addListeners()
     submit.addEventListener("click", handleRegistration)
     break
   case "/login":
+    window.onload = particleInit()
     checkToken()
     addListeners()
     submit.addEventListener("click", handleLogin)

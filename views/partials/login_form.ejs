@@ -1,23 +1,27 @@
-<div class="auth-form">
-  <form id="form" onsubmit="return false;">
-    <div class="flexwrap">
-      <label for="email">Email:</label>
-      <input type="email" id="email" placeholder="Enter email" required />
+<div class="gridwrap">
+  <section class="grid login">
+    <div class="infowrap">
+      <label for="email">Email</label>
+      <div class="flexwrap">
+        <input id="email" type="name" placeholder="Enter email" />
+      </div>
     </div>
-    <div class="flexwrap">
-      <label for="password">Password:</label>
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter password"
-        autocomplete="off"
-        required
-      />
+    <div class="infowrap">
+      <label for="password">Password</label>
+      <div class="flexwrap">
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter password"
+          autocomplete="off"
+          required
+        />
+      </div>
     </div>
     <div id="response"></div>
-    <div class="centerwrap">
+    <div class="fdc">
       <button id="submit">Submit</button>
+      <p>Don't have an account? <a href="/register">Register here</a>!</p>
     </div>
-    <p>Don't have an account? <a href="/register">Register here</a>!</p>
-  </form>
+  </section>
 </div>

@@ -120,38 +120,38 @@ const addAll = (e, obj = null) => {
       delete choices[key]
     }
     let q = document.createElement("li")
-    let span = document.createElement("span")
+    let button = document.createElement("button")
     q.classList.add("not_met")
-    span.innerHTML = '<i class="fas fa-times-circle"></i>'
+    button.innerHTML = '<i class="fas fa-times-circle"></i>'
     let p = document.createElement("p")
     q.dataset.id = `pid${id}`
     q.dataset.diff = diff
     p.innerText = `Problem ID: ${id}`
-    let prev = document.createElement("span")
+    let prev = document.createElement("button")
     prev.setAttribute("role", "button")
     prev.setAttribute("aria-label", "Preview problem")
     prev.setAttribute("title", "Preview problem")
     prev.innerHTML = '<i class="fas fa-eye"></i>'
     prev.addEventListener("pointerup", prevProblem)
-    let edit = document.createElement("span")
+    let edit = document.createElement("button")
     edit.setAttribute("role", "button")
     edit.setAttribute("aria-label", "Edit problem")
     edit.setAttribute("title", "Edit problem")
     edit.innerHTML = '<i class="fas fa-edit"></i>'
     edit.addEventListener("pointerup", editProblem)
-    // let copy = document.createElement("span")
+    // let copy = document.createElement("button")
     // copy.setAttribute("role", "button")
     // copy.setAttribute("aria-label", "Copy problem")
     // copy.setAttribute("title", "Copy problem")
     // copy.innerHTML = '<i class="fas fa-copy"></i>'
     // copy.addEventListener("pointerup", copyProblem)
-    let del = document.createElement("span")
+    let del = document.createElement("button")
     del.setAttribute("role", "button")
     del.setAttribute("aria-label", "Delete problem")
     del.setAttribute("title", "Delete problem")
     del.innerHTML = '<i class="fas fa-trash"></i>'
     del.addEventListener("pointerup", delProblem)
-    q.appendChild(span)
+    q.appendChild(button)
     q.appendChild(p)
     q.appendChild(prev)
     q.appendChild(edit)
@@ -171,13 +171,13 @@ const addAll = (e, obj = null) => {
       }
     }
     let q = document.createElement("li")
-    let span = document.createElement("span")
+    let button = document.createElement("button")
     if (satisfied) {
       q.classList.add("satisfied")
-      span.innerHTML = '<i class="fas fa-check-circle"></i>'
+      button.innerHTML = '<i class="fas fa-check-circle"></i>'
     } else {
       q.classList.add("not_met")
-      span.innerHTML = '<i class="fas fa-times-circle"></i>'
+      button.innerHTML = '<i class="fas fa-times-circle"></i>'
     }
     let difficulty = difficultySelect.value
     let id
@@ -195,31 +195,31 @@ const addAll = (e, obj = null) => {
     q.dataset.id = `pid${id}`
     q.dataset.diff = difficulty
     p.innerText = `Problem ID: ${id}`
-    let prev = document.createElement("span")
+    let prev = document.createElement("button")
     prev.setAttribute("role", "button")
     prev.setAttribute("aria-label", "Preview problem")
     prev.setAttribute("title", "Preview problem")
     prev.innerHTML = '<i class="fas fa-eye"></i>'
     prev.addEventListener("pointerup", prevProblem)
-    let edit = document.createElement("span")
+    let edit = document.createElement("button")
     edit.setAttribute("role", "button")
     edit.setAttribute("aria-label", "Edit problem")
     edit.setAttribute("title", "Edit problem")
     edit.innerHTML = '<i class="fas fa-edit"></i>'
     edit.addEventListener("pointerup", editProblem)
-    // let copy = document.createElement("span")
+    // let copy = document.createElement("button")
     // copy.setAttribute("role", "button")
     // copy.setAttribute("aria-label", "Copy problem")
     // copy.setAttribute("title", "Copy problem")
     // copy.innerHTML = '<i class="fas fa-copy"></i>'
     // copy.addEventListener("pointerup", copyProblem)
-    let del = document.createElement("span")
+    let del = document.createElement("button")
     del.setAttribute("role", "button")
     del.setAttribute("aria-label", "Delete problem")
     del.setAttribute("title", "Delete problem")
     del.innerHTML = '<i class="fas fa-trash"></i>'
     del.addEventListener("pointerup", delProblem)
-    q.appendChild(span)
+    q.appendChild(button)
     q.appendChild(p)
     q.appendChild(prev)
     q.appendChild(edit)
@@ -234,14 +234,14 @@ const addAll = (e, obj = null) => {
   } else {
     let newDiff = difficultySelect.value
     let qDOM = document.querySelector(`[data-id="${refId}"]`)
-    let icon = qDOM.querySelector("span")
+    let icon = qDOM.querySelector("button")
     if (newDiff !== refDiff) {
       problems[newDiff][refId] = {
         question: question,
         choices: { ...choices },
       }
       delete problems[refDiff][refId]
-      let del = qDOM.querySelectorAll("span")[3]
+      let del = qDOM.querySelectorAll("button")[3]
       del.dispatchEvent(new Event("pointerup"))
       qDOM.dataset.diff = newDiff
       appendThisToThat(qDOM, newDiff)
@@ -391,7 +391,7 @@ const editProblem = (e) => {
   let { refId } = addAllBtn.dataset
   if (refId && refId !== targetId) {
     let li = problemSet.querySelector("li.editing")
-    let edit = li.querySelectorAll("span")[2]
+    let edit = li.querySelectorAll("button")[2]
     edit.setAttribute("aria-label", "Edit problem")
     edit.setAttribute("title", "Edit problem")
     let { id } = li.dataset
@@ -595,13 +595,13 @@ const addQ = () => {
     questionItem = document.createElement("li")
     let p = document.createElement("p")
     p.innerText = "Question"
-    let edit = document.createElement("span")
+    let edit = document.createElement("button")
     edit.setAttribute("role", "button")
     edit.setAttribute("aria-label", "Edit question")
     edit.setAttribute("title", "Edit question")
     edit.innerHTML = '<i class="fas fa-edit"></i>'
     edit.addEventListener("pointerup", editQ)
-    let del = document.createElement("span")
+    let del = document.createElement("button")
     del.setAttribute("role", "button")
     del.setAttribute("aria-label", "Delete question")
     del.setAttribute("title", "Delete question")
@@ -697,7 +697,7 @@ const discardQ = (e) => {
   questionTextArea.innerHTML = "<p><br></p>"
   let li = questionSection.querySelector("li")
   if (li) {
-    let edit = li.querySelectorAll("span")[1]
+    let edit = li.querySelectorAll("button")[1]
     target.setAttribute("aria-label", "Discard")
     target.setAttribute("title", "Discard")
     edit.setAttribute("aria-label", "Edit question")
@@ -732,13 +732,13 @@ const addAns = (e) => {
     choices.answer = correctAnswerTextArea.innerHTML
     let p = document.createElement("p")
     p.innerText = "Answer"
-    let edit = document.createElement("span")
+    let edit = document.createElement("button")
     edit.setAttribute("role", "button")
     edit.setAttribute("aria-label", "Edit answer")
     edit.setAttribute("title", "Edit answer")
     edit.innerHTML = '<i class="fas fa-edit"></i>'
     edit.addEventListener("pointerup", editAns)
-    let del = document.createElement("span")
+    let del = document.createElement("button")
     del.setAttribute("role", "button")
     del.setAttribute("aria-label", "Delete answer")
     del.setAttribute("title", "Delete answer")
@@ -824,7 +824,7 @@ const discardAns = (e) => {
   correctAnswerTextArea.innerHTML = "<p><br></p>"
   let li = correctAnswerSection.querySelector("li")
   if (li) {
-    let edit = li.querySelectorAll("span")[1]
+    let edit = li.querySelectorAll("button")[1]
     edit.setAttribute("aria-label", "Cancel edit")
     edit.setAttribute("title", "Cancel edit")
     target.setAttribute("aria-label", "Discard")
@@ -917,19 +917,19 @@ const addChoice = (e) => {
   let p = document.createElement("p")
   choiceItem.dataset.id = `cid${id}`
   p.innerText = `Choice ID: ${id}`
-  let edit = document.createElement("span")
+  let edit = document.createElement("button")
   edit.setAttribute("role", "button")
   edit.setAttribute("aria-label", "Edit choice")
   edit.setAttribute("title", "Edit choice")
   edit.innerHTML = '<i class="fas fa-edit"></i>'
   edit.addEventListener("pointerup", editChoice)
-  // let copy = document.createElement("span")
+  // let copy = document.createElement("button")
   // copy.setAttribute("role", "button")
   // copy.setAttribute("aria-label", "Duplicate choice")
   // copy.setAttribute("title", "Duplicate choice")
   // copy.innerHTML = '<i class="fas fa-copy"></i>'
   // copy.addEventListener("pointerup", copyChoice)
-  let del = document.createElement("span")
+  let del = document.createElement("button")
   del.setAttribute("role", "button")
   del.setAttribute("aria-label", "Delete choice")
   del.setAttribute("title", "Delete choice")

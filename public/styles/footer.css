@@ -3,7 +3,6 @@ footer {
     bottom: 0;
     width: 100%;
     padding: 1em;
-    margin-bottom: var(--offset);
     background-color: var(--accentDark);
 }
 
@@ -14,7 +13,6 @@ footer a {
 
 @media (min-width: 576px) {
     footer {
-       margin-bottom: unset;
         display: block;
         background-color: var(--navGreen);
         color: var(--neutralLight);
@@ -25,4 +23,4 @@ footer a {
 
 @media (min-width: 992px) { }
 
-@media (min-width: 1200px) {}
+@media (min-width: 1200px) { }

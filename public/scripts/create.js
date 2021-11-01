@@ -83,12 +83,15 @@ const addTag = (e) => {
     if (value.length === 0 || inputValues.includes(value)) {
       return (tagsInput.value = "")
     }
-    let tag = document.createElement("li")
-    tag.innerHTML = value
+    let tag = document.createElement("button")
+    let val = document.createElement("span")
+    val.innerText = value
     let close = document.createElement("span")
-    close.innerHTML = "×"
+    close.innerText = "×"
+    tag.appendChild(val)
     tag.appendChild(close)
     tag.addEventListener("click", removeTag)
+    tags.appendChild(tag)
     inputValues.push(value)
     if (inputValues.length > 0) {
       tags.classList.remove("hide")
@@ -115,10 +118,12 @@ const addTags = (incomingTags) => {
     tags.classList.remove("hide")
   }
   for (let tag of incomingTags) {
-    let newTag = document.createElement("li")
-    newTag.innerHTML = tag
+    let newTag = document.createElement("button")
+    let val = document.createElement("span")
+    val.innerText = tag
     let close = document.createElement("span")
-    close.innerHTML = "×"
+    close.innerText = "×"
+    newTag.appendChild(val)
     newTag.appendChild(close)
     newTag.addEventListener("click", removeTag)
     tags.appendChild(newTag)

@@ -6,30 +6,83 @@
     color: darkred
 }
 
-.grid {
+.background {
+    position: absolute;
+    display: block;
+    height: 432px !important; 
+    top: 65px;
+    left: 0;
+    z-index: -1;
+}
+
+.gridwrap {
+    width: 100%;
+    height: 432px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gridwrap.r, 
+.background.r {
+    height: 640px !important;
+}
+
+.gridwrap .fdc p {
+    width: 22ch;
+    line-height: 1.25rem;
+    text-align: center;
+}
+
+.grid, .grid.login, 
+.grid.register {
     display: grid;
     grid-template-columns: 1fr;
-    padding: 0.75rem 0.75rem 0;
     width: 90%;
     max-width: 500px;
     margin: auto;
+}
+
+.grid {
+    padding: 0.75rem 0.75rem 10rem;
+}
+
+.grid.login, 
+.grid.register {
+    padding: 0.75rem;
+    border: var(--border);
+    box-shadow: var(--boxShadow);
+    border-radius: 3px;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(1px);
+}
+
+.grid.register {
+    margin-top: 1.25rem;
 }
 
 .infowrap {
     display: block;
     white-space: nowrap;
     width: 100%;
+    margin-top: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-label {
+.infowrap label {
     font-size: 1.25rem;
     white-space: nowrap;
 }
 
-label ~ label {
-    margin-top: 10px;
+.infowrap button i {
+    pointer-events: none;
+}
+
+.grid.login .infowrap, 
+.grid.register .infowrap {
+    margin-top: 0;
 }
 
 .flexwrap {
@@ -48,7 +101,23 @@ border-radius: 3px;
 pointer-events: none;
 }
 
-.flexwrap p, .flexwrap input {
+.grid.login .infowrap .flexwrap, 
+.grid.register .infowrap .flexwrap {
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    background-color: transparent;
+}
+
+.grid.login .infowrap 
+.flexwrap input, 
+.grid.register .infowrap 
+.flexwrap input {
+    margin-right: 0;
+}
+
+.flexwrap p, 
+.flexwrap input {
     width: 100%;
     margin-right: 10px;
     white-space: nowrap;
@@ -59,15 +128,54 @@ pointer-events: none;
     pointer-events: all;
 }
 
-.flexwrap span {
+.flexwrap button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
     pointer-events: all;
     cursor: pointer;
 }
 
-.flexwrap span:hover {
+.flexwrap button:hover,  
+.flexwrap button:focus {
     color: var(--accentDark);
+}
+
+.flexwrap button:active {
+    color: var(--accentActive)
+}
+
+.grid.login .fdc, 
+.grid.register .fdc {
+    margin: 0;    
+    align-items: center;
+}
+
+.grid.login .fdc #submit, 
+.grid.register .fdc #submit {
+    padding: 0.25rem 0.5rem;
+    margin: 10px 0;
+    border-radius: 20px;
+    border: var(--border);
+    box-shadow: var(--boxShadow);
+    background-color: var(--heroGreen);
+    color: white;
+    font-size: 1.125rem;
+}
+
+.grid.login a, 
+.grid.register a, 
+.grid.login a:link, 
+.grid.register a:link, 
+.grid.login a:visited, 
+.grid.register a:visited {
+    color: initial;
 }
 
 .fdc {
@@ -93,7 +201,7 @@ pointer-events: none;
     pointer-events: none;
 }
 
-.save_discard_buttons span {
+.save_discard_buttons button {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -107,20 +215,21 @@ pointer-events: none;
     pointer-events: all;
 }
 
-.save_discard_buttons span:hover {
+.save_discard_buttons button:hover {
     cursor: pointer;
     background-color: var(--tinymceGray);
 }
 
-.save_discard_buttons span:active, .save_discard_buttons span:focus {
+.save_discard_buttons button:active, 
+.save_discard_buttons button:focus {
     background-color: var(--tinymceGrayActive);
 }
 
-.save_discard_buttons span i {
+.save_discard_buttons button i {
     font-size: 2rem;
 }
 
-.save_discard_buttons span p {
+.save_discard_buttons button p {
     margin-top: 10px;
     text-align: center;
     user-select: none;
@@ -133,33 +242,203 @@ pointer-events: none;
     margin-top: 30px;
 }
 
-.delete {
-    margin-top: 30px;
-    text-align: center;
+.grid.login #response, 
+.grid.register #response {
+    margin: 0;
+    height: unset;
 }
 
-.delete button {
-    padding: 1rem;
-    margin-bottom: 150px;
-    width: 180px;
-    border: var(--border);
+.delete-button {
+    display: flex;
+    margin: 30px auto;
+    width: 100%;
+    height: 50px;
+    max-width: 350px;
     box-shadow: var(--boxShadow);
     border-radius: 3px;
-    background-color: red;
+    text-align: center;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.delete-button::-webkit-scrollbar {
+    display: none;
+}
+
+#db, #q {
+    height: 100%;
+    flex-shrink: 0;
+}
+
+#db, #cancel, #proceed, #back, .inpwrap, #confirm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+}
+
+#db, #cancel, #proceed, #back, #confirm {
     color: white;
+    border: none;
+}
+
+#cancel, #proceed, #back, #confirm {
+    font-size: 1.25rem;
+}
+
+#db {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background-color: red;
     font-size: 1.5rem;
 }
 
-@media (min-width: 320px) {}
+#db h5, #back i {
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
 
-@media (min-width: 576px) {
-    .delete {
-        margin-top: 50px;
+#cancel, #proceed, #back, #confirm {
+    flex-shrink: 0;
+    background-color: var(--heroGreen);
+}
+
+#cancel, #proceed {
+    width: 20%;
+}
+
+#back {
+    width: 10%;
+}
+
+#confirm {
+    width: 25%
+}
+
+#q, .inpwrap {
+    padding: 0.25rem;
+    flex-shrink: 0;
+}
+
+#q {
+    width: 60%;
+}
+
+.inpwrap {
+    width: 65%;
+    flex-direction: column;
+    background-color: white;
+}
+
+#delpassword {
+    width: 100%;
+    padding: 0.1rem;
+}
+
+#delresponse {
+    text-align: center;
+}
+
+#db:hover, 
+#cancel:hover, 
+#proceed:hover, 
+#back:hover, 
+#confirm:hover, 
+.grid.login .fdc #submit:hover, 
+.grid.register .fdc #submit:hover {
+    cursor: pointer;
+}
+
+#db:hover, #db:focus {
+    background-color: rgb(225, 0, 0);
+}
+
+#db:active {
+    background-color: rgb(195, 0, 0);
+}
+
+#cancel:hover, 
+#proceed:hover, 
+#back:hover, 
+#confirm:hover, 
+.grid.login .fdc #submit:hover, 
+.grid.register .fdc #submit:hover,
+.grid.login .fdc #submit:focus, 
+.grid.register .fdc #submit:focus,
+#cancel:focus, 
+#proceed:focus, 
+#back:focus, 
+#confirm:focus {
+    background-color: var(--accentDark);
+}
+
+#cancel:active, 
+#proceed:active,
+#back:active, 
+#confirm:active, 
+.grid.login .fdc #submit:active, 
+.grid.register .fdc #submit:active {
+    background-color: var(--accentActive);
+}
+
+@media (min-width: 320px) {
+    .background {
+        height: 472px !important; 
+        top: 65px;
+    }
+    
+    .gridwrap {
+        height: 472px;
     }
 
-    .delete button {
-    width: 310px;
-    margin-bottom: 75px;
+    .grid.register {
+        margin-top: 1.5rem;
+    }
+
+    .gridwrap.r, 
+    .background.r {
+        height: 620px !important;
+    }
+}
+
+@media (min-width: 360px) {
+    .gridwrap .fdc p {
+        width: unset;
+        line-height: unset;
+        text-align: unset;
+    }
+    
+}
+
+@media (min-width: 576px) {
+    .background {
+        height: 441px !important; 
+        top: 146px;
+    }
+
+    .gridwrap {
+        height: 441px;
+    }
+
+    .gridwrap.r, 
+    .background.r {
+        height: 580px !important;
+    }
+
+    .grid {
+        padding: 0.75rem 0.75rem 4rem;
+    }
+
+    .grid.login .fdc #submit, 
+    .grid.register .fdc #submit {
+        padding: 0.5rem 1rem;
+    }
+
+    .delete-button {
+        margin: 10px auto 30px;
     }
 
     .save_discard_buttons {
@@ -167,182 +446,59 @@ pointer-events: none;
         margin-top: 20px;
     }
 
-    .save_discard_buttons span {
+    .save_discard_buttons button {
         width: 150px;
         padding: 15px 10px;
     }
 }
 
 @media (min-width: 768px) {
-    .grid {
-    grid-template-columns: repeat(8, minmax(0, 1fr));
-    column-gap: 20px;
+    .background {
+        height: 433px !important; 
+        top: 146px;
+    }
+
+    .gridwrap {
+        height: 433px;
+    }
+
+    .gridwrap.r, .background.r {
+        height: 437px !important;
+    }
+
+    .grid, 
+    .grid.register {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        column-gap: 20px;
         width: 95%;
         max-width: 1020px;
     }
 
-    .infowrap:nth-of-type(1), .infowrap:nth-of-type(3) {
+    .grid.register {
+        margin-top: auto;
+    }
+
+    .grid.login .infowrap:nth-of-type(1), 
+    .grid.login .infowrap:nth-of-type(2), 
+    .grid.login #response,  
+    .grid.login .centerwrap {
+        grid-column: 1/span 1;
+    }
+
+    .infowrap:nth-of-type(1), 
+    .infowrap:nth-of-type(3),
+    .grid.register .infowrap:nth-of-type(5) {
         grid-column: 1/span 4;
     }
     
-    .infowrap:nth-of-type(2), .infowrap:nth-of-type(4) {
+    .infowrap:nth-of-type(2), 
+    .infowrap:nth-of-type(4), 
+    .grid.register .infowrap:nth-of-type(6) {
         grid-column: 5/span 4;
     }
 
-    .infowrap:nth-of-type(5),  .save_discard_buttons, #response, .delete {
+    .infowrap:nth-of-type(5), .save_discard_buttons,
+    #response, #delresponse, .delete-button, .grid.register .fdc {
         grid-column: 3/span 4;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* .auth-form input, .auth-form button, .auth-form a, .auth-form label, .auth-form p, #response {
-    font-size: 0.8rem;   
-} */
-/* 
-.form-section input + button {
-    margin-left: 8px;
-}
-
-.flexwrap  input {
-    width: 100%;
-}
-
-.flexwrap button {
-    margin-top: 5px;
-}
-
-.flexwrap-s {
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-
-
-.centerwrap {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-#response, #submit {
-    text-align: center;
-    margin-bottom: 0.5em;
-    font-weight: 500;
-}
-
-
-
-button {
-    background-color: #EFEFEF; 
-    border: solid black 1px;
-    padding: 1px 5px;
-    border-radius: 2px;
-    white-space: nowrap;
-}
-
-
-
-.no-click {
-    filter: brightness(0.6);
-    cursor: not-allowed;
-}
-
-a {
-    color: white;
-}
-
-p {
-    font-weight: 300;
-    text-align: center;
-}
-
-p > a {
-    color: black;
-    text-decoration: underline;
-}
-
-.question {
-    text-align: justify;
-}
-
-input[type="radio"] {
-    width: unset;
-}
-
-#delete label {
-    margin-right: 3px;
-    width: unset;
-}
-
-#delete label ~ label {
-    margin-left: 2em;
-}
-
-#delete p {
-    padding: 0 0 20px;
-}
-
-#delete .flexwrap {
-    flex-direction: row;
-    align-items: center;
-}
-
-#delete label, #delete input {
-    margin-top: unset;
-}
-
-#delete .flexwrap, #delete button {
-    margin-bottom: 20px;
-} 
-
-@media (min-width: 576px) {
-    .auth-form, .auth-form___header {
-        width: 70%;
-        max-width: 700px;
-        margin: auto;
-    }
-
-    .flexwrap {
-        align-items: center;
-        flex-direction: row;
-    }
-    
-    label {
-        width: 150px;
-        text-align: right;
-        flex-shrink: 0;
-    }
-
-    .flexwrap button {
-        margin: 0;
-    }
-
-    .flexwrap p, .flexwrap-s p {
-        width: 100%;
-        text-align: left;
-    }
-
-    .fdc {
-        flex-direction: row;
-    }
-
-    
-} */

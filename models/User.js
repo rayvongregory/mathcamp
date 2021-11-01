@@ -73,7 +73,7 @@ userSchema.methods.createDisplayName = function () {
 userSchema.methods.getAvatar = function () {
   this.avatar = gravatar.url(
     this.contactEmail,
-    { s: "40", r: "x", d: "retro" },
+    { s: "40", r: "g", d: "retro" },
     true
   )
 }

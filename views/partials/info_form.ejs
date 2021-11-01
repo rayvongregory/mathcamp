@@ -10,7 +10,9 @@
         placeholder="Enter first name"
       />
       <p></p>
-      <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
+      <button aria-label="Edit" title="Edit">
+        <i class="fas fa-edit"></i>
+      </button>
     </div>
   </div>
   <div class="infowrap">
@@ -23,15 +25,11 @@
         placeholder="Enter last name"
       />
       <p></p>
-      <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
+      <button aria-label="Edit" title="Edit">
+        <i class="fas fa-edit"></i>
+      </button>
     </div>
   </div>
-  <!-- <div class="infowrap">
-    <label for="email">Email</label>
-    <div class="flexwrap">
-      <p>rayvongregory@gmail.com</p>
-    </div>
-  </div> -->
   <div class="infowrap">
     <label for="dname">Display Name</label>
     <div class="flexwrap">
@@ -42,15 +40,19 @@
         placeholder="Enter display name"
       />
       <p></p>
-      <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
+      <button aria-label="Edit" title="Edit">
+        <i class="fas fa-edit"></i>
+      </button>
     </div>
   </div>
   <div class="infowrap">
-    <label for="email">Email:</label>
+    <label for="email">Email</label>
     <div class="flexwrap">
       <input type="email" id="email" placeholder="Enter email" class="hide" />
       <p></p>
-      <span aria-label="Edit" title="Edit"><i class="fas fa-edit"></i></span>
+      <button aria-label="Edit" title="Edit">
+        <i class="fas fa-edit"></i>
+      </button>
     </div>
   </div>
   <div class="infowrap">
@@ -74,38 +76,44 @@
           placeholder="Re-enter new password"
         />
       </div>
-      <span id="password" aria-label="Edit" title="Edit"
-        ><i class="fas fa-edit"></i
-      ></span>
+      <button id="password" aria-label="Edit" title="Edit">
+        <i class="fas fa-edit"></i>
+      </button>
     </div>
   </div>
-  <!-- <div class="save_discard_buttons hide"> -->
   <div class="save_discard_buttons">
-    <!-- only reveal when an update can be made -->
-    <span
-      id="submit"
-      role="button"
-      aria-label="Save changes"
-      title="Save changes"
-      ><i class="fas fa-save"></i>
-      <p>Save Changes</p></span
-    >
-    <span
+    <button id="submit" aria-label="Save changes" title="Save changes">
+      <i class="fas fa-save"></i>
+      <p>Save Changes</p>
+    </button>
+    <button
       id="discard_all"
-      role="button"
       aria-label="Discard changes"
       title="Discard changes"
-      ><i class="fas fa-trash"></i>
-      <p>Discard Changes</p></span
     >
+      <i class="fas fa-trash"></i>
+      <p>Discard Changes</p>
+    </button>
   </div>
   <div id="response"></div>
-  <div class="delete">
-    <button><h5>Delete Account</h5></button>
+  <div class="delete-button">
+    <button id="db">
+      <h5>Delete Account</h5>
+    </button>
+    <button id="cancel">No</button>
+    <p id="q">Are you sure you want to delete your account?</p>
+    <button id="proceed">Yes</button>
+    <button id="back">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <div class="inpwrap">
+      <input
+        id="delpassword"
+        type="password"
+        placeholder="Enter your password to confirm"
+      />
+    </div>
+    <button id="confirm">Delete</button>
   </div>
+  <p id="delresponse">Yooooooooooooooooooooo</p>
 </section>
-
-<!-- <div class="centerwrap">
-    <button id="submit" class="no-click">Update</button>
-  </div>
-  <p>Want to delete your account? <a href="/delete">Click here</a>.</p> -->
