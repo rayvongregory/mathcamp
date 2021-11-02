@@ -5,23 +5,16 @@
     <link rel="stylesheet" href="/styles/auth.css" />
   </head>
   <body>
-    <%- include('../partials/aside'); %> <%- include('../partials/nav'); %>
-    <header class="secondary"><h1><%=bannerTitle%></h1></header>
-    <% if(title === "Login") { %> <%- include('../partials/login_form') %> <% }
-    else if(title === "Register") { %> <%- include('../partials/register_form')
-    %> <% } else if(title === "Delete") { %> <%-
-    include('../partials/delete_form') %> <% } else { %> <%-
-    include('../partials/info_form') %> <% } %> <%-
-    include('../partials/universal_scripts'); %>
-    <script type="module" src="/scripts/auth.js"></script>
-
-    <% if(title === "Login") { %>
+    <%- include('../partials/aside'); %> <%- include('../partials/nav'); %> <%-
+    include('../partials/auth_banner'); %> <% if(title === "Login") { %> <%-
+    include('../partials/login_form') %> <% } else if(title === "Register") { %>
+    <%- include('../partials/register_form') %> <% } else if(title === "Delete")
+    { %> <%- include('../partials/delete_form') %> <% } else { %> <%-
+    include('../partials/info_form') %> <% } %> <% if(title === "Login") { %>
     <canvas class="background"></canvas>
     <% } else if(title === "Register") { %>
     <canvas class="background r"></canvas>
-    <% } %>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.2/particles.min.js
-      "></script>
+    <% } %> <%- include('../partials/universal_scripts'); %>
+    <script type="module" src="/scripts/auth.js"></script>
   </body>
 </html>

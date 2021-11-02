@@ -9,23 +9,21 @@
 .background {
     position: absolute;
     display: block;
-    height: 432px !important; 
-    top: 65px;
+    top: 0;
     left: 0;
     z-index: -1;
 }
 
 .gridwrap {
     width: 100%;
-    height: 432px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: min(10%, 50px);
 }
 
-.gridwrap.r, 
-.background.r {
-    height: 640px !important;
+.gridwrap.r {
+    margin-bottom: 8rem;
 }
 
 .gridwrap .fdc p {
@@ -58,10 +56,6 @@
     backdrop-filter: blur(1px);
 }
 
-.grid.register {
-    margin-top: 1.25rem;
-}
-
 .infowrap {
     display: block;
     white-space: nowrap;
@@ -72,6 +66,7 @@
 }
 
 .infowrap label {
+    padding-left: 5px;
     font-size: 1.25rem;
     white-space: nowrap;
 }
@@ -109,11 +104,19 @@ pointer-events: none;
     background-color: transparent;
 }
 
-.grid.login .infowrap 
-.flexwrap input, 
-.grid.register .infowrap 
-.flexwrap input {
+.grid.login .infowrap .flexwrap input, 
+.grid.register .infowrap .flexwrap input {
     margin-right: 0;
+    border: 1px solid var(--tinymceGrayActive);
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.grid.login .infowrap .flexwrap input:active, 
+.grid.register .infowrap .flexwrap input:active,
+.grid.login .infowrap .flexwrap input:focus, 
+.grid.register .infowrap .flexwrap input:focus {
+    outline: none;
 }
 
 .flexwrap p, 
@@ -124,7 +127,7 @@ pointer-events: none;
 }
 
 .flexwrap input {
-    padding-left: 3px;
+    padding-left: 5px;
     pointer-events: all;
 }
 
@@ -144,7 +147,8 @@ pointer-events: none;
 
 .flexwrap button:hover,  
 .flexwrap button:focus {
-    color: var(--accentDark);
+    color: var(--deepOrange);
+    outline: none;
 }
 
 .flexwrap button:active {
@@ -162,11 +166,18 @@ pointer-events: none;
     padding: 0.25rem 0.5rem;
     margin: 10px 0;
     border-radius: 20px;
-    border: var(--border);
-    box-shadow: var(--boxShadow);
-    background-color: var(--heroGreen);
+    border: none;
+    background-color: var(--deepOrange);
     color: white;
     font-size: 1.125rem;
+}
+
+.grid.login .fdc #submit:hover, 
+.grid.register .fdc #submit:hover,
+.grid.login .fdc #submit:focus, 
+.grid.register .fdc #submit:focus {
+    box-shadow: var(--boxShadow);
+    outline: none;
 }
 
 .grid.login a, 
@@ -191,14 +202,15 @@ pointer-events: none;
 
 .save_discard_buttons {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
-    margin-top: 10px;
-    gap: 10px;
-    pointer-events: none;
+    margin: 10px auto auto;
+    padding: 5px;
+    width: 260px;
+    border: var(--border);
+    border-radius: 3px;
+    box-shadow: var(--boxShadow);
+    background-color: white;
 }
 
 .save_discard_buttons button {
@@ -206,34 +218,36 @@ pointer-events: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 180px;
-    padding: 10px;
+    padding: 5px;
+    margin: 5px;
+    width: 110px;
     border: var(--border);
-    box-shadow: var(--boxShadow);
-    background-color: white;
-    border-radius: 3px; 
-    pointer-events: all;
+    border-radius: 3px;
+    pointer-events: all
 }
 
 .save_discard_buttons button:hover {
-    cursor: pointer;
     background-color: var(--tinymceGray);
+    cursor: pointer;
 }
 
 .save_discard_buttons button:active, 
 .save_discard_buttons button:focus {
     background-color: var(--tinymceGrayActive);
+    outline: none;
 }
 
 .save_discard_buttons button i {
     font-size: 2rem;
+    pointer-events: none;
 }
 
 .save_discard_buttons button p {
-    margin-top: 10px;
-    text-align: center;
-    user-select: none;
+    padding-top: 5px;
     white-space: nowrap;
+    font-size: 0.85em;
+    pointer-events: none;
+    user-select: none;
 }
 
 #response {
@@ -291,11 +305,11 @@ pointer-events: none;
 #db {
     width: 100%;
     padding: 0.5rem 1rem;
-    background-color: red;
+    background-color: var(--accent);
     font-size: 1.5rem;
 }
 
-#db h5, #back i {
+#db p, #back i {
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none;
@@ -303,7 +317,7 @@ pointer-events: none;
 
 #cancel, #proceed, #back, #confirm {
     flex-shrink: 0;
-    background-color: var(--heroGreen);
+    background-color: var(--accent);
 }
 
 #cancel, #proceed {
@@ -353,11 +367,13 @@ pointer-events: none;
 }
 
 #db:hover, #db:focus {
-    background-color: rgb(225, 0, 0);
+    background-color: var(--deepOrange);
+    color: white;
+    outline: none;
 }
 
 #db:active {
-    background-color: rgb(195, 0, 0);
+    background-color: var(--accentActive);
 }
 
 #cancel:hover, 
@@ -372,7 +388,8 @@ pointer-events: none;
 #proceed:focus, 
 #back:focus, 
 #confirm:focus {
-    background-color: var(--accentDark);
+    background-color: var(--deepOrange);
+    outline: none;
 }
 
 #cancel:active, 
@@ -382,26 +399,6 @@ pointer-events: none;
 .grid.login .fdc #submit:active, 
 .grid.register .fdc #submit:active {
     background-color: var(--accentActive);
-}
-
-@media (min-width: 320px) {
-    .background {
-        height: 472px !important; 
-        top: 65px;
-    }
-    
-    .gridwrap {
-        height: 472px;
-    }
-
-    .grid.register {
-        margin-top: 1.5rem;
-    }
-
-    .gridwrap.r, 
-    .background.r {
-        height: 620px !important;
-    }
 }
 
 @media (min-width: 360px) {
@@ -414,20 +411,6 @@ pointer-events: none;
 }
 
 @media (min-width: 576px) {
-    .background {
-        height: 441px !important; 
-        top: 146px;
-    }
-
-    .gridwrap {
-        height: 441px;
-    }
-
-    .gridwrap.r, 
-    .background.r {
-        height: 580px !important;
-    }
-
     .grid {
         padding: 0.75rem 0.75rem 4rem;
     }
@@ -444,38 +427,26 @@ pointer-events: none;
     .save_discard_buttons {
         flex-direction: row;
         margin-top: 20px;
+        width: 350px;
     }
 
     .save_discard_buttons button {
         width: 150px;
         padding: 15px 10px;
     }
+
+    .save_discard_buttons button p {
+        font-size: 1rem;
+    }
 }
 
 @media (min-width: 768px) {
-    .background {
-        height: 433px !important; 
-        top: 146px;
-    }
-
-    .gridwrap {
-        height: 433px;
-    }
-
-    .gridwrap.r, .background.r {
-        height: 437px !important;
-    }
-
     .grid, 
     .grid.register {
         grid-template-columns: repeat(8, minmax(0, 1fr));
         column-gap: 20px;
         width: 95%;
         max-width: 1020px;
-    }
-
-    .grid.register {
-        margin-top: auto;
     }
 
     .grid.login .infowrap:nth-of-type(1), 

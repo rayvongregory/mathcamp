@@ -1,4 +1,3 @@
-const path = window.location.pathname
 const html = document.querySelector("html")
 const body = document.querySelector("body")
 const form = document.querySelectorAll("input:not(.nav___search-input)")
@@ -128,7 +127,9 @@ const handleLogin = async () => {
     }
   }
   response.innerHTML = "Logging in..."
-  const { email, password } = formData
+  let { email, password } = formData
+  email = email.toLowerCase()
+  console.log(email)
   try {
     const { data } = await axios.post(`/api/v1/auth${path}`, {
       email,
@@ -459,13 +460,6 @@ const particleInit = () => {
         breakpoint: 576,
         options: {
           maxParticles: 40,
-          sizeVariations: 20,
-        },
-      },
-      {
-        breakpoint: 320,
-        options: {
-          maxParticles: 30,
           sizeVariations: 20,
         },
       },

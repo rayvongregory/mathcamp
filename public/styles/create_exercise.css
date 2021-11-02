@@ -40,7 +40,7 @@
 
 .overlay___body h3 {
     font-size: 2rem;
-    background-color: var(--heroGreen);
+    background-color: var(--deepOrange);
     color: white;
     padding: 10px 15px;
 }
@@ -127,6 +127,7 @@
 .add_delete_q_buttons button:active, 
 .add_delete_q_buttons button:focus {
     background-color: var(--tinymceGrayActive);
+    outline: none;
 }
 
 .exercise_requirements {
@@ -224,6 +225,7 @@
     white-space: nowrap;
     font-size: 0.85em;
     pointer-events: none;
+    user-select: none;
 }
 
 .problem_set {
@@ -347,7 +349,7 @@
 .question_choices li.editing, 
 .correct_answer li.editing, 
 .question_section li.editing {
-    background-color: var(--accentDark);
+    background-color: var(--deepOrange);
     color: white;
 }
 

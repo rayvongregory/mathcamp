@@ -1,3 +1,4 @@
+const path = window.location.pathname
 const html = document.querySelector("html")
 const body = document.querySelector("body")
 const nav = document.querySelector("nav")
@@ -30,7 +31,9 @@ const token = localStorage.getItem("token")
 let justLoaded = true
 let breakpoints = { tiny: 320, small: 576, medium: 768, big: 992, large: 1200 }
 let lastWindowSize = 1,
-  currentWindowSize = 1
+  currentWindowSize = 1,
+  speed = 0,
+  particleMod = 0
 
 logoutBtn.addEventListener("pointerup", async () => {
   try {
@@ -391,6 +394,50 @@ const checkWindowSize = () => {
 const navInit = () => {
   checkWindowSize()
   getDisplayName()
+  if (path === "/login" || path === "/register") {
+    speed = 0.5
+    particleMod = 15
+  }
+  Particles.init({
+    selector: ".background",
+    maxParticles: 25 + particleMod,
+    sizeVariations: 25 + particleMod,
+    speed,
+    connectParticles: true,
+    color: [
+      "#FF6138",
+      "#EB890A",
+      "#FAB355",
+      "#FFFF9D",
+      "#BEEB9F",
+      "#79BD8F",
+      "#00A388",
+    ],
+    // options for breakpoints
+    responsive: [
+      {
+        breakpoint: 768,
+        options: {
+          maxParticles: 20 + particleMod,
+          sizeVariations: 20 + particleMod,
+        },
+      },
+      {
+        breakpoint: 576,
+        options: {
+          maxParticles: 15 + particleMod,
+          sizeVariations: 15 + particleMod,
+        },
+      },
+      {
+        breakpoint: 320,
+        options: {
+          maxParticles: 10 + particleMod,
+          sizeVariations: 10 + particleMod,
+        },
+      },
+    ],
+  })
 }
 
 window.addEventListener("load", navInit)

@@ -50,7 +50,7 @@ aside a, #logout {
 
 aside a:hover, #logout:hover,
 aside a:focus, #logout:focus {
-    background-color: var(--accentDark);
+    background-color: var(--deepOrange);
     padding-left: 30px;
 }
 
@@ -68,7 +68,7 @@ aside a:active, #logout:active {
     justify-content: flex-start;
     align-items: center;
     padding: 5px 0 5px 20px;
-    background-color: var(--navGreen);
+    background-color: var(--deepOrange);
 }
 
 .name-wrapper img {
@@ -106,7 +106,7 @@ aside a:active, #logout:active {
 .sticky {
     position: sticky;
     right: unset;
-    left: 14.5px;
+    left: 15px;
     pointer-events: all;
 }
 
@@ -336,11 +336,6 @@ aside a:active, #logout:active {
     .name-wrapper img {
         display: unset;
         /* margin: 5px 10px 5px 0; */
-    }
-
-    .name-wrapper:hover *, 
-    aside:hover .name-wrapper * {
-        color: var(--heroGreen)
     }
 
     .rotate {

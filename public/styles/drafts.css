@@ -76,7 +76,7 @@
 #drafts___section button:focus, 
 #drafts___lessons button:focus, 
 #drafts___practices button:focus {
-    color: var(--accentDark);
+    color: var(--deepOrange);
     cursor: pointer;
 }
 

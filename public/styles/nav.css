@@ -40,7 +40,7 @@ nav {
     font-size: 1rem;
 }
 
-.buttons button a {
+.buttons a, .buttons button {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -58,19 +58,24 @@ nav {
     display: none;
 }
 
-#nav-search-btn:hover, 
 #submit-search:hover,
-#nav-search-btn:focus, 
 #submit-search:focus {
     cursor: pointer;
+    outline: none;
+    background-color: var(--tinymceGray);
 }
 
 .buttons button:hover, 
-.buttons button:focus {
+.buttons button:focus,
+.buttons a:hover, 
+.buttons a:focus {
     background-color: rgb(34, 92, 100);
+    cursor: pointer;
+    outline: none;
 }
 
-.buttons button:active {
+.buttons button:active,
+.buttons a:active {
     background-color: rgb(14, 72, 80);
 }
 
@@ -113,7 +118,7 @@ nav i {
     text-decoration: none;
     border: none;
     height: 2em;
-    padding-left: 1em;
+    padding-left: 1rem;
     width: 100%;
     margin: auto;
     background-color: var(--neutralLight);
@@ -145,19 +150,10 @@ nav i {
 .nav___search button:focus {
     cursor: pointer;
     background-color: var(--tinymceGray);
+    outline: none;
 }
 
 .nav___search button:active {
-    cursor: pointer;
-    background-color: var(--tinymceGrayActive);
-}
-
-#submit-search:hover,
-#submit-search:focus {
-    background-color: var(--tinymceGray);
-}
-
-#submit-search:active {
     background-color: var(--tinymceGrayActive);
 }
 
@@ -230,7 +226,7 @@ nav i {
     }
 
     .nav___search-input {
-        border-right: 1px solid rgba(0, 0, 0, 0.15);
+        border-right: 1px solid #D9D9D9;
     }
 
     #submit-search {
@@ -243,44 +239,48 @@ nav i {
         height: 42px;
     }
 
-    .buttons button {
+    .buttons button, .buttons a {
         position: relative;
         width: -webkit-fit-content;
         width: -moz-fit-content;
         width: fit-content;
         text-align: center;
         padding: 0;
+        height: unset;
         background-color: transparent;
         color: black;
     }
 
     .buttons button:hover, 
     .buttons button:focus, 
-    .buttons button:active {
+    .buttons button:active,
+    .buttons a:hover, 
+    .buttons a:focus, 
+    .buttons a:active {
         background-color: transparent;
     }
 
-    .buttons button a {
+    .buttons a {
         width: fit-content;
         width: -moz-fit-content;
         padding: unset;
         font-size: 1.375em;
     }
     
-    .buttons button:first-child {
+    .buttons a:first-child {
         margin-left: 1rem;
     }
 
-    .buttons button:nth-child(4) {
+    .buttons a:nth-child(4) {
         margin-right: auto;
     }
 
-    .buttons button + button {
+    .buttons a + a {
         margin-left: 1rem;
     }
 
-    .buttons button:hover a::after,
-    .buttons button:focus a::after {
+    .buttons a:hover::after,
+    .buttons a:focus::after {
         content: '';
         position: absolute;
         width: 100%;
@@ -290,14 +290,14 @@ nav i {
         background-color: var(--accent);
     }
 
-    .buttons button:active a::after {
+    .buttons a:active::after {
         content: '';
         position: absolute;
         width: 100%;
         bottom: 8px;
         left: 0;
         height: 3px;
-        background-color: var(--accentDark);
+        background-color: var(--deepOrange);
     }
 
 }
@@ -332,21 +332,17 @@ nav i {
         width: 375px
     }
 
-    .nav___search:hover {
+    .nav___search:hover,
+    .nav___search:focus {
         box-shadow: var(--boxShadow);
     }
 
     .nav___search:hover .nav___search-input,
-    .nav___search:hover #submit-search {
-        border-color: rgba(0, 0, 0, 0.05);
-    }
+    .nav___search:hover #submit-search,
+    .nav___search:focus .nav___search-input,
+    .nav___search:focus #submit-search {
+        border-color: #f2f2f2;
 
-    .nav___search:hover .nav___search-input {
-        border-right: 1px solid rgba(0, 0, 0, 0.15);
-    }
-
-    .nav___search-input, #submit-search {
-        border-color: rgba(0, 0, 0, 0.15);
     }
 }
 
@@ -357,15 +353,15 @@ nav i {
         width: unset;
     }
 
-    .buttons button:first-child {
+    .buttons a:first-child {
         margin-left: 0;
     }
 
-    .buttons button:nth-child(4) {
+    .buttons a:nth-child(4) {
         margin-right: 0;
     }
 
-    .buttons button + button {
+    .buttons a + a {
         margin-left: 1.5rem;
     }
 

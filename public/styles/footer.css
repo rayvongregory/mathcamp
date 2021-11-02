@@ -3,7 +3,7 @@ footer {
     bottom: 0;
     width: 100%;
     padding: 1em;
-    background-color: var(--accentDark);
+    background-color: var(--deepOrange);
 }
 
 footer a {
