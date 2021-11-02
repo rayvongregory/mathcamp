@@ -404,15 +404,7 @@ const navInit = () => {
     sizeVariations: 25 + particleMod,
     speed,
     connectParticles: true,
-    color: [
-      "#FF6138",
-      "#EB890A",
-      "#FAB355",
-      "#FFFF9D",
-      "#BEEB9F",
-      "#79BD8F",
-      "#00A388",
-    ],
+    color: ["#e55832", "#bf492a", "#21d8ba", "#00a388"],
     // options for breakpoints
     responsive: [
       {

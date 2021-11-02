@@ -55,7 +55,7 @@ aside a:focus, #logout:focus {
 }
 
 aside a:active, #logout:active {
-    background-color: var(--accentActive);
+    background-color: var(--brightOrange);
 
 }
 
@@ -68,7 +68,7 @@ aside a:active, #logout:active {
     justify-content: flex-start;
     align-items: center;
     padding: 5px 0 5px 20px;
-    background-color: var(--deepOrange);
+    background-color: var(--deepTeal);
 }
 
 .name-wrapper img {

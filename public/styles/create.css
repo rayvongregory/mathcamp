@@ -85,12 +85,14 @@ footer {
     padding: 0 0.5em;
     margin: 0.125em;
     border: none;
-    background-color: var(--accent);
-    font-size: 0.75em;
+    background-color: var(--brightOrange);
+    color: white;
+    font-size: 0.85em;
 }
 
 #tags button:hover, #tags button:focus{
     background-color: var(--tinymceGray);
+    color: black;
     cursor: pointer; 
 }
 

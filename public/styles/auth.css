@@ -1,5 +1,5 @@
 .success {
-    color: var(--navGreen)
+    color: var(--deepTeal)
 }
 
 .unauthorized {
@@ -60,9 +60,12 @@
     display: block;
     white-space: nowrap;
     width: 100%;
-    margin-top: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.infowrap:nth-of-type(1) {
+    margin-top: 20px;
 }
 
 .infowrap label {
@@ -140,6 +143,7 @@ pointer-events: none;
     flex-shrink: 0;
     border: none;
     background-color: transparent;
+    color: var(--deepTeal);
     font-size: 1rem;
     pointer-events: all;
     cursor: pointer;
@@ -152,7 +156,7 @@ pointer-events: none;
 }
 
 .flexwrap button:active {
-    color: var(--accentActive)
+    color: var(--brightOrange)
 }
 
 .grid.login .fdc, 
@@ -305,7 +309,7 @@ pointer-events: none;
 #db {
     width: 100%;
     padding: 0.5rem 1rem;
-    background-color: var(--accent);
+    background-color: var(--deepTeal);
     font-size: 1.5rem;
 }
 
@@ -317,7 +321,7 @@ pointer-events: none;
 
 #cancel, #proceed, #back, #confirm {
     flex-shrink: 0;
-    background-color: var(--accent);
+    background-color: var(--deepTeal);
 }
 
 #cancel, #proceed {
@@ -373,7 +377,7 @@ pointer-events: none;
 }
 
 #db:active {
-    background-color: var(--accentActive);
+    background-color: var(--brightOrange);
 }
 
 #cancel:hover, 
@@ -398,7 +402,7 @@ pointer-events: none;
 #confirm:active, 
 .grid.login .fdc #submit:active, 
 .grid.register .fdc #submit:active {
-    background-color: var(--accentActive);
+    background-color: var(--brightOrange);
 }
 
 @media (min-width: 360px) {
@@ -466,6 +470,10 @@ pointer-events: none;
     .infowrap:nth-of-type(4), 
     .grid.register .infowrap:nth-of-type(6) {
         grid-column: 5/span 4;
+    }
+
+    .infowrap:nth-of-type(2) {
+        margin-top: 20px;
     }
 
     .infowrap:nth-of-type(5), .save_discard_buttons,

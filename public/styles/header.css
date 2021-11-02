@@ -16,21 +16,18 @@
 }
 
 :root {
-    --neutralLight: #F4F7F5;
-    --neutralMid: #A9A9AA;
-    --neutralDark: #6E7476;
-    --navGreen: #2C666E;
-    /* must finish picking colors */
-    /* --heroGreen: #008573; */
-    /* --accent: #FAB355; */
-    /* --accentDark: #B85D25; */
-    --accentActive: #FF6138;
+    --neutralLight: #f4f7f5;
+    --neutralMid: #a9a9aa;
+    --neutralDark: #6e7476;
+    --navGreen: #2c666e;
+    --navGreenHover: #225c64;
+    --deepTeal: #005b60;
     --deepOrange: #bf492a;
-    --accent: #005B60;
-    --tinymceGray: #CCCCCC;
+    --brightOrange: #e55832;
+    --tinymceGray: #cccccc;
     --tinymceGrayActive: #B4B7BA;
     --boxShadow: 0px 2px 2px 0px #00000025;
-    --border: 1px solid #D9D9D9;
+    --border: 1px solid #d9d9d9;
 }
 
 html, button, input, select {
@@ -69,7 +66,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--accent);
+    background-color: var(--deepTeal);
     font-size: 1.25rem;
 }
 

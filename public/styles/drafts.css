@@ -29,8 +29,8 @@
 }
 
 #drafts___section li,
- #drafts___lessons li, 
- #drafts___practices li{
+#drafts___lessons li, 
+#drafts___practices li{
     display: flex;
     align-items: center;
     border: var(--border);
@@ -65,9 +65,10 @@
 #drafts___section button, 
 #drafts___lessons button, 
 #drafts___practices button {
-    background-color: transparent;
     border: none;
     font-size: 1rem;
+    background-color: transparent;
+    color: var(--deepTeal);
 }
 
 #drafts___section button:hover, 
@@ -83,7 +84,7 @@
 #drafts___section button:active, 
 #drafts___lessons button:active, 
 #drafts___practices button:active {
-    color: var(--accentActive);
+    color: var(--brightOrange);
 
 }
 

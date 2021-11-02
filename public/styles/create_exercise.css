@@ -338,7 +338,7 @@
 }
 
 .satisfied {
-    color: var(--navGreen);
+    color: var(--deepTeal);
 }
 
 .not_met {

@@ -14,7 +14,7 @@ footer a {
 @media (min-width: 576px) {
     footer {
         display: block;
-        background-color: var(--navGreen);
+        background-color: var(--deepTea);
         color: var(--neutralLight);
     }
 }
