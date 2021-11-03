@@ -17,6 +17,7 @@ const getUser = async (req, res) => {
   if (!user) {
     return res.status(StatusCodes.BAD_REQUEST).json({ msg: "No user user" })
   }
+
   let { name, displayName, contactEmail } = user
   res.status(StatusCodes.OK).json({
     fname: name.split(" ")[0],
@@ -79,13 +80,29 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   //when user decides to delete their account
   const { token } = req.params
+  const { pwd } = req.body
+  console.log(req.body)
   let email = jwt.decode(token).email //! decode does not verify, nor does it require the secret string
-  const user = await User.findOneAndDelete({ email })
+  const user = await User.findOne({ email })
   if (!user) {
     return res.status(StatusCodes.BAD_REQUEST).json({ msg: "No user user" })
   }
-  user.removeRefreshToken()
-  res.status(StatusCodes.OK).json({ msg: "Account deleted" })
+  if (pwd) {
+    const match = await user.matchPasswords(pwd)
+    if (match) {
+      let a = await User.findOneAndDelete({ email })
+      user.removeRefreshToken()
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        a,
+        msg: "Account deleted",
+      })
+    }
+  }
+  res.status(StatusCodes.BAD_REQUEST).json({
+    success: false,
+    msg: "The password you entered is incorrect.",
+  })
 }
 module.exports = {
   getAllUsers,

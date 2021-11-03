@@ -19,13 +19,12 @@
     --neutralLight: #f4f7f5;
     --neutralMid: #a9a9aa;
     --neutralDark: #6e7476;
+    --tinymceGray: #cccccc;
+    --tinymceGrayActive: #B4B7BA;
     --navGreen: #2c666e;
-    --navGreenHover: #225c64;
     --deepTeal: #005b60;
     --deepOrange: #bf492a;
     --brightOrange: #e55832;
-    --tinymceGray: #cccccc;
-    --tinymceGrayActive: #B4B7BA;
     --boxShadow: 0px 2px 2px 0px #00000025;
     --border: 1px solid #d9d9d9;
 }

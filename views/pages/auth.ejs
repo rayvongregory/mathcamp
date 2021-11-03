@@ -15,6 +15,15 @@
     <% } else if(title === "Register") { %>
     <canvas class="background r"></canvas>
     <% } %> <%- include('../partials/universal_scripts'); %>
-    <script type="module" src="/scripts/auth.js"></script>
+
+    <script src="/scripts/auth.js"></script>
+
+    <% if(title === "Login") { %>
+    <script type="module" src="/scripts/login.js"></script>
+    <% } else if(title === "Register") { %>
+    <script type="module" src="/scripts/register.js"></script>
+    <% } else if(title === "Account") { %>
+    <script type="module" src="/scripts/account.js"></script>
+    <% } %>
   </body>
 </html>

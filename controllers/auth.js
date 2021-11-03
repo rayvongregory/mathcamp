@@ -6,8 +6,6 @@ const jwt = require("jsonwebtoken")
 const loginUser = async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ email })
-  user.getAvatar()
-  await user.save()
   if (!user) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
@@ -17,6 +15,8 @@ const loginUser = async (req, res) => {
   if (match) {
     const refreshToken = user.generateRefreshToken()
     const accessToken = user.generateAccessToken()
+    user.getAvatar()
+    await user.save()
     return res.status(StatusCodes.OK).json({
       accessToken,
       refreshToken,

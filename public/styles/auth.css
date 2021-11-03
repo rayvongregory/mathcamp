@@ -83,6 +83,19 @@
     margin-top: 0;
 }
 
+.grid.register .infowrap button,
+.grid.login .infowrap button {
+    padding: 0 5px;
+    align-self: center;
+    border: var(--border);
+    border-color: var(--tinymceGrayActive);
+    height: 30px;
+    width: 30px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+
 .flexwrap {
     display: flex;
     justify-content: center;
@@ -99,12 +112,18 @@ border-radius: 3px;
 pointer-events: none;
 }
 
+.flexwrap.p {
+    padding: 0;
+    border: none;
+    box-shadow: none;
+}
+
 .grid.login .infowrap .flexwrap, 
 .grid.register .infowrap .flexwrap {
     padding: 0;
     box-shadow: none;
     border: none;
-    background-color: transparent;
+    background-color: white;
 }
 
 .grid.login .infowrap .flexwrap input, 
@@ -113,6 +132,14 @@ pointer-events: none;
     border: 1px solid var(--tinymceGrayActive);
     padding: 5px;
     border-radius: 3px;
+    height: 30px;
+}
+
+.grid.login .infowrap .flexwrap input.brn, 
+.grid.register .infowrap .flexwrap input.brn {
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0
 }
 
 .grid.login .infowrap .flexwrap input:active, 
@@ -200,9 +227,38 @@ pointer-events: none;
     margin-right: 10px;
 }
 
+.center-h {
+    align-self: center;
+}
+
+.center-h p {
+    pointer-events: none;
+    margin-right: unset;
+}
+
 .fdc input + input {
     margin-top: 5px;
 }
+
+.fdc button.center-h {
+    width: unset;
+    height: unset;
+    padding: 0.5rem 1rem;
+    background-color: var(--deepTeal);
+    border-radius: 3px;
+    color: white;
+}
+
+.fdc button.center-h:hover,
+.fdc button.center-h:focus {
+    background-color: var(--deepOrange);
+}
+
+.fdc button.center-h:active {
+    background-color: var(--brightOrange);
+
+}
+
 
 .save_discard_buttons {
     display: flex;
@@ -255,9 +311,9 @@ pointer-events: none;
 }
 
 #response {
-    height: 1ch;
+    height: 3ch;
     text-align: center;
-    margin-top: 30px;
+    margin: 15px 0;
 }
 
 .grid.login #response, 

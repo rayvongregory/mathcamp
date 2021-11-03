@@ -58,24 +58,39 @@
   <div class="infowrap">
     <label>Password</label>
     <div class="flexwrap">
-      <p>Edit password</p>
       <div class="fdc hide">
-        <input
-          type="password"
-          id="password"
-          placeholder="Enter current password"
-        />
-        <input
-          type="password"
-          id="npassword"
-          placeholder="Enter new password"
-        />
-        <input
-          type="password"
-          id="cnpassword"
-          placeholder="Re-enter new password"
-        />
+        <div class="flexwrap p">
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter current password"
+          />
+          <button aria-label="See" title="See">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <div class="flexwrap p">
+          <input
+            type="password"
+            id="npassword"
+            placeholder="Enter new password"
+          />
+          <button aria-label="See" title="See">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <div class="flexwrap p">
+          <input
+            type="password"
+            id="cnpassword"
+            placeholder="Re-enter new password"
+          />
+          <button aria-label="See" title="See">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
       </div>
+      <p>Edit password</p>
       <button id="password" aria-label="Edit" title="Edit">
         <i class="fas fa-edit"></i>
       </button>
@@ -115,5 +130,4 @@
     </div>
     <button id="confirm">Delete</button>
   </div>
-  <p id="delresponse">Yooooooooooooooooooooo</p>
 </section>
