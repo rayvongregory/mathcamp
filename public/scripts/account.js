@@ -1,4 +1,5 @@
 const sdb = document.querySelector(".save_discard_buttons")
+const discardBtn = document.querySelector("#discard_all")
 const editBtns = document.querySelectorAll('[aria-label="Edit"]')
 const delBtn = document.querySelector("#db")
 const cancBtn = document.querySelector("#cancel")
@@ -88,6 +89,7 @@ const allowUpdate = (e) => {
 }
 
 const handleUpdate = async () => {
+  document.activeElement.blur()
   handleData()
   // try updating names
   let name = ""
@@ -135,7 +137,7 @@ const handleUpdate = async () => {
 
   let { email } = formData
   if (email && !email.match(emailPattern)) {
-    return unauthorized("New email is invalid.", true)
+    return unauthorized("Please enter a valid email address.", true)
   } else if (email && email !== accountEmail.innerHTML) {
     response.innerHTML = "Updating your email..."
     console.log(token)
@@ -214,6 +216,15 @@ const handleUpdate = async () => {
   }
 }
 
+const handleDiscardAll = () => {
+  editBtns.forEach((btn) => {
+    let i = btn.querySelector("i")
+    if ((i && i.classList.contains("fa-trash")) || !i) {
+      btn.dispatchEvent(new Event("pointerup"))
+    }
+  })
+}
+
 const handleDelete = async (e) => {
   const { target } = e
   switch (target) {
@@ -228,11 +239,13 @@ const handleDelete = async (e) => {
       break
     case backBtn:
       cancBtn.scrollIntoView({ block: "nearest", inline: "nearest" })
+      break
     case confBtn:
+      document.activeElement.blur()
       let pwd = delPasswrd.value
       if (!pwd) {
         return unauthorized(
-          "You must enter your password to complete the request.",
+          "Please enter your password to complete the request.",
           true
         )
       }
@@ -250,7 +263,7 @@ const handleDelete = async (e) => {
         }, 1000)
       } catch (err) {
         console.error(err)
-        unauthorized("The password you entered is incorrect", true)
+        unauthorized("The password you've entered is incorrect", true)
         return
       }
       break
@@ -274,4 +287,5 @@ cancBtn.addEventListener("pointerup", handleDelete)
 backBtn.addEventListener("pointerup", handleDelete)
 confBtn.addEventListener("pointerup", handleDelete)
 submit.addEventListener("click", handleUpdate)
+discardBtn.addEventListener("click", handleDiscardAll)
 window.onload = getAccountInfo()

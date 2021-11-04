@@ -109,6 +109,7 @@
     height: 34px;
     border-radius: 3px;
     border: none;
+    font-size: 1rem;
     background-color: transparent;
 }
 
@@ -160,7 +161,7 @@
 .to_publish_add_question {
     position: sticky;
     top: 0;
-    margin-top: 24px;
+    margin-top: 19px;
     height: fit-content;
     height: -moz-fit-content;
 }
@@ -290,7 +291,7 @@
 .question_section li {
     display: flex;
     align-items: center;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: var(--border);
     background-color: var(--neutralLight);
     padding: 10px;
     pointer-events: none;
@@ -300,30 +301,55 @@
     margin-top: 10px;
 }
 
+.question_choices li > :first-child,
 .problem_set li > :nth-child(2), 
 .correct_answer li > :nth-child(1), 
 .question_section li > :nth-child(1) {
-    margin-right: auto;
+    margin: 0 auto 0 0.75rem;
 }
 
-.question_choices li > :first-child {
-    margin-right: auto;
-}
-
-.question_choices li > *:not(:first-child), 
-.problem_set li > *:not(:first-child), 
-.correct_answer li > *, 
-.question_section li > * {
-    margin-left: 1em;
+.question_choices li > button, 
+.problem_set li > button, 
+.correct_answer li > button, 
+.question_section li > button {
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
     pointer-events: all;
+
+}
+
+.question_choices li > button:not(:first-of-type), 
+.problem_set li > button:not(:first-of-type), 
+.correct_answer li > button, 
+.question_section li > button {
+    margin-left: 1em;
+}
+
+.question_choices li > button i, 
+.problem_set li > button i, 
+.correct_answer li > button i, 
+.question_section li > button i {
+    pointer-events: none;
 }
 
 .question_choices button:hover, 
 .problem_set button:hover, 
 .correct_answer button:hover, 
-.question_section button:hover {
-    filter: brightness(1.25);
+.question_section button:hover,
+.question_choices button:focus, 
+.problem_set button:focus, 
+.correct_answer button:focus, 
+.question_section button:focus  {
+    color: var(--deepOrange);
     cursor: pointer;
+}
+
+.question_choices button:active, 
+.problem_set button:active, 
+.correct_answer button:active, 
+.question_section button:active  {
+    color: var(--brightOrange);
 }
 
 .no_problems_yet {
@@ -349,9 +375,17 @@
 .question_choices li.editing, 
 .correct_answer li.editing, 
 .question_section li.editing {
-    background-color: var(--deepOrange);
+    background-color: var(--deepTeal);
     color: white;
 }
+
+.problem_set li.editing button, 
+.question_choices li.editing button, 
+.correct_answer li.editing button, 
+.question_section li.editing button {
+    color: white;
+}
+
 
 .question_section.pop-top, 
 .correct_answer.pop-top, 

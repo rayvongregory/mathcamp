@@ -1,3 +1,4 @@
+//overlapping util functions
 const type = window.location.pathname.split("/")[2]
 const publishBtn = document.querySelector("#publish")
 const draftBtn = document.querySelector("#draft")
@@ -8,11 +9,7 @@ let pTag = document.querySelector("#ptag") //!may need this later but currently 
 let pTitle = document.querySelector("#ptitle")
 let inputValues = []
 
-// let token = localStorage.getItem("token")
-
-//put the overlapping code here, or the code that can be handled with a simple if-else
 const removeInvalidCharacters = (string) => {
-  //this can be an external function
   let bool = true
   while (bool) {
     let firstLetterCode = string.charCodeAt(0)

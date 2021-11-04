@@ -1,3 +1,7 @@
+.tox-statusbar__resize-handle {
+    display: none !important;
+}
+
 .create-wrapper {
     padding: 2rem;
     width: 100%;

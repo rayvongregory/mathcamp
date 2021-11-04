@@ -61,7 +61,6 @@
     white-space: nowrap;
     width: 100%;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .infowrap:nth-of-type(1) {
@@ -154,6 +153,8 @@ pointer-events: none;
     width: 100%;
     margin-right: 10px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .flexwrap input {
@@ -256,9 +257,7 @@ pointer-events: none;
 
 .fdc button.center-h:active {
     background-color: var(--brightOrange);
-
 }
-
 
 .save_discard_buttons {
     display: flex;
@@ -282,18 +281,21 @@ pointer-events: none;
     margin: 5px;
     width: 110px;
     border: var(--border);
+    background-color: var(--neutralLight);
+    color: var(--deepTeal);
     border-radius: 3px;
     pointer-events: all
 }
 
 .save_discard_buttons button:hover {
-    background-color: var(--tinymceGray);
+    background-color: var(--deepTeal);
+    color: white;    
     cursor: pointer;
 }
 
 .save_discard_buttons button:active, 
 .save_discard_buttons button:focus {
-    background-color: var(--tinymceGrayActive);
+    background-color: var(--deepOrange);
     outline: none;
 }
 
@@ -358,10 +360,6 @@ pointer-events: none;
     border: none;
 }
 
-#cancel, #proceed, #back, #confirm {
-    font-size: 1.25rem;
-}
-
 #db {
     width: 100%;
     padding: 0.5rem 1rem;
@@ -376,6 +374,7 @@ pointer-events: none;
 }
 
 #cancel, #proceed, #back, #confirm {
+    font-size: 1rem;
     flex-shrink: 0;
     background-color: var(--deepTeal);
 }
@@ -399,6 +398,16 @@ pointer-events: none;
 
 #q {
     width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.65rem;
+}
+
+#delpassword {
+    font-size: 0.65rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .inpwrap {
@@ -461,6 +470,16 @@ pointer-events: none;
     background-color: var(--brightOrange);
 }
 
+@media (min-width: 320px) {
+    #q, #delpassword {
+        font-size: 0.75rem;
+    }
+
+    #cancel, #proceed, #back, #confirm {
+        font-size: 1.25rem;
+    }
+}
+
 @media (min-width: 360px) {
     .gridwrap .fdc p {
         width: unset;
@@ -471,6 +490,10 @@ pointer-events: none;
 }
 
 @media (min-width: 576px) {
+    #q, #delpassword {
+        font-size: 0.8rem;
+    }
+
     .grid {
         padding: 0.75rem 0.75rem 4rem;
     }
@@ -501,6 +524,10 @@ pointer-events: none;
 }
 
 @media (min-width: 768px) {
+    #q, #delpassword {
+        font-size: 0.9rem;
+    }
+
     .grid, 
     .grid.register {
         grid-template-columns: repeat(8, minmax(0, 1fr));
@@ -536,4 +563,11 @@ pointer-events: none;
     #response, #delresponse, .delete-button, .grid.register .fdc {
         grid-column: 3/span 4;
     }
+}
+
+@media (min-width: 992px) {
+    #q {
+        font-size: 1rem;
+    }
+    
 }
