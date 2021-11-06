@@ -65,6 +65,10 @@ nav {
     background-color: var(--tinymceGray);
 }
 
+#submit-search:active {
+    background-color: var(--tinymceGrayActive);
+}
+
 .buttons button:hover, 
 .buttons button:focus,
 .buttons a:hover, 

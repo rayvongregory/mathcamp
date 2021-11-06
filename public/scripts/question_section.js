@@ -47,44 +47,48 @@ const uniqueQ = (text) => {
   return true
 }
 
+const createQItem = () => {
+  questionItem = document.createElement("li")
+  let p = document.createElement("p")
+  p.innerText = "Question"
+  let edit = document.createElement("button")
+  edit.setAttribute("role", "button")
+  edit.setAttribute("aria-label", "Edit question")
+  edit.setAttribute("title", "Edit question")
+  edit.innerHTML = '<i class="fas fa-edit"></i>'
+  edit.addEventListener("pointerup", editQ)
+  let del = document.createElement("button")
+  del.setAttribute("role", "button")
+  del.setAttribute("aria-label", "Delete question")
+  del.setAttribute("title", "Delete question")
+  del.innerHTML = '<i class="fas fa-trash"></i>'
+  del.addEventListener("pointerup", deleteQ)
+  questionItem.appendChild(p)
+  questionItem.appendChild(edit)
+  questionItem.appendChild(del)
+  questionSection.appendChild(questionItem)
+}
+
 //create
 const addQ = () => {
   document.activeElement.blur()
   if (!uniqueQ(questionTextArea.innerHTML)) {
-    extraOptions_0.classList.add("not_met")
     let p = extraOptions_0.querySelector("p")
+    p.classList.add("not_met")
     p.classList.remove("hide")
     setTimeout(() => {
-      extraOptions_0.classList.remove("not_met")
+      p.classList.remove("not_met")
       p.classList.add("hide")
     }, 2000)
-    delete addQBtn.dataset.refId
-    delete addQBtn.dataset.refDiff
+    //why delete it? wouldn't that make the util fcn not work properly the next time?
+    // delete addQBtn.dataset.refId
+    // delete addQBtn.dataset.refDiff
     return
   }
-
   question = questionTextArea.innerHTML
   let questionItem = questionSection.querySelector("li")
   if (!questionItem) {
-    questionItem = document.createElement("li")
-    let p = document.createElement("p")
-    p.innerText = "Question"
-    let edit = document.createElement("button")
-    edit.setAttribute("role", "button")
-    edit.setAttribute("aria-label", "Edit question")
-    edit.setAttribute("title", "Edit question")
-    edit.innerHTML = '<i class="fas fa-edit"></i>'
-    edit.addEventListener("pointerup", editQ)
-    let del = document.createElement("button")
-    del.setAttribute("role", "button")
-    del.setAttribute("aria-label", "Delete question")
-    del.setAttribute("title", "Delete question")
-    del.innerHTML = '<i class="fas fa-trash"></i>'
-    del.addEventListener("pointerup", deleteQ)
-    questionItem.appendChild(p)
-    questionItem.appendChild(edit)
-    questionItem.appendChild(del)
-    questionSection.appendChild(questionItem)
+    createQItem()
     i = poseQ.querySelector("i")
     questionSection.classList.remove("pop-top")
   } else {
@@ -113,6 +117,77 @@ const addQ = () => {
   delete addQBtn.dataset.refDiff
 }
 
+const addQRewrk = () => {
+  document.activeElement.blur()
+  //check if question is unique across all difficulties
+  switch (uniqueQ(questionTextArea.innerHTML)) {
+    //if question is not unique, return error message, do not store the value
+    case false:
+      let p = extraOptions_0.querySelector("p")
+      p.classList.add("not_met")
+      p.classList.remove("hide")
+      setTimeout(() => {
+        p.classList.remove("not_met")
+        p.classList.add("hide")
+      }, 2000)
+      break
+
+    // if question is unique, store its value
+    case true:
+      break
+    default:
+      break
+  }
+
+  //if question is being edited, keep current question item
+  // if question is not being edited, create question item
+
+  //
+
+  //   if (!uniqueQ(questionTextArea.innerHTML)) {
+  //     let p = extraOptions_0.querySelector("p")
+  //     p.classList.add("not_met")
+  //     p.classList.remove("hide")
+  //     setTimeout(() => {
+  //       p.classList.remove("not_met")
+  //       p.classList.add("hide")
+  //     }, 2000)
+  //     //why delete it? wouldn't that make the util fcn not work properly the next time?
+  //     // delete addQBtn.dataset.refId
+  //     // delete addQBtn.dataset.refDiff
+  //     return
+  //   }
+  //   question = questionTextArea.innerHTML
+  //   let questionItem = questionSection.querySelector("li")
+  //   if (!questionItem) {
+  //     createQItem()
+  //     i = poseQ.querySelector("i")
+  //     questionSection.classList.remove("pop-top")
+  //   } else {
+  //     question = questionTextArea.innerHTML
+  //     questionItem.classList.remove("editing")
+  //     let p = questionItem.querySelector("p")
+  //     p.innerText = "Question"
+  //     questionSection.classList.remove("pop-top")
+  //     addQBtn.setAttribute("aria-label", "Add question")
+  //     addQBtn.setAttribute("title", "Add question")
+  //   }
+  //   let questionIT = questionTextArea.innerText.trim()
+  //   if (
+  //     question !== "<p><br></p>" &&
+  //     question !== '<p><br data-mce-bogus="1"></p>' &&
+  //     questionIT !== "" &&
+  //     questionIT !== "\n"
+  //   ) {
+  //     i.classList.replace("fa-times-circle", "fa-check-circle")
+  //     poseQ.classList.replace("not_met", "satisfied")
+  //   }
+  //   questionSection.classList.remove("hide")
+  //   questionTextAreaDiv.classList.add("hide")
+  //   extraOptions_0.classList.add("hide")
+  //   delete addQBtn.dataset.refId
+  //   delete addQBtn.dataset.refDiff
+}
 //read
 
 //update
@@ -196,5 +271,5 @@ const deleteQ = () => {
 }
 
 //add listeners
-addQBtn.addEventListener("pointerup", addQ)
+addQBtn.addEventListener("pointerup", addQRewrk)
 discardQBtn.addEventListener("pointerup", discardQ)

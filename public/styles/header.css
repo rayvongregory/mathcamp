@@ -19,8 +19,9 @@
     --neutralLight: #f4f7f5;
     --neutralMid: #a9a9aa;
     --neutralDark: #6e7476;
-    --tinymceGray: #cccccc;
-    --tinymceGrayActive: #B4B7BA;
+    --tinymceGray: #dee0e2;
+    --tinymceGrayActive: #c8cbcf;
+    --tinymceBorder: 1px solid #ccc;
     --navGreen: #2c666e;
     --deepTeal: #005b60;
     --deepOrange: #bf492a;

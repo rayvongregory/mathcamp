@@ -81,7 +81,7 @@
 .extra-options {
     position: absolute;
     right: 5px;
-    top: 22.5px;
+    top: 24.5px;
     display: flex;
     align-items: center;
     background-color: white;
@@ -93,7 +93,7 @@
 }
 
 .extra-options select {
-    margin-right: 5px;
+    margin-right: 0.5rem;
 }
 
 .extra-options button, 
@@ -155,13 +155,13 @@
     height: -moz-fit-content;
     padding: 10px 1rem 2rem;
     background-color: white;
-    border: 1px solid var(--tinymceGray);
+    border: var(--tinymceBorder);
 }
 
 .to_publish_add_question {
     position: sticky;
     top: 0;
-    margin-top: 19px;
+    margin-top: 22px;
     height: fit-content;
     height: -moz-fit-content;
 }
@@ -200,7 +200,7 @@
     padding: 5px; 
     width: 100%;
     background-color: white;
-    border: 1px solid var(--tinymceGray);
+    border: var(--tinymceBorder);
 }
 
 .add_delete_q_buttons button {
@@ -210,7 +210,7 @@
     align-items: center;
     padding: 5px;
     margin: 5px;
-    width: 90px;
+    width: 100px;
     border: var(--border);
     border-radius: 3px;
     pointer-events: all;
@@ -359,7 +359,7 @@
     width: 100%;
     height: 100%;
     padding: 10px;
-    border: 1px solid var(--tinymceGray);
+    border: var(--tinymceBorder);
     background-color: white;
 }
 

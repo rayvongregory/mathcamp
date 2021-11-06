@@ -1,4 +1,4 @@
-<div class="flex-wrapper">
+<!-- <div class="flex-wrapper">
   <label for="title">Title: </label>
   <input
     type="text"
@@ -9,14 +9,33 @@
   <p id="ptitle"></p>
 </div>
 <div class="flex-wrapper">
-  <label for="input">Tags: </label>
+  
+  
+</div>-->
+
+<div class="flex-wrapper">
+  <div class="label-wrapper">
+    <label for="title">Title</label>
+    <p class="not_met hide">Please create a title to save this resource.</p>
+  </div>
+  <input
+    id="title"
+    type="text"
+    placeholder="Please enter the title of this resource"
+  />
+  <p id="ptitle" class="hide"></p>
+</div>
+<div class="flex-wrapper">
+  <div class="label-wrapper">
+    <label for="tags_input">Tags</label>
+    <p class="not_met hide">Please create tags to publish this resource.</p>
+  </div>
   <input
     type="text"
     name="input"
     id="tags_input"
     placeholder="Create tags for this resource"
   />
-  <p id="ptag">Click <a href="/tags">here</a> to learn more about tags.</p>
 </div>
 <div class="tags-wrapper">
   <section class="hide" id="tags"></section>

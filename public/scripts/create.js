@@ -50,6 +50,7 @@ const removeTag = (e) => {
   if (inputValues.length === 0) {
     tags.classList.add("hide")
   }
+  console.log(inputValues)
 }
 
 const isEqual = (obj1, obj2) => {
@@ -90,10 +91,10 @@ const addTag = (e) => {
     tag.addEventListener("click", removeTag)
     tags.appendChild(tag)
     inputValues.push(value)
-    if (inputValues.length > 0) {
+    console.log(inputValues)
+    if (inputValues.length > 0 && tags.classList.contains("hide")) {
       tags.classList.remove("hide")
     }
-    tags.appendChild(tag)
     tagsInput.value = ""
   }
 }

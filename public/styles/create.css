@@ -2,6 +2,10 @@
     display: none !important;
 }
 
+.tox-tbtn:hover {
+    cursor: pointer;
+}
+
 .create-wrapper {
     padding: 2rem;
     width: 100%;
@@ -20,39 +24,45 @@ footer {
 
 .flex-wrapper {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: self-start;
+    margin-bottom: 10px;
     width: 100%;
-    max-width: 700px;
+    max-width: 600px;
     font-size: 1.125rem;
 }
 
-.flex-wrapper label {
-    text-align: right;
-    flex-shrink: 0;
-    width: 4.25ch;
-    padding-right: 5px;
+.label-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-right: 0.5rem;
 }
 
 .flex-wrapper input {
     height: 2em;
     width: 100%;
     font-size: 0.8em;
-    padding: 0 5px;
+    padding-left: 5px;
     display: inline-block;
-    border: 1px solid #ccc;
+    border: var(--tinymceBorder);
 }
 
 .flex-wrapper p {
     font-size: 0.9rem;
     white-space: nowrap;
-    padding: 0 5px;
 }
 
-.flex-wrapper ~ .flex-wrapper {
-    margin-top: 5px;
+.tags-wrapper {
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 600px;
 }
 
 .textarea-wrapper {
+    font-size: 1.125rem;
     position: relative;
 }
 
@@ -60,22 +70,13 @@ footer {
     margin-top: 10px;
 }
 
-.textarea-wrapper label {
-    margin-left: 3px;
-}
-
-.tags-wrapper {
-    padding: 5px 0 10px 45.74px;
-}
-
 #tags {
     display: flex;
     flex-wrap: wrap;
     width: fit-content;
     width: -moz-fit-content;
-    max-width: 700px;
-    border: 1.5px solid black;
-    border-radius: 2px;
+    max-width: 600px;
+    border: var(--tinymceBorder);
     padding: 0.125em 0.1em;
     list-style: none;
 }
@@ -92,6 +93,10 @@ footer {
     background-color: var(--brightOrange);
     color: white;
     font-size: 0.85em;
+}
+
+#tags button span {
+    pointer-events: none;
 }
 
 #tags button:hover, #tags button:focus{
@@ -120,7 +125,7 @@ footer {
     padding: 5px; 
     width: 100%;
     background-color: white;
-    border: 1px solid var(--tinymceGray);
+    border: var(--tinymceBorder);
 }
 
 .publish_save_buttons button {
@@ -163,7 +168,7 @@ footer {
     cursor: not-allowed;
 }
 
-@media screen and (min-width: 630px) and (min-height: 500px) {
+@media screen and (min-width: 640px) and (min-height: 500px) {
     .too-small {
         display: none;
     }
@@ -173,7 +178,7 @@ footer {
     }
 }
 
-@media screen and (max-width: 630px), (max-height: 500px) {
+@media screen and (max-width: 640px), (max-height: 500px) {
     .too-small {
         display: flex;
     }
