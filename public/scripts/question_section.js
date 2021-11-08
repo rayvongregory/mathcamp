@@ -1,11 +1,13 @@
+// I think this is finished... 11/7/2021 @ 12:42AM
 const extraOptions_0 = document.querySelectorAll(".extra-options")[0]
 const difficultySelect = document.querySelector("#choose_difficulty")
 const addQBtn = document.querySelector("#q_add")
 const discardQBtn = document.querySelector("#q_discard")
-const poseQ = document.querySelector("#question")
+const poseQItem = document.querySelector("#question")
 const questionSection = document.querySelector(".question_section")
-const pickDifficulty = document.querySelector("#difficulty") // rename probably
+const selectDiffItem = document.querySelector("#difficulty")
 let question = "<p><br></p>"
+let qDiff = "no_choice"
 
 //util
 const uniqueQ = (text) => {
@@ -48,19 +50,15 @@ const uniqueQ = (text) => {
 }
 
 const createQItem = () => {
-  questionItem = document.createElement("li")
+  let questionItem = document.createElement("li")
   let p = document.createElement("p")
   p.innerText = "Question"
   let edit = document.createElement("button")
-  edit.setAttribute("role", "button")
-  edit.setAttribute("aria-label", "Edit question")
-  edit.setAttribute("title", "Edit question")
+  setAttr(edit, "aria", "Edit question")
   edit.innerHTML = '<i class="fas fa-edit"></i>'
   edit.addEventListener("pointerup", editQ)
   let del = document.createElement("button")
-  del.setAttribute("role", "button")
-  del.setAttribute("aria-label", "Delete question")
-  del.setAttribute("title", "Delete question")
+  setAttr(del, "aria", "Delete question")
   del.innerHTML = '<i class="fas fa-trash"></i>'
   del.addEventListener("pointerup", deleteQ)
   questionItem.appendChild(p)
@@ -70,127 +68,86 @@ const createQItem = () => {
 }
 
 //create
+// const addQ_OLD = () => {
+//   document.activeElement.blur()
+//   if (!uniqueQ(questionTextArea.innerHTML)) {
+//     labelPs[0].classList.remove("hide")
+//     setTimeout(() => {
+//       labelPs[0].classList.add("hide")
+//     }, 2000)
+//     //why delete it? wouldn't that make the util fcn not work properly the next time?
+//     // delete addQBtn.dataset.refId
+//     // delete addQBtn.dataset.refDiff
+//     return
+//   }
+//   question = questionTextArea.innerHTML
+//   let questionItem = questionSection.querySelector("li")
+//   if (!questionItem) {
+//     createQItem()
+//     i = poseQItem.querySelector("i")
+//     questionSection.classList.remove("pop-top")
+//   } else {
+//     question = questionTextArea.innerHTML
+//     questionItem.classList.remove("editing")
+//     let p = questionItem.querySelector("p")
+//     p.innerText = "Question"
+//     questionSection.classList.remove("pop-top")
+//     addQBtn.setAttribute("aria-label", "Add question")
+//     addQBtn.setAttribute("title", "Add question")
+//   }
+//   let questionIT = questionTextArea.innerText.trim()
+//   if (
+//     question !== "<p><br></p>" &&
+//     question !== '<p><br data-mce-bogus="1"></p>' &&
+//     questionIT !== "" &&
+//     questionIT !== "\n"
+//   ) {
+//     i.classList.replace("fa-times-circle", "fa-check-circle")
+//     poseQItem.classList.replace("not_met", "satisfied")
+//   }
+//   questionSection.classList.remove("hide")
+//   questionTextAreaDiv.classList.add("hide")
+//   extraOptions_0.classList.add("hide")
+//   delete addQBtn.dataset.refId
+//   delete addQBtn.dataset.refDiff
+// }
+
 const addQ = () => {
   document.activeElement.blur()
-  if (!uniqueQ(questionTextArea.innerHTML)) {
-    let p = extraOptions_0.querySelector("p")
-    p.classList.add("not_met")
-    p.classList.remove("hide")
-    setTimeout(() => {
-      p.classList.remove("not_met")
-      p.classList.add("hide")
-    }, 2000)
-    //why delete it? wouldn't that make the util fcn not work properly the next time?
-    // delete addQBtn.dataset.refId
-    // delete addQBtn.dataset.refDiff
-    return
-  }
-  question = questionTextArea.innerHTML
-  let questionItem = questionSection.querySelector("li")
-  if (!questionItem) {
-    createQItem()
-    i = poseQ.querySelector("i")
-    questionSection.classList.remove("pop-top")
-  } else {
-    question = questionTextArea.innerHTML
-    questionItem.classList.remove("editing")
-    let p = questionItem.querySelector("p")
-    p.innerText = "Question"
-    questionSection.classList.remove("pop-top")
-    addQBtn.setAttribute("aria-label", "Add question")
-    addQBtn.setAttribute("title", "Add question")
-  }
-  let questionIT = questionTextArea.innerText.trim()
-  if (
-    question !== "<p><br></p>" &&
-    question !== '<p><br data-mce-bogus="1"></p>' &&
-    questionIT !== "" &&
-    questionIT !== "\n"
-  ) {
-    i.classList.replace("fa-times-circle", "fa-check-circle")
-    poseQ.classList.replace("not_met", "satisfied")
-  }
-  questionSection.classList.remove("hide")
-  questionTextAreaDiv.classList.add("hide")
-  extraOptions_0.classList.add("hide")
-  delete addQBtn.dataset.refId
-  delete addQBtn.dataset.refDiff
-}
-
-const addQRewrk = () => {
-  document.activeElement.blur()
-  //check if question is unique across all difficulties
   switch (uniqueQ(questionTextArea.innerHTML)) {
-    //if question is not unique, return error message, do not store the value
     case false:
-      let p = extraOptions_0.querySelector("p")
-      p.classList.add("not_met")
-      p.classList.remove("hide")
-      setTimeout(() => {
-        p.classList.remove("not_met")
-        p.classList.add("hide")
-      }, 2000)
+      showNotUniqueMsg(labelPs[0])
       break
-
-    // if question is unique, store its value
     case true:
+      question = questionTextArea.innerHTML
+      qDiff = difficultySelect.value
+      checkList(poseQItem, "check")
+      hideOrShowThisTextArea("questionTextArea", "hide")
+      let questionItem = questionSection.querySelector("li")
+      if (!questionItem) {
+        createQItem()
+      } else {
+        let p = questionItem.querySelector("p")
+        questionItem.classList.remove("editing")
+        p.innerText = "Question"
+      }
       break
     default:
       break
   }
-
-  //if question is being edited, keep current question item
-  // if question is not being edited, create question item
-
-  //
-
-  //   if (!uniqueQ(questionTextArea.innerHTML)) {
-  //     let p = extraOptions_0.querySelector("p")
-  //     p.classList.add("not_met")
-  //     p.classList.remove("hide")
-  //     setTimeout(() => {
-  //       p.classList.remove("not_met")
-  //       p.classList.add("hide")
-  //     }, 2000)
-  //     //why delete it? wouldn't that make the util fcn not work properly the next time?
-  //     // delete addQBtn.dataset.refId
-  //     // delete addQBtn.dataset.refDiff
-  //     return
-  //   }
-  //   question = questionTextArea.innerHTML
-  //   let questionItem = questionSection.querySelector("li")
-  //   if (!questionItem) {
-  //     createQItem()
-  //     i = poseQ.querySelector("i")
-  //     questionSection.classList.remove("pop-top")
-  //   } else {
-  //     question = questionTextArea.innerHTML
-  //     questionItem.classList.remove("editing")
-  //     let p = questionItem.querySelector("p")
-  //     p.innerText = "Question"
-  //     questionSection.classList.remove("pop-top")
-  //     addQBtn.setAttribute("aria-label", "Add question")
-  //     addQBtn.setAttribute("title", "Add question")
-  //   }
-  //   let questionIT = questionTextArea.innerText.trim()
-  //   if (
-  //     question !== "<p><br></p>" &&
-  //     question !== '<p><br data-mce-bogus="1"></p>' &&
-  //     questionIT !== "" &&
-  //     questionIT !== "\n"
-  //   ) {
-  //     i.classList.replace("fa-times-circle", "fa-check-circle")
-  //     poseQ.classList.replace("not_met", "satisfied")
-  //   }
-  //   questionSection.classList.remove("hide")
-  //   questionTextAreaDiv.classList.add("hide")
-  //   extraOptions_0.classList.add("hide")
-  //   delete addQBtn.dataset.refId
-  //   delete addQBtn.dataset.refDiff
 }
 //read
 
 //update
+const checkForDiff = (e) => {
+  const { target } = e
+  if (target.value !== "no_choice") {
+    checkList(selectDiffItem, "check")
+  } else {
+    checkList(selectDiffItem, "uncheck")
+  }
+}
+
 const editQ = (e) => {
   document.activeElement.blur()
   let { target } = e
@@ -198,53 +155,52 @@ const editQ = (e) => {
   if (addAllBtn.dataset.refId) {
     addQBtn.dataset.refId = addAllBtn.dataset.refId
     addQBtn.dataset.refDiff = addAllBtn.dataset.refDiff
+    //why copy these refs over if they're already in the other btns?
   }
   let p = li.querySelector("p")
   if (li.classList.contains("editing")) {
     li.classList.remove("editing")
     p.innerText = "Question"
-    target.setAttribute("aria-label", "Edit question")
-    target.setAttribute("title", "Edit question")
-    questionSection.classList.remove("pop-top")
-    questionTextAreaDiv.classList.add("hide")
-    extraOptions_0.classList.add("hide")
+    if (qDiff != difficultySelect.value) {
+      difficultySelect.value = qDiff
+      difficultySelect.dispatchEvent(new Event("pointerup"))
+    }
+    setAttr(target, "aria", "Edit question")
+    hideOrShowThisTextArea("questionTextArea", "hide")
   } else {
     li.classList.add("editing")
     p.innerText = "Question (editing)"
-    target.setAttribute("aria-label", "Cancel edit")
-    target.setAttribute("title", "Cancel edit")
+    setAttr(target, "aria", "Cancel edit")
     questionTextArea.innerHTML = question
-    questionTextAreaDiv.classList.remove("hide")
-    addQBtn.setAttribute("aria-label", "Save question")
-    addQBtn.setAttribute("title", "Save question")
-    discardQBtn.setAttribute("aria-label", "Discard changes")
-    discardQBtn.setAttribute("title", "Discard changes")
-    questionSection.classList.add("pop-top")
-    extraOptions_0.classList.remove("hide")
+    difficultySelect.value = qDiff
+    difficultySelect.dispatchEvent(new Event("pointerup"))
+    setAttr(addQBtn, "aria", "Save question")
+    setAttr(discardQBtn, "aria", "Discard changes")
+    hideOrShowThisTextArea("questionTextArea", "show")
   }
 }
 
 //delete
 const discardQ = (e) => {
   document.activeElement.blur()
+  console.log(question)
   let { target } = e
   questionTextArea.innerHTML = "<p><br></p>"
+  difficultySelect.value = qDiff
+  difficultySelect.dispatchEvent(new Event("click"))
   let li = questionSection.querySelector("li")
   if (li) {
-    let edit = li.querySelectorAll("button")[1]
-    target.setAttribute("aria-label", "Discard")
-    target.setAttribute("title", "Discard")
-    edit.setAttribute("aria-label", "Edit question")
-    edit.setAttribute("title", "Edit question")
-    target.previousElementSibling.setAttribute("aria-label", "Add question")
-    target.previousElementSibling.setAttribute("title", "Add question")
-    extraOptions_0.classList.add("hide")
-    questionTextAreaDiv.classList.add("hide")
-    questionSection.classList.remove("hide")
-    questionSection.classList.remove("pop-top")
+    let edit = li.querySelectorAll("button")[0]
+    setAttr(target, "aria", "Discard")
+    setAttr(edit, "aria", "Edit question")
+    setAttr(target.previousElementSibling, "aria", "Add question")
+    hideOrShowThisTextArea("questionTextArea", "hide")
     li.classList.remove("editing")
     let p = li.querySelector("p")
     p.innerText = "Question"
+  } else {
+    question = "<p><br></p>"
+    difficultySelect.value = "no_choice"
   }
 }
 
@@ -254,22 +210,19 @@ const deleteQ = () => {
   if (li) li.remove()
   question = "<p><br></p>"
   questionTextArea.innerHTML = "<p><br></p>"
+  setAttr(addQBtn, "aria", "Add question")
+  setAttr(discardQBtn, "aria", "Discard")
+  checkList(poseQItem, "uncheck")
+  hideOrShowThisTextArea("questionTextArea", "show")
   questionSection.classList.add("hide")
-  questionTextAreaDiv.classList.remove("hide")
-  addQBtn.setAttribute("aria-label", "Add question")
-  addQBtn.setAttribute("title", "Add question")
-  discardQBtn.setAttribute("aria-label", "Discard")
-  discardQBtn.setAttribute("title", "Discard")
-  extraOptions_0.classList.remove("hide")
-  poseQ.classList.replace("satisfied", "not_met")
-  i = poseQ.querySelector("i")
-  i.classList.replace("fa-check-circle", "fa-times-circle")
-  i = pickDifficulty.querySelector("i")
-  i.classList.replace("fa-check-circle", "fa-times-circle")
-  difficultySelect.value = "no_choice"
+  qDiff = "no_choice"
+  difficultySelect.value = qDiff
   difficultySelect.dispatchEvent(new Event("pointerup"))
 }
 
 //add listeners
-addQBtn.addEventListener("pointerup", addQRewrk)
+addQBtn.addEventListener("pointerup", addQ)
 discardQBtn.addEventListener("pointerup", discardQ)
+difficultySelect.addEventListener("pointerup", checkForDiff)
+difficultySelect.addEventListener("click", checkForDiff) // for moz
+difficultySelect.addEventListener("keyup", checkForDiff)

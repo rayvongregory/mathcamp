@@ -1,7 +1,9 @@
 <div class="textarea-wrapper">
-  <label for="create_choices">Choices</label>
+  <div class="label-wrapper">
+    <label for="create_choices">Choices</label>
+    <p class="not_met hide">This choice is not unique.</p>
+  </div>
   <div class="extra-options">
-    <p class="hide">This choice is not unique.</p>
     <button
       id="choice_add"
       aria-label="Add choice to question"
@@ -14,4 +16,5 @@
     </button>
   </div>
   <textarea id="create_choices"></textarea>
+  <ul class="question_choices pop-top hide"></ul>
 </div>

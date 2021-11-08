@@ -1,14 +1,14 @@
 <section class="exercise_requirements">
   <div class="to_publish_add_question">
-    <ul class="to_publish_question">
-      <h4>To publish this question:</h4>
+    <ul class="to_publish_reqs">
+      <h4>To publish this question</h4>
       <li id="question" class="not_met">
         <i class="fas fa-times-circle"></i>
         <p>Pose a unique question</p>
       </li>
       <li id="difficulty" class="not_met">
         <i class="fas fa-times-circle"></i>
-        <p>Select a difficulty</p>
+        <p>Choose a difficulty</p>
       </li>
       <li id="correct_answer" class="not_met">
         <i class="fas fa-times-circle"></i>
@@ -28,10 +28,27 @@
         <i class="fas fa-plus-circle"></i>
         <p>Add All</p>
       </button>
-      <button id="discard_all" aria-label="Discard all" title="Discard all">
-        <i class="fas fa-trash"></i>
-        <p>Discard All</p>
-      </button>
+      <div id="discard_all_slider">
+        <button id="d_a1" aria-label="Discard all" title="Discard all">
+          <i class="fas fa-trash"></i>
+          <p>Discard All</p>
+        </button>
+        <div id="d_a2">
+          <p>Type "yes" to continue</p>
+          <button id="discard_btn_back" aria-label="Back" title="Back">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <input
+            type="text"
+            name="discard_confirm"
+            id="discard_confirm"
+            placeholder='Type "yes"'
+          />
+          <button id="discard_all" aria-label="Confirm" title="Confirm">
+            Confirm
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>

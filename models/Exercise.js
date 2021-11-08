@@ -8,6 +8,9 @@ const exerciseSchema = new Schema(
       unique: true,
       required: [true, "Please provide lesson title"],
     },
+    subject: {
+      type: String,
+    },
     tags: {
       type: Array,
     },

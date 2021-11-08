@@ -25,14 +25,11 @@
     </div>
     <div class="create-wrapper">
       <%- include('../partials/resource_title_tags'); %>
-      <div class="three-one-grid">
-        <div>
-          <%-include('../partials/question'); %>
-          <%-include('../partials/correct_answer'); %>
-          <%-include('../partials/create_choices'); %>
-          <ul class="question_choices pop-top hide"></ul>
-        </div>
-        <%- include('../partials/publish_question_requirements'); %>
+      <div class="four-one-grid">
+        <%-include('../partials/question'); %>
+        <%-include('../partials/correct_answer'); %>
+        <%-include('../partials/create_choices'); %> <%-
+        include('../partials/publish_question_requirements'); %>
       </div>
       <div class="three-two-grid">
         <%- include('../partials/problem_set'); %> <%-

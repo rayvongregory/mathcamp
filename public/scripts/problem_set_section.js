@@ -1,3 +1,11 @@
+const addAllBtn = document.querySelector("#add_all")
+const discardAllSlider = document.querySelector("#discard_all_slider")
+const dA1 = discardAllSlider.querySelector("#d_a1")
+const dA2 = discardAllSlider.querySelector("#d_a2")
+const dA2p = dA2.querySelector("p")
+const discardBackBtn = discardAllSlider.querySelector("#discard_btn_back")
+const discardConf = discardAllSlider.querySelector("#discard_confirm")
+const discardAllBtn = document.querySelector("#discard_all")
 const problemSet = document.querySelector(".problem_set")
 const easyProblemsSection = document.querySelector("#easy_problems")
 const standardProblemsSection = document.querySelector("#standard_problems")
@@ -22,7 +30,64 @@ let problems = {
   no_choice: {},
 }
 
-//create
+//util
+const createProblemItem = (diff, newP = true) => {
+  // get icon class
+  let satisfied = true
+  for (let req of publishQuestionReqs) {
+    if (req.classList.contains("not_met")) {
+      satisfied = false
+      break
+    }
+  }
+  let q = document.createElement("li")
+  let icon = document.createElement("span")
+  if (satisfied) {
+    q.classList.add("satisfied")
+    icon.innerHTML = '<i class="fas fa-check-circle"></i>'
+  } else {
+    q.classList.add("not_met")
+    icon.innerHTML = '<i class="fas fa-times-circle"></i>'
+  }
+  // generate ID && store values
+  let id
+  do {
+    id = String(Math.round(Math.random() * 999))
+    if (id.length !== 3) {
+      id = id.padStart(3, "0")
+    }
+  } while (problems[diff][`pid${id}`] !== undefined)
+  problems[diff][`pid${id}`] = {
+    question: questionTextArea.innerHTML,
+    choices: { ...choices },
+  }
+  // do some extra stuff if newP is false... I still don't know when that happens
+
+  // create & append
+  let p = document.createElement("p")
+  q.dataset.id = `pid${id}`
+  q.dataset.diff = diff
+  p.innerText = `Problem ID: ${id}`
+  let prev = document.createElement("button")
+  setAttr(prev, "aria", "Preview problem")
+  prev.innerHTML = '<i class="fas fa-eye"></i>'
+  prev.addEventListener("pointerup", prevProblem)
+  let edit = document.createElement("button")
+  setAttr(edit, "aria", "Edit problem")
+  edit.innerHTML = '<i class="fas fa-edit"></i>'
+  edit.addEventListener("pointerup", editProblem)
+  let del = document.createElement("button")
+  setAttr(del, "aria", "Delete problem")
+  del.innerHTML = '<i class="fas fa-trash"></i>'
+  del.addEventListener("pointerup", delProblem)
+  q.appendChild(icon)
+  q.appendChild(p)
+  q.appendChild(prev)
+  q.appendChild(edit)
+  q.appendChild(del)
+  appendThisToThat(q, diff)
+}
+
 const appendThisToThat = (el, diff) => {
   if (!noProblemsYet.classList.contains("hide")) {
     noProblemsYet.classList.add("hide")
@@ -50,6 +115,125 @@ const appendThisToThat = (el, diff) => {
       break
   }
 }
+
+//create
+const addAll = (e, obj = null) => {
+  document.activeElement.blur()
+  //when do i ever pass an obj to this function??
+  if (obj) {
+    let id = obj.id.substring(3)
+    let { question, choices } = obj.problem
+    let { diff } = obj
+    let newId
+    for (let key in choices) {
+      do {
+        newId = String(Math.round(Math.random() * 999))
+        if (newId.length !== 3) {
+          newId = newId.padStart(3, "0")
+        }
+      } while (choices[`cid${newId}`] !== undefined)
+      choices[`cid${newId}`] = choices[key]
+      delete choices[key]
+    }
+    let q = document.createElement("li")
+    let icon = document.createElement("span")
+    q.classList.add("not_met")
+    button.innerHTML = '<i class="fas fa-times-circle"></i>'
+    let p = document.createElement("p")
+    q.dataset.id = `pid${id}`
+    q.dataset.diff = diff
+    p.innerText = `Problem ID: ${id}`
+    let prev = document.createElement("button")
+    prev.setAttribute("role", "button")
+    prev.setAttribute("aria-label", "Preview problem")
+    prev.setAttribute("title", "Preview problem")
+    prev.innerHTML = '<i class="fas fa-eye"></i>'
+    prev.addEventListener("pointerup", prevProblem)
+    let edit = document.createElement("button")
+    edit.setAttribute("role", "button")
+    edit.setAttribute("aria-label", "Edit problem")
+    edit.setAttribute("title", "Edit problem")
+    edit.innerHTML = '<i class="fas fa-edit"></i>'
+    edit.addEventListener("pointerup", editProblem)
+    let del = document.createElement("button")
+    del.setAttribute("role", "button")
+    del.setAttribute("aria-label", "Delete problem")
+    del.setAttribute("title", "Delete problem")
+    del.innerHTML = '<i class="fas fa-trash"></i>'
+    del.addEventListener("pointerup", delProblem)
+    q.appendChild(icon)
+    q.appendChild(p)
+    q.appendChild(prev)
+    q.appendChild(edit)
+    q.appendChild(del)
+    appendThisToThat(q, diff)
+    return
+  }
+  let { refId, refDiff } = e.target.dataset
+  if (!refId) {
+    createProblemItem(difficultySelect.value)
+    discardAll()
+    hideOrShowThisTextArea("questionTextArea", "show")
+    questionSection.classList.add("hide")
+  } else {
+    let newDiff = difficultySelect.value
+    let qDOM = document.querySelector(`[data-id="${refId}"]`)
+    let icon = qDOM.querySelector("button")
+    if (newDiff !== refDiff) {
+      problems[newDiff][refId] = {
+        question: question,
+        choices: { ...choices },
+      }
+      delete problems[refDiff][refId]
+      let del = qDOM.querySelectorAll("button")[2]
+      del.dispatchEvent(new Event("pointerup"))
+      qDOM.dataset.diff = newDiff
+      appendThisToThat(qDOM, newDiff)
+    } else {
+      problems[refDiff][refId] = {
+        question: question,
+        choices: { ...choices },
+      }
+    }
+
+    let satisfied = true
+    for (let req of publishQuestionReqs) {
+      if (req.classList.contains("not_met")) {
+        satisfied = false
+        break
+      }
+    }
+    if (satisfied) {
+      qDOM.classList.remove("not_met")
+      qDOM.classList.add("satisfied")
+      icon.innerHTML = '<i class="fas fa-check-circle"></i>'
+    } else {
+      qDOM.classList.remove("satisfied")
+      qDOM.classList.add("not_met")
+      icon.innerHTML = '<i class="fas fa-times-circle"></i>'
+    }
+
+    discardAll()
+    let problem = document.querySelector(`[data-id="${refId}"]`)
+    if (problem.dataset.id === refId) {
+      problem.classList.remove("editing")
+      let p = problem.querySelector("p")
+      p.innerText = `Problem ID: ${refId.substring(3)}`
+    }
+    addAllBtn.setAttribute("aria-label", "Add all to exercise")
+    addAllBtn.setAttribute("title", "Add all to exercise")
+    let p = addAllBtn.querySelector("p")
+    p.innerText = "Add All"
+    discardAllBtn.setAttribute("aria-label", "Discard all")
+    discardAllBtn.setAttribute("title", "Discard all")
+    p = discardAllBtn.querySelector("p")
+    p.innerText = "Discard All"
+    delete e.target.dataset.refId
+    delete e.target.dataset.refDiff
+    // if there is a refId, simply locate the object and update it
+  }
+}
+
 //read
 const prevProblem = (e) => {
   document.activeElement.blur()
@@ -103,7 +287,7 @@ const closeOverlay = () => {
 //update
 const editProblem = (e) => {
   document.activeElement.blur()
-  if (questionChoicesSection.querySelector("li")) deleteChoices()
+  if (choicesSection.querySelector("li")) deleteChoices()
   let { target } = e
   let li = target.parentElement
   let { id: targetId } = li.dataset
@@ -111,16 +295,13 @@ const editProblem = (e) => {
     li.classList.remove("editing")
     let p = li.querySelector("p")
     p.innerText = `Problem ID: ${targetId.substring(3)}`
-    addAllBtn.setAttribute("aria-label", "Add all to exercise")
-    addAllBtn.setAttribute("title", "Add all to exercise")
+    setAttr(addAllBtn, "aria", "Add all to exercise")
     delete addAllBtn.dataset.refId
     delete addAllBtn.dataset.refDiff
     p = addAllBtn.querySelector("p")
     p.innerText = "Add All"
-    discardAllBtn.setAttribute("aria-label", "Discard all")
-    discardAllBtn.setAttribute("title", "Discard all")
-    target.setAttribute("aria-label", "Edit problem")
-    target.setAttribute("title", "Edit problem")
+    setAttr(discardAllBtn, "aria", "Discard all")
+    setAttr(target, "aria", "Edit problem")
     p = discardAllBtn.querySelector("p")
     p.innerText = "Discard All"
     discardAll()
@@ -138,7 +319,7 @@ const editProblem = (e) => {
     p.innerText = `Problem ID: ${id.substring(3)}`
     discardAll()
   }
-  titleInput.scrollIntoView()
+  nav.scrollIntoView({ block: "nearest", inline: "nearest" })
   //add edit styles
   li.classList.add("editing")
   let p = li.querySelector("p")
@@ -194,6 +375,33 @@ const editProblem = (e) => {
 }
 
 //delete
+const discardAll = () => {
+  document.activeElement.blur()
+  let problem = problemSet.querySelector("li.editing")
+  if (problem) {
+    problem.classList.remove("editing")
+    let p = problem.querySelector("p")
+    let id = problem.dataset.id
+    p.innerText = `Problem ID: ${id.substring(3)}`
+    delete addAllBtn.dataset.refId
+    delete addAllBtn.dataset.refDiff
+    addAllBtn.setAttribute("aria-label", "Add all to exercise")
+    addAllBtn.setAttribute("title", "Add all to exercise")
+    p = addAllBtn.querySelector("p")
+    p.innerText = "Add All"
+    discardAllBtn.setAttribute("aria-label", "Discard all")
+    discardAllBtn.setAttribute("title", "Discard all")
+    p = discardAllBtn.querySelector("p")
+    p.innerText = "Discard All"
+  }
+  discardQBtn.dispatchEvent(new Event("pointerup"))
+  deleteQ()
+  discardChoice()
+  deleteChoices()
+  discardAnsBtn.dispatchEvent(new Event("pointerup"))
+  deleteAns()
+}
+
 const delProblem = (e) => {
   let item = e.target.parentElement
   let section = item.parentElement
@@ -228,4 +436,33 @@ const delProblem = (e) => {
   item.remove()
 }
 
+const confirmDiscardAll = (e) => {
+  switch (e.target) {
+    case dA1:
+      document.activeElement.blur()
+      dA2.scrollIntoView({ block: "nearest", inline: "nearest" })
+      break
+    case discardBackBtn:
+      dA1.scrollIntoView({ block: "nearest", inline: "nearest" })
+      discardConf.value = ""
+      break
+    case discardAllBtn:
+      if (discardConf.value !== "yes") {
+        dA2p.classList.add("flash")
+        setTimeout(() => {
+          dA2p.classList.remove("flash")
+        }, 600)
+        return
+      } else {
+        discardAll()
+        dA1.scrollIntoView({ block: "nearest", inline: "nearest" })
+        discardConf.value = ""
+        nav.scrollIntoView()
+      }
+    default:
+      break
+  }
+}
+addAllBtn.addEventListener("pointerup", addAll)
+discardAllSlider.addEventListener("pointerup", confirmDiscardAll)
 overlayCloseBtn.addEventListener("pointerup", closeOverlay)

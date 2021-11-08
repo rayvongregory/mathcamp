@@ -1,6 +1,7 @@
+// I think this is done... 11/8/2021 @ 12:10 AM
 const addChoiceBtn = document.querySelector("#choice_add")
 const discardChoiceBtn = document.querySelector("#choice_discard")
-const questionChoicesSection = document.querySelector(".question_choices")
+const choicesSection = document.querySelector(".question_choices")
 const extraOptions_2 = document.querySelectorAll(".extra-options")[2]
 const tenChoices = document.querySelector("#ten_choices")
 let choices = {}
@@ -9,97 +10,102 @@ let choices = {}
 const checkForTen = () => {
   i = tenChoices.querySelector("i")
   if (Object.keys(choices).length >= 10) {
-    tenChoices.classList.replace("not_met", "satisfied")
-    i.classList.replace("fa-times-circle", "fa-check-circle")
+    checkList(tenChoices, "check")
   } else {
-    tenChoices.classList.replace("satisfied", "not_met")
-    i.classList.replace("fa-check-circle", "fa-times-circle")
+    checkList(tenChoices, "uncheck")
   }
 }
 
 const uniqueChoice = (text) => {
-  let { refId } = addChoiceBtn.dataset
   if (text === "<p><br></p>" || text === '<p><br data-mce-bogus="1"></p>') {
     return false
   }
   for (let choice in choices) {
-    if (choices[choice] === text && choice !== refId) {
+    if (choices[choice] === text) {
       return false
     }
   }
   return true
 }
 
-//create
-const addChoice = (e) => {
-  document.activeElement.blur()
-  // try finding a choice (or answer) with the same innerHTML. if found, don't add
-  if (!uniqueChoice(choicesTextArea.innerHTML)) {
-    extraOptions_2.classList.add("not_met")
-    let p = extraOptions_2.querySelector("p")
-    p.classList.remove("hide")
-    setTimeout(() => {
-      extraOptions_2.classList.remove("not_met")
-      p.classList.add("hide")
-    }, 2000)
-    return
-  }
+const addToTextArea = (target, cid, edit) => {
+  target.classList.add("editing")
+  let p = target.querySelector("p")
+  p.innerText = `Choice ID: ${cid} (editing)`
+  choicesTextArea.innerHTML = choices[`cid${cid}`]
+  addChoiceBtn.dataset.cid = cid
+  setAttr(edit, "aria", "Cancel edit")
+  setAttr(addChoiceBtn, "aria", "Save changes")
+  setAttr(discardChoiceBtn, "aria", "Discard changes")
+}
 
-  // check for dom el
-  let { refId: ref } = e.target.dataset
-  let li = questionChoicesSection.querySelector(`[data-id="${ref}"]`)
-  if (li) {
-    // if dom el exists, update choices obj
-    choices[ref] = choicesTextArea.innerHTML
-    li.classList.remove("editing")
-    let p = li.querySelector("p")
-    p.innerText = `Choice ID: ${ref.substring(3)}`
-    addChoiceBtn.setAttribute("aria-label", "Add choice")
-    addChoiceBtn.setAttribute("title", "Add choice")
-    discardChoiceBtn.setAttribute("aria-label", "Discard")
-    discardChoiceBtn.setAttribute("aria-label", "Discard")
-    delete e.target.dataset.refId
-    choicesTextArea.innerHTML = "<p><br></p>"
-
-    return
-  }
-  let id
-  // create id or use ref
-  if (!ref) {
+const createChoiceItem = (id = null) => {
+  // id is just the number
+  if (!id) {
     do {
       id = String(Math.round(Math.random() * 999))
       if (id.length !== 3) {
         id = id.padStart(3, "0")
       }
     } while (choices[`cid${id}`] !== undefined)
-  } else {
-    id = ref.substring(3)
-    delete e.target.dataset.refId
   }
-
-  //if dom el doesn't exist, create dom el
   choices[`cid${id}`] = choicesTextArea.innerHTML
+  //   console.log(choices)
   let choiceItem = document.createElement("li")
   let p = document.createElement("p")
-  choiceItem.dataset.id = `cid${id}`
+  choiceItem.dataset.cid = id
   p.innerText = `Choice ID: ${id}`
   let edit = document.createElement("button")
-  edit.setAttribute("role", "button")
-  edit.setAttribute("aria-label", "Edit choice")
-  edit.setAttribute("title", "Edit choice")
+  setAttr(edit, "aria", "Edit choice")
   edit.innerHTML = '<i class="fas fa-edit"></i>'
   edit.addEventListener("pointerup", editChoice)
   let del = document.createElement("button")
-  del.setAttribute("role", "button")
-  del.setAttribute("aria-label", "Delete choice")
-  del.setAttribute("title", "Delete choice")
+  setAttr(del, "aria", "Delete choice")
   del.innerHTML = '<i class="fas fa-trash"></i>'
   del.addEventListener("pointerup", deleteChoice)
   choiceItem.appendChild(p)
   choiceItem.appendChild(edit)
   choiceItem.appendChild(del)
-  questionChoicesSection.appendChild(choiceItem)
-  questionChoicesSection.classList.remove("hide")
+  choicesSection.appendChild(choiceItem)
+  if (choicesSection.classList.contains("hide")) {
+    choicesSection.classList.remove("hide")
+  }
+}
+
+//create
+const addChoice = (e) => {
+  document.activeElement.blur()
+  // try finding a choice (or answer) with the same innerHTML. if found, don't add
+  let { cid } = e.target.dataset
+  switch (
+    uniqueChoice(choicesTextArea.innerHTML) ||
+    (cid !== undefined && choicesTextArea.innerHTML === choices[`cid${cid}`])
+  ) {
+    case false:
+      showNotUniqueMsg(labelPs[2])
+      break
+    case true:
+      let choiceItem = choicesSection.querySelector(`[data-cid="${cid}"]`)
+      if (choiceItem) {
+        let p = choiceItem.querySelector("p")
+        let editBtn = choiceItem.querySelector("button")
+        choices[`$cid${cid}`] = choicesTextArea.innerHTML
+        choiceItem.classList.remove("editing")
+        p.innerText = `Choice ID: ${cid}`
+        setAttr(editBtn, "aria", "Edit choice")
+        setAttr(addChoiceBtn, "aria", "Add choice")
+        setAttr(discardChoiceBtn, "aria", "Discard")
+        delete e.target.dataset.cid
+        choicesTextArea.innerHTML = "<p><br></p>"
+        // don't need to create a choice item, just need to update the obj using id
+      } else {
+        // create a choice item and its id
+        createChoiceItem()
+      }
+      break
+    default:
+      break
+  }
   checkForTen()
   choicesTextArea.innerHTML = "<p><br></p>"
 }
@@ -107,92 +113,78 @@ const addChoice = (e) => {
 //update
 const editChoice = (e) => {
   document.activeElement.blur()
-  let btn = e.target
-  let target = btn.parentElement
-  let { id: itemID } = target.dataset
-  let li = questionChoicesSection.querySelector("li.editing")
-  if (li && li !== target) {
+  let edit = e.target
+  let target = edit.parentElement
+  let { cid } = target.dataset // this is just the number
+  let li = choicesSection.querySelector("li.editing")
+  if (!li) {
+    addToTextArea(target, cid, edit)
+  } else if (li && li !== target) {
     li.classList.remove("editing")
     let p = li.querySelector("p")
-    let { id } = li.dataset
-    p.innerText = `Choice ID: ${id.substring(3)}`
+    let editBtn = li.querySelector("button")
+    setAttr(editBtn, "aria", "Edit choice")
+    let { cid: oldCid } = li.dataset
+    p.innerText = `Choice ID: ${oldCid}`
+    addToTextArea(target, cid, edit)
   } else if (li && li === target) {
     li.classList.remove("editing")
-    li.classList.remove("editing")
-    btn.setAttribute("aria-label", "Edit choice")
-    btn.setAttribute("title", "Edit choice")
-    addChoiceBtn.setAttribute("aria-label", "Add choice to question")
-    addChoiceBtn.setAttribute("title", "Add choice to question")
+    setAttr(edit, "aria", "Edit choice")
+    setAttr(addChoiceBtn, "aria", "Add choice to question")
     let p = li.querySelector("p")
-    let { id } = li.dataset
-    p.innerText = `Choice ID: ${id.substring(3)}`
-    delete addChoiceBtn.dataset.refId
+    let { cid } = li.dataset
+    p.innerText = `Choice ID: ${cid}`
+    delete addChoiceBtn.dataset.cid
     discardChoice()
-    return
   }
-  target.classList.add("editing")
-  let p = target.querySelector("p")
-  p.innerText = `Choice ID: ${itemID.substring(3)} (editing)`
-  choicesTextArea.innerHTML = choices[itemID]
-  addChoiceBtn.dataset.refId = itemID
-  btn.setAttribute("aria-label", "Cancel edit")
-  btn.setAttribute("title", "Cancel edit")
-  addChoiceBtn.setAttribute("aria-label", "Save changes")
-  addChoiceBtn.setAttribute("title", "Save changes")
-  discardChoiceBtn.setAttribute("aria-label", "Discard changes")
-  discardChoiceBtn.setAttribute("title", "Discard changes")
 }
 
 //delete
 const discardChoice = () => {
   document.activeElement.blur()
   choicesTextArea.innerHTML = "<p><br></p>"
-  let { refId } = addChoiceBtn.dataset
-  if (refId) {
-    addChoiceBtn.setAttribute("aria-label", "Add choice to question")
-    addChoiceBtn.setAttribute("title", "Add choice to question")
-    discardChoiceBtn.setAttribute("aria-label", "Discard")
-    discardChoiceBtn.setAttribute("title", "Discard")
-    let li = questionChoicesSection.querySelector(`[data-id="${refId}"]`)
+  let { cid } = addChoiceBtn.dataset
+  if (cid) {
+    setAttr(addChoiceBtn, "aria", "Add choice to question")
+    setAttr(discardChoiceBtn, "aria", "Discard")
+    let li = choicesSection.querySelector(`[data-cid="${cid}"]`)
     li.classList.remove("editing")
     let edit = li.querySelector('[aria-label="Cancel edit"]')
-    edit.setAttribute("aria-label", "Edit choice")
-    edit.setAttribute("title", "Edit choice")
+    setAttr(edit, "aria", "Edit choice")
     let p = li.querySelector("p")
-    p.innerText = `Choice ID: ${refId.substring(3)}`
-    delete addChoiceBtn.dataset.refId
+    p.innerText = `Choice ID: ${cid}`
+    delete addChoiceBtn.dataset.cid
   }
 }
 
 const deleteChoice = (e) => {
   let item = e.target.parentElement
-  let { id: itemID } = item.dataset
-  if (itemID === addChoiceBtn.dataset.refId) {
-    delete addChoiceBtn.dataset.refId
-    addChoiceBtn.setAttribute("aria-label", "Add choice to question")
-    addChoiceBtn.setAttribute("title", "Add choice to question")
-    discardChoiceBtn.setAttribute("aria-label", "Discard")
-    discardChoiceBtn.setAttribute("title", "Discard")
+  let { cid } = item.dataset
+  if (cid === addChoiceBtn.dataset.cid) {
+    delete addChoiceBtn.dataset.cid
+    setAttr(addChoiceBtn, "aria", "Add choice to question")
+    setAttr(discardChoiceBtn, "aria", "Discard")
   }
   item.remove()
-  delete choices[itemID]
+  delete choices[`cid${cid}`]
+  choicesTextArea.innerHTML = "<p><br></p>"
   checkForTen()
   if (
     Object.keys(choices).length === 0 ||
     (Object.keys(choices).length === 1 && choices.answer)
   ) {
-    questionChoicesSection.classList.add("hide")
+    choicesSection.classList.add("hide")
   }
 }
 
 const deleteChoices = () => {
-  let choicesList = questionChoicesSection.querySelectorAll("li")
+  let choicesList = choicesSection.querySelectorAll("li")
   for (let choice of choicesList) {
     delete choices[choice.dataset.id]
     choice.remove()
   }
   if (addChoiceBtn.dataset.refId) delete addChoiceBtn.dataset.refId
-  questionChoicesSection.classList.add("hide")
+  choicesSection.classList.add("hide")
   choicesTextArea.innerHTML = "<p><br></p>"
 }
 

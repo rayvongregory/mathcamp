@@ -1,7 +1,9 @@
 <div class="textarea-wrapper">
-  <label for="create_correct_answer pop-top">Correct Answer</label>
+  <div class="label-wrapper">
+    <label for="create_correct_answer pop-top">Answer</label>
+    <p class="not_met hide">This choice is not unique.</p>
+  </div>
   <div class="extra-options">
-    <p class="hide">This choice is not unique.</p>
     <button
       id="answer_add"
       aria-label="Add answer to question"
@@ -14,5 +16,5 @@
     </button>
   </div>
   <textarea id="create_correct_answer"></textarea>
+  <ul class="correct_answer hide"></ul>
 </div>
-<ul class="correct_answer hide"></ul>

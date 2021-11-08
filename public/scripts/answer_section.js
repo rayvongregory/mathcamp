@@ -1,3 +1,4 @@
+// I think this is done... 11/7/2021 @ 6:48PM
 //cache
 const extraOptions_1 = document.querySelectorAll(".extra-options")[1]
 const addAnsBtn = document.querySelector("#answer_add")
@@ -5,61 +6,58 @@ const discardAnsBtn = document.querySelector("#answer_discard")
 const createCorrectAns = document.querySelector("#correct_answer")
 const correctAnswerSection = document.querySelector(".correct_answer")
 
+//util
+const createAnsItem = () => {
+  let correctAnswerItem = document.createElement("li")
+  let p = document.createElement("p")
+  p.innerText = "Answer"
+  let edit = document.createElement("button")
+  setAttr(edit, "aria", "Edit answer")
+  edit.innerHTML = '<i class="fas fa-edit"></i>'
+  edit.addEventListener("pointerup", editAns)
+  let del = document.createElement("button")
+  setAttr(del, "aria", "Delete answer")
+  del.innerHTML = '<i class="fas fa-trash"></i>'
+  del.addEventListener("pointerup", deleteAns)
+  correctAnswerItem.appendChild(p)
+  correctAnswerItem.appendChild(edit)
+  correctAnswerItem.appendChild(del)
+  correctAnswerSection.appendChild(correctAnswerItem)
+}
+
 //create
 const addAns = (e) => {
   document.activeElement.blur()
   let { refId: ref } = e.target.dataset
-  if (!uniqueChoice(correctAnswerTextArea.innerHTML, ref)) {
-    extraOptions_1.classList.add("not_met")
-    let p = extraOptions_1.querySelector("p")
-    p.classList.remove("hide")
-    setTimeout(() => {
-      extraOptions_1.classList.remove("not_met")
-      p.classList.add("hide")
-    }, 2000)
-    return
+  // not sure if i need to pass that ref, we'll see
+  switch (
+    uniqueChoice(correctAnswerTextArea.innerHTML) ||
+    correctAnswerTextArea.innerHTML === choices.answer
+  ) {
+    case false:
+      showNotUniqueMsg(labelPs[1])
+      break
+    case true:
+      choices.answer = correctAnswerTextArea.innerHTML
+      checkList(createCorrectAns, "check")
+      hideOrShowThisTextArea("correctAnswerTextArea", "hide")
+      let correctAnswerItem = correctAnswerSection.querySelector("li")
+      if (!correctAnswerItem) {
+        createAnsItem()
+        checkForTen()
+        // addAnsBtn.dataset.ansRef = "ans"
+      } else {
+        let p = correctAnswerItem.querySelector("p")
+        let btn = correctAnswerItem.querySelector("button")
+        correctAnswerItem.classList.remove("editing")
+        setAttr(btn, "aria", "Edit answer")
+        p.innerText = "Answer"
+        // setAttr(addAnsBtn, "aria", "Add answer to question")
+      }
+      break
+    default:
+      break
   }
-  let correctAnswerItem = correctAnswerSection.querySelector("li")
-  if (!correctAnswerItem) {
-    correctAnswerItem = document.createElement("li")
-    choices.answer = correctAnswerTextArea.innerHTML
-    let p = document.createElement("p")
-    p.innerText = "Answer"
-    let edit = document.createElement("button")
-    edit.setAttribute("role", "button")
-    edit.setAttribute("aria-label", "Edit answer")
-    edit.setAttribute("title", "Edit answer")
-    edit.innerHTML = '<i class="fas fa-edit"></i>'
-    edit.addEventListener("pointerup", editAns)
-    let del = document.createElement("button")
-    del.setAttribute("role", "button")
-    del.setAttribute("aria-label", "Delete answer")
-    del.setAttribute("title", "Delete answer")
-    del.innerHTML = '<i class="fas fa-trash"></i>'
-    del.addEventListener("pointerup", deleteAns)
-    correctAnswerItem.appendChild(p)
-    correctAnswerItem.appendChild(edit)
-    correctAnswerItem.appendChild(del)
-    correctAnswerSection.appendChild(correctAnswerItem)
-    i = createCorrectAns.querySelector("i")
-    i.classList.replace("fa-times-circle", "fa-check-circle")
-    createCorrectAns.classList.replace("not_met", "satisfied")
-    correctAnswerSection.classList.remove("hide")
-    checkForTen()
-    // addAnsBtn.dataset.ansRef = "ans"
-  } else {
-    choices.answer = correctAnswerTextArea.innerHTML
-    correctAnswerItem.classList.remove("editing")
-    let p = correctAnswerItem.querySelector("p")
-    p.innerText = "Answer"
-    addAnsBtn.setAttribute("aria-label", "Add answer to question")
-    addAnsBtn.setAttribute("title", "Add answer to question")
-  }
-  correctAnswerSection.classList.remove("hide")
-  correctAnswerSection.classList.remove("pop-top")
-  correctAnswerTextAreaDiv.classList.add("hide")
-  extraOptions_1.classList.add("hide")
-  correctAnswerTextArea.innerHTML = "<p><br></p>"
 }
 
 //read
@@ -77,22 +75,16 @@ const editAns = (e) => {
   if (li.classList.contains("editing")) {
     li.classList.remove("editing")
     p.innerText = "Answer"
-    correctAnswerSection.classList.remove("pop-top")
-    correctAnswerTextAreaDiv.classList.add("hide")
-    extraOptions_1.classList.add("hide")
+    setAttr(target, "aria", "Edit answer")
+    hideOrShowThisTextArea("correctAnswerTextArea", "hide")
   } else {
     li.classList.add("editing")
     p.innerText = "Answer (editing)"
     correctAnswerTextArea.innerHTML = choices.answer
-    target.setAttribute("aria-label", "Cancel edit")
-    target.setAttribute("title", "Cancel edit")
-    addAnsBtn.setAttribute("aria-label", "Save answer")
-    addAnsBtn.setAttribute("title", "Save answer")
-    discardAnsBtn.setAttribute("aria-label", "Discard changes")
-    discardAnsBtn.setAttribute("title", "Discard changes")
-    correctAnswerSection.classList.add("pop-top")
-    correctAnswerTextAreaDiv.classList.remove("hide")
-    extraOptions_1.classList.remove("hide")
+    setAttr(target, "aria", "Cancel edit")
+    setAttr(addAnsBtn, "aria", "Save answer")
+    setAttr(discardAnsBtn, "aria", "Discard changes")
+    hideOrShowThisTextArea("correctAnswerTextArea", "show")
   }
 }
 
@@ -101,21 +93,15 @@ const discardAns = (e) => {
   document.activeElement.blur()
   let { target } = e
   correctAnswerTextArea.innerHTML = "<p><br></p>"
-  let li = correctAnswerSection.querySelector("li")
-  if (li) {
-    let edit = li.querySelectorAll("button")[1]
-    edit.setAttribute("aria-label", "Cancel edit")
-    edit.setAttribute("title", "Cancel edit")
-    target.setAttribute("aria-label", "Discard")
-    target.setAttribute("title", "Discard")
-    target.previousElementSibling.setAttribute("aria-label", "Add answer")
-    target.previousElementSibling.setAttribute("title", "Add answer")
-    extraOptions_1.classList.add("hide")
-    correctAnswerTextAreaDiv.classList.add("hide")
-    correctAnswerSection.classList.remove("hide")
-    correctAnswerSection.classList.remove("pop-top")
-    li.classList.remove("editing")
-    let p = li.querySelector("p")
+  let correctAnswerItem = correctAnswerSection.querySelector("li")
+  if (correctAnswerItem) {
+    let edit = correctAnswerItem.querySelector("button")
+    setAttr(edit, "aria", "Edit answer")
+    setAttr(target, "aria", "Discard")
+    setAttr(target.previousElementSibling, "aria", "Add answer to question")
+    hideOrShowThisTextArea("correctAnswerTextArea", "hide")
+    correctAnswerItem.classList.remove("editing")
+    let p = correctAnswerItem.querySelector("p")
     p.innerText = "Answer"
   }
 }
@@ -126,16 +112,12 @@ const deleteAns = () => {
   if (li) {
     li.remove()
     delete choices.answer
-    i = createCorrectAns.querySelector("i")
-    i.classList.replace("fa-check-circle", "fa-times-circle")
-    createCorrectAns.classList.replace("satisfied", "not_met")
+    checkList(createCorrectAns, "uncheck")
+    hideOrShowThisTextArea("correctAnswerTextArea", "show")
+    correctAnswerTextArea.innerHTML = "<p><br></p>"
     correctAnswerSection.classList.add("hide")
-    correctAnswerTextAreaDiv.classList.remove("hide")
-    extraOptions_1.classList.remove("hide")
-    addAnsBtn.setAttribute("aria-label", "Add answer")
-    addAnsBtn.setAttribute("title", "Add answer")
-    discardAnsBtn.setAttribute("aria-label", "Discard")
-    discardAnsBtn.setAttribute("title", "Discard")
+    setAttr(addAnsBtn, "aria", "Add answer")
+    setAttr(discardAnsBtn, "aria", "Discard")
     // delete addAnsBtn.dataset.ansRef
   }
   checkForTen()

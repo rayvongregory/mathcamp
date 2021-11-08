@@ -1,42 +1,48 @@
-<!-- <div class="flex-wrapper">
-  <label for="title">Title: </label>
-  <input
-    type="text"
-    name="title"
-    id="title"
-    placeholder="Create a title for this resource"
-  />
-  <p id="ptitle"></p>
-</div>
-<div class="flex-wrapper">
-  
-  
-</div>-->
-
-<div class="flex-wrapper">
-  <div class="label-wrapper">
-    <label for="title">Title</label>
-    <p class="not_met hide">Please create a title to save this resource.</p>
+<div class="tts-grid">
+  <div class="flex-wrapper">
+    <div class="label-wrapper">
+      <label for="title">Title</label>
+      <p class="not_met hide">Please create a title to save this resource.</p>
+    </div>
+    <input
+      id="title"
+      type="text"
+      placeholder="Please enter the title of this resource"
+    />
+    <p id="ptitle" class="hide"></p>
   </div>
-  <input
-    id="title"
-    type="text"
-    placeholder="Please enter the title of this resource"
-  />
-  <p id="ptitle" class="hide"></p>
-</div>
-<div class="flex-wrapper">
-  <div class="label-wrapper">
-    <label for="tags_input">Tags</label>
-    <p class="not_met hide">Please create tags to publish this resource.</p>
+  <div class="flex-wrapper">
+    <div class="label-wrapper">
+      <label for="tags_input">Tags</label>
+      <p class="not_met hide">Please create tags to publish this resource.</p>
+    </div>
+    <input
+      type="text"
+      name="input"
+      id="tags_input"
+      placeholder="Create tags for this resource"
+    />
   </div>
-  <input
-    type="text"
-    name="input"
-    id="tags_input"
-    placeholder="Create tags for this resource"
-  />
-</div>
-<div class="tags-wrapper">
-  <section class="hide" id="tags"></section>
+  <div class="tags-wrapper">
+    <section class="hide" id="tags"></section>
+  </div>
+  <div class="flex-wrapper">
+    <div class="label-wrapper">
+      <label for="subject">Subject</label>
+      <p class="not_met hide">Please choose a subject for this resource.</p>
+    </div>
+    <select name="subject" id="subject">
+      <option value="no_choice">Choose a subject</option>
+      <option value="7">7th Grade</option>
+      <option value="8">8th Grade</option>
+      <option value="alg">Algebra</option>
+      <option value="geo">Geometry</option>
+      <option value="p_s">Probability & Statistics</option>
+      <option value="alg2">Algebra 2</option>
+      <option value="pc">Precalculus</option>
+      <option value="calc">Calculus</option>
+      <option value="calc2">Calculus 2</option>
+    </select>
+    <p id="ptitle" class="hide"></p>
+  </div>
 </div>

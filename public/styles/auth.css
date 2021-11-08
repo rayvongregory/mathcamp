@@ -333,14 +333,9 @@ pointer-events: none;
     box-shadow: var(--boxShadow);
     border-radius: 3px;
     text-align: center;
-    scrollbar-width: none;
     scroll-behavior: smooth;
     overflow: hidden;
     pointer-events: none;
-}
-
-.delete-button::-webkit-scrollbar {
-    display: none;
 }
 
 #db, #q {
