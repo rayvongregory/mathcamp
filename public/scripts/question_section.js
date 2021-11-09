@@ -1,4 +1,4 @@
-// I think this is finished... 11/7/2021 @ 12:42AM
+// I think this is done... 11/8/2021 @ 4:38PM
 const extraOptions_0 = document.querySelectorAll(".extra-options")[0]
 const difficultySelect = document.querySelector("#choose_difficulty")
 const addQBtn = document.querySelector("#q_add")
@@ -10,8 +10,13 @@ let question = "<p><br></p>"
 let qDiff = "no_choice"
 
 //util
+const setDiff = (diff) => {
+  difficultySelect.value = diff
+  difficultySelect.dispatchEvent(new Event("pointerup"))
+}
+
 const uniqueQ = (text) => {
-  if (text === "<p><br></p>" || text === '<p><br data-mce-bogus="1"></p>') {
+  if (text.innerText.trim() === "" && !text.querySelector("img")) {
     return false
   }
   let ez = problems.easy
@@ -22,28 +27,44 @@ const uniqueQ = (text) => {
   let { refId, refDiff } = addQBtn.dataset
   // check ez
   for (let id in ez) {
-    if (ez[id].question === text && refDiff !== "easy" && refId !== id)
+    if (
+      ez[id].question === text.innerHTML &&
+      refDiff !== "easy" &&
+      refId !== id
+    )
       return false
   }
 
   // check standard
   for (let id in s) {
-    if (s[id].question === text && refDiff !== "standard" && refId !== id)
+    if (
+      s[id].question === text.innerHTML &&
+      refDiff !== "standard" &&
+      refId !== id
+    )
       return false
   }
   // check hard
   for (let id in h) {
-    if (h[id].question === text && refDiff !== "hard" && refId !== id)
+    if (h[id].question === text.innerHTML && refDiff !== "hard" && refId !== id)
       return false
   }
   // check advanced
   for (let id in a) {
-    if (a[id].question === text && refDiff !== "advanced" && refId !== id)
+    if (
+      a[id].question === text.innerHTML &&
+      refDiff !== "advanced" &&
+      refId !== id
+    )
       return false
   }
   // check no_diff
   for (let id in nc) {
-    if (nc[id].question === text && refDiff !== "no_choice" && refId !== id)
+    if (
+      nc[id].question === text.innerHTML &&
+      refDiff !== "no_choice" &&
+      refId !== id
+    )
       return false
   }
   return true
@@ -114,13 +135,12 @@ const createQItem = () => {
 
 const addQ = () => {
   document.activeElement.blur()
-  switch (uniqueQ(questionTextArea.innerHTML)) {
+  switch (uniqueQ(questionTextArea)) {
     case false:
       showNotUniqueMsg(labelPs[0])
       break
     case true:
       question = questionTextArea.innerHTML
-      qDiff = difficultySelect.value
       checkList(poseQItem, "check")
       hideOrShowThisTextArea("questionTextArea", "hide")
       let questionItem = questionSection.querySelector("li")
@@ -141,6 +161,7 @@ const addQ = () => {
 //update
 const checkForDiff = (e) => {
   const { target } = e
+  qDiff = difficultySelect.value // does this make more sense here? i think so
   if (target.value !== "no_choice") {
     checkList(selectDiffItem, "check")
   } else {
@@ -162,8 +183,7 @@ const editQ = (e) => {
     li.classList.remove("editing")
     p.innerText = "Question"
     if (qDiff != difficultySelect.value) {
-      difficultySelect.value = qDiff
-      difficultySelect.dispatchEvent(new Event("pointerup"))
+      setDiff(qDiff)
     }
     setAttr(target, "aria", "Edit question")
     hideOrShowThisTextArea("questionTextArea", "hide")
@@ -172,8 +192,7 @@ const editQ = (e) => {
     p.innerText = "Question (editing)"
     setAttr(target, "aria", "Cancel edit")
     questionTextArea.innerHTML = question
-    difficultySelect.value = qDiff
-    difficultySelect.dispatchEvent(new Event("pointerup"))
+    setDiff(qDiff)
     setAttr(addQBtn, "aria", "Save question")
     setAttr(discardQBtn, "aria", "Discard changes")
     hideOrShowThisTextArea("questionTextArea", "show")
@@ -183,11 +202,9 @@ const editQ = (e) => {
 //delete
 const discardQ = (e) => {
   document.activeElement.blur()
-  console.log(question)
   let { target } = e
   questionTextArea.innerHTML = "<p><br></p>"
-  difficultySelect.value = qDiff
-  difficultySelect.dispatchEvent(new Event("click"))
+  setDiff(qDiff)
   let li = questionSection.querySelector("li")
   if (li) {
     let edit = li.querySelectorAll("button")[0]
@@ -216,8 +233,7 @@ const deleteQ = () => {
   hideOrShowThisTextArea("questionTextArea", "show")
   questionSection.classList.add("hide")
   qDiff = "no_choice"
-  difficultySelect.value = qDiff
-  difficultySelect.dispatchEvent(new Event("pointerup"))
+  setDiff(qDiff)
 }
 
 //add listeners

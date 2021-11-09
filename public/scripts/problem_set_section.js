@@ -1,3 +1,4 @@
+const backToTop = document.querySelector("#top")
 const addAllBtn = document.querySelector("#add_all")
 const discardAllSlider = document.querySelector("#discard_all_slider")
 const dA1 = discardAllSlider.querySelector("#d_a1")
@@ -7,11 +8,14 @@ const discardBackBtn = discardAllSlider.querySelector("#discard_btn_back")
 const discardConf = discardAllSlider.querySelector("#discard_confirm")
 const discardAllBtn = document.querySelector("#discard_all")
 const problemSet = document.querySelector(".problem_set")
-const easyProblemsSection = document.querySelector("#easy_problems")
-const standardProblemsSection = document.querySelector("#standard_problems")
-const hardProblemsSection = document.querySelector("#hard_problems")
-const advancedProblemsSection = document.querySelector("#advanced_problems")
-const noDiffProblemsSection = document.querySelector("#no_difficulty_problems")
+const listTogglers = problemSet.querySelectorAll(".header button")
+const easyProblemsSection = document.querySelector("#easy_problems ul")
+const standardProblemsSection = document.querySelector("#standard_problems ul")
+const hardProblemsSection = document.querySelector("#hard_problems ul")
+const advancedProblemsSection = document.querySelector("#advanced_problems ul")
+const noDiffProblemsSection = document.querySelector(
+  "#no_difficulty_problems ul"
+)
 const noProblemsYet = document.querySelector(".no_problems_yet")
 const thirtyEZ = document.querySelector("#thirty_easy")
 const thirtyStandard = document.querySelector("#thirty_standard")
@@ -22,6 +26,7 @@ const overlay = document.querySelector(".overlay")
 const overlayCloseBtn = overlay.querySelector(".close")
 let overlayHeader = overlay.querySelector("h3")
 let overlayContent = overlay.querySelector(".overlay___content")
+let usedPIDs = []
 let problems = {
   easy: {},
   standard: {},
@@ -31,8 +36,35 @@ let problems = {
 }
 
 //util
-const createProblemItem = (diff, newP = true) => {
-  // get icon class
+const toggleList = (e) => {
+  document.activeElement.blur()
+  const { target } = e
+  let list = target.parentElement.nextElementSibling
+  if (list.classList.contains("hide")) {
+    list.classList.remove("hide")
+  } else {
+    list.classList.add("hide")
+  }
+}
+
+const createProblemItem = (diff, id = null) => {
+  // id will not be null when we're fetching this data from the db and have to
+  // recreate these items
+  if (!id) {
+    do {
+      id = String(Math.round(Math.random() * 999))
+      if (id.length !== 3) {
+        id = id.padStart(3, "0")
+      }
+      if (!usedPIDs.includes(id)) {
+        usedPIDs.push(id)
+      }
+    } while (problems[diff][`pid${id}`] !== undefined)
+    problems[diff][`pid${id}`] = { question, choices: { ...choices } }
+    usedPIDs.push(id)
+  }
+  let problemItem = document.createElement("li")
+  let icon = document.createElement("span")
   let satisfied = true
   for (let req of publishQuestionReqs) {
     if (req.classList.contains("not_met")) {
@@ -40,38 +72,22 @@ const createProblemItem = (diff, newP = true) => {
       break
     }
   }
-  let q = document.createElement("li")
-  let icon = document.createElement("span")
   if (satisfied) {
-    q.classList.add("satisfied")
+    problemItem.classList.add("satisfied")
     icon.innerHTML = '<i class="fas fa-check-circle"></i>'
   } else {
-    q.classList.add("not_met")
+    problemItem.classList.add("not_met")
     icon.innerHTML = '<i class="fas fa-times-circle"></i>'
   }
-  // generate ID && store values
-  let id
-  do {
-    id = String(Math.round(Math.random() * 999))
-    if (id.length !== 3) {
-      id = id.padStart(3, "0")
-    }
-  } while (problems[diff][`pid${id}`] !== undefined)
-  problems[diff][`pid${id}`] = {
-    question: questionTextArea.innerHTML,
-    choices: { ...choices },
-  }
-  // do some extra stuff if newP is false... I still don't know when that happens
-
-  // create & append
   let p = document.createElement("p")
-  q.dataset.id = `pid${id}`
-  q.dataset.diff = diff
+  problemItem.dataset.pid = id
+  problemItem.dataset.diff = diff
+  problemItem.dataset.satisfied = satisfied
   p.innerText = `Problem ID: ${id}`
   let prev = document.createElement("button")
   setAttr(prev, "aria", "Preview problem")
   prev.innerHTML = '<i class="fas fa-eye"></i>'
-  prev.addEventListener("pointerup", prevProblem)
+  //   prev.addEventListener("pointerup", prevProblem)
   let edit = document.createElement("button")
   setAttr(edit, "aria", "Edit problem")
   edit.innerHTML = '<i class="fas fa-edit"></i>'
@@ -79,13 +95,21 @@ const createProblemItem = (diff, newP = true) => {
   let del = document.createElement("button")
   setAttr(del, "aria", "Delete problem")
   del.innerHTML = '<i class="fas fa-trash"></i>'
-  del.addEventListener("pointerup", delProblem)
-  q.appendChild(icon)
-  q.appendChild(p)
-  q.appendChild(prev)
-  q.appendChild(edit)
-  q.appendChild(del)
-  appendThisToThat(q, diff)
+  //   del.addEventListener("pointerup", delProblem)
+  problemItem.appendChild(icon)
+  problemItem.appendChild(p)
+  problemItem.appendChild(prev)
+  problemItem.appendChild(edit)
+  problemItem.appendChild(del)
+  appendThisToThat(problemItem, diff)
+}
+
+const unhideSection = (section) => {
+  if (section.classList.contains("hide")) {
+    section.classList.remove("hide")
+  }
+  if (section.parentElement.classList.contains("hide"))
+    section.parentElement.classList.remove("hide")
 }
 
 const appendThisToThat = (el, diff) => {
@@ -95,358 +119,155 @@ const appendThisToThat = (el, diff) => {
   switch (diff) {
     case "easy":
       easyProblemsSection.appendChild(el)
-      easyProblemsSection.classList.remove("hide")
+      unhideSection(easyProblemsSection)
       break
     case "standard":
       standardProblemsSection.appendChild(el)
-      standardProblemsSection.classList.remove("hide")
+      unhideSection(standardProblemsSection)
       break
     case "hard":
       hardProblemsSection.appendChild(el)
-      hardProblemsSection.classList.remove("hide")
+      unhideSection(hardProblemsSection)
       break
     case "advanced":
       advancedProblemsSection.appendChild(el)
-      advancedProblemsSection.classList.remove("hide")
+      unhideSection(advancedProblemsSection)
       break
     default:
-      noDiffProblemsSection.appendChild(el)
-      noDiffProblemsSection.classList.remove("hide")
+      noDiffProblemsSection
+        .appendChild(el)
+        .parentElement.classList.remove("hide")
+      unhideSection(noDiffProblemsSection)
       break
   }
 }
 
-//create
-const addAll = (e, obj = null) => {
-  document.activeElement.blur()
-  //when do i ever pass an obj to this function??
-  if (obj) {
-    let id = obj.id.substring(3)
-    let { question, choices } = obj.problem
-    let { diff } = obj
-    let newId
-    for (let key in choices) {
-      do {
-        newId = String(Math.round(Math.random() * 999))
-        if (newId.length !== 3) {
-          newId = newId.padStart(3, "0")
-        }
-      } while (choices[`cid${newId}`] !== undefined)
-      choices[`cid${newId}`] = choices[key]
-      delete choices[key]
-    }
-    let q = document.createElement("li")
-    let icon = document.createElement("span")
-    q.classList.add("not_met")
-    button.innerHTML = '<i class="fas fa-times-circle"></i>'
-    let p = document.createElement("p")
-    q.dataset.id = `pid${id}`
-    q.dataset.diff = diff
-    p.innerText = `Problem ID: ${id}`
-    let prev = document.createElement("button")
-    prev.setAttribute("role", "button")
-    prev.setAttribute("aria-label", "Preview problem")
-    prev.setAttribute("title", "Preview problem")
-    prev.innerHTML = '<i class="fas fa-eye"></i>'
-    prev.addEventListener("pointerup", prevProblem)
-    let edit = document.createElement("button")
-    edit.setAttribute("role", "button")
-    edit.setAttribute("aria-label", "Edit problem")
-    edit.setAttribute("title", "Edit problem")
-    edit.innerHTML = '<i class="fas fa-edit"></i>'
-    edit.addEventListener("pointerup", editProblem)
-    let del = document.createElement("button")
-    del.setAttribute("role", "button")
-    del.setAttribute("aria-label", "Delete problem")
-    del.setAttribute("title", "Delete problem")
-    del.innerHTML = '<i class="fas fa-trash"></i>'
-    del.addEventListener("pointerup", delProblem)
-    q.appendChild(icon)
-    q.appendChild(p)
-    q.appendChild(prev)
-    q.appendChild(edit)
-    q.appendChild(del)
-    appendThisToThat(q, diff)
-    return
+const sideScroll = (vis, hidden) => {
+  // lil weird in moz when dA1 isn't scrolled into view during onload
+  if (vis.dataset.hidden === "true") {
+    vis.scrollIntoView({ block: "nearest", inline: "nearest" })
+    hidden.dataset.hidden = true
+    delete vis.dataset.hidden
   }
-  let { refId, refDiff } = e.target.dataset
-  if (!refId) {
-    createProblemItem(difficultySelect.value)
-    discardAll()
-    hideOrShowThisTextArea("questionTextArea", "show")
-    questionSection.classList.add("hide")
+  if (vis === dA1) {
+    discardConf.value = ""
+  }
+}
+
+const editThisOne = (problemItem, diff, pid) => {
+  question = problems[diff][`pid${pid}`].question
+  choices = { ...problems[diff][`pid${pid}`].choices }
+  qDiff = diff
+  if (problemItem.classList.contains("not_met")) {
+    problemItem.classList.replace("not_met", "editing")
   } else {
-    let newDiff = difficultySelect.value
-    let qDOM = document.querySelector(`[data-id="${refId}"]`)
-    let icon = qDOM.querySelector("button")
-    if (newDiff !== refDiff) {
-      problems[newDiff][refId] = {
-        question: question,
-        choices: { ...choices },
-      }
-      delete problems[refDiff][refId]
-      let del = qDOM.querySelectorAll("button")[2]
-      del.dispatchEvent(new Event("pointerup"))
-      qDOM.dataset.diff = newDiff
-      appendThisToThat(qDOM, newDiff)
-    } else {
-      problems[refDiff][refId] = {
-        question: question,
-        choices: { ...choices },
-      }
+    problemItem.classList.replace("satisfied", "editing")
+  }
+  let p = problemItem.querySelector("p")
+  p.innerText = `Problem ID: ${pid} (editing)`
+  if (question !== "<p><br></p>") {
+    checkList(poseQItem, "check")
+    hideOrShowThisTextArea("questionTextArea", "hide")
+    createQItem()
+  }
+  if (qDiff !== "no_choice") {
+    setDiff(qDiff)
+    checkList(selectDiffItem, "check")
+  }
+  if (choices.answer) {
+    checkList(createCorrectAns, "check")
+    hideOrShowThisTextArea("correctAnswerTextArea", "hide")
+    createAnsItem()
+  }
+  for (let choice in choices) {
+    if (choice !== "answer") {
+      createChoiceItem(choice.substring(3))
     }
+  }
+  let editBtn = problemItem.querySelectorAll("button")[1]
+  addAllBtn.dataset.refId = pid
+  addAllBtn.dataset.refDiff = diff
+  p = addAllBtn.querySelector("p")
+  p.innerText = "Save Changes"
+  p = discardAllSlider.querySelector("p")
+  p.innerText = "Discard changes"
+  setAttr(editBtn, "aria", "Cancel edit")
+  setAttr(addAllBtn, "aria", "Save changes")
+  setAttr(dA1, "aria", "Discard changes")
+}
 
-    let satisfied = true
-    for (let req of publishQuestionReqs) {
-      if (req.classList.contains("not_met")) {
-        satisfied = false
-        break
-      }
-    }
-    if (satisfied) {
-      qDOM.classList.remove("not_met")
-      qDOM.classList.add("satisfied")
-      icon.innerHTML = '<i class="fas fa-check-circle"></i>'
-    } else {
-      qDOM.classList.remove("satisfied")
-      qDOM.classList.add("not_met")
-      icon.innerHTML = '<i class="fas fa-times-circle"></i>'
-    }
+const editCancel = (problemItem) => {
+  let { pid, satisfied } = problemItem.dataset
+  switch (satisfied) {
+    case "true":
+      problemItem.classList.replace("editing", "satisfied")
+      break
+    case "false":
+      problemItem.classList.replace("editing", "not_met")
+      break
+    default:
+      break
+  }
+  let p = problemItem.querySelector("p")
+  p.innerText = `Problem ID: ${pid}`
+  let editBtn = problemItem.querySelectorAll("button")[1]
+  setAttr(editBtn, "aria", "Edit problem")
+  p = addAllBtn.querySelector("p")
+  p.innerText = "Add All"
+  p = dA1.querySelector("p")
+  p.innerText = "Discard All"
+  setAttr(addAllBtn, "aria", "Add all to exercise")
+  setAttr(dA1, "aria", "Discard all")
+  delete addAllBtn.dataset.refId
+  delete addAllBtn.dataset.refDiff
+  discardAll()
+}
 
+//create
+const addAll = (e) => {
+  //check is there's even anything to add first,
+  // if all fields are empty and the difficulty is no_choice, don't add
+  const { refId } = e.target.dataset //for later
+  if (refId) {
+    // we're in the middle of updating a problem that is being edited
+  } else {
+    createProblemItem(qDiff)
+    sideScroll(dA1, dA2)
     discardAll()
-    let problem = document.querySelector(`[data-id="${refId}"]`)
-    if (problem.dataset.id === refId) {
-      problem.classList.remove("editing")
-      let p = problem.querySelector("p")
-      p.innerText = `Problem ID: ${refId.substring(3)}`
-    }
-    addAllBtn.setAttribute("aria-label", "Add all to exercise")
-    addAllBtn.setAttribute("title", "Add all to exercise")
-    let p = addAllBtn.querySelector("p")
-    p.innerText = "Add All"
-    discardAllBtn.setAttribute("aria-label", "Discard all")
-    discardAllBtn.setAttribute("title", "Discard all")
-    p = discardAllBtn.querySelector("p")
-    p.innerText = "Discard All"
-    delete e.target.dataset.refId
-    delete e.target.dataset.refDiff
-    // if there is a refId, simply locate the object and update it
+    // we're not updating anything and need to create/append a new dom element
   }
 }
 
 //read
-const prevProblem = (e) => {
-  document.activeElement.blur()
-  let { id, diff } = e.target.parentElement.dataset
-  let problem = problems[diff][id]
-  let pcs = problem.choices
-
-  overlayHeader.innerText = `Problem ID: ${id.substring(3)}`
-  let q = document.createElement("p")
-  q.innerHTML = problem.question
-  let options = []
-  let pcKeys = Object.keys(pcs)
-  if (problem.answer) {
-    options.push(problem.answer)
-    pcKeys.splice(pcKeys.indexOf("answer"), 1)
-  }
-  let rnd
-  let count = 0
-  while (options.length < 5 && count < 20) {
-    rnd = Math.floor(Math.random() * pcKeys.length)
-    let c = pcKeys[rnd]
-    count++
-    if (options.includes(pcs[c])) {
-      continue
-    }
-    options.push(pcs[c])
-  }
-  console.log(options, count)
-
-  for (let x of options) {
-  }
-  //get all choices
-
-  //pick any 3
-
-  let ul = document.createElement("ul")
-  let l1 = document.createElement("li")
-  let l2 = document.createElement("li")
-  let l3 = document.createElement("li")
-  let l4 = document.createElement("li")
-  overlayContent.appendChild(q)
-  overlay.classList.remove("hide")
-  console.log("previewing question")
-}
-
-const closeOverlay = () => {
-  overlayContent.innerHTML = ""
-  overlay.classList.add("hide")
-}
 
 //update
 const editProblem = (e) => {
   document.activeElement.blur()
-  if (choicesSection.querySelector("li")) deleteChoices()
-  let { target } = e
-  let li = target.parentElement
-  let { id: targetId } = li.dataset
-  if (li.classList.contains("editing")) {
-    li.classList.remove("editing")
-    let p = li.querySelector("p")
-    p.innerText = `Problem ID: ${targetId.substring(3)}`
-    setAttr(addAllBtn, "aria", "Add all to exercise")
-    delete addAllBtn.dataset.refId
-    delete addAllBtn.dataset.refDiff
-    p = addAllBtn.querySelector("p")
-    p.innerText = "Add All"
-    setAttr(discardAllBtn, "aria", "Discard all")
-    setAttr(target, "aria", "Edit problem")
-    p = discardAllBtn.querySelector("p")
-    p.innerText = "Discard All"
-    discardAll()
-    return
-  }
-  let { refId } = addAllBtn.dataset
-  if (refId && refId !== targetId) {
-    let li = problemSet.querySelector("li.editing")
-    let edit = li.querySelectorAll("button")[2]
-    edit.setAttribute("aria-label", "Edit problem")
-    edit.setAttribute("title", "Edit problem")
-    let { id } = li.dataset
-    li.classList.remove("editing")
-    let p = li.querySelector("p")
-    p.innerText = `Problem ID: ${id.substring(3)}`
-    discardAll()
-  }
-  nav.scrollIntoView({ block: "nearest", inline: "nearest" })
-  //add edit styles
-  li.classList.add("editing")
-  let p = li.querySelector("p")
-  p.innerText = `Problem ID: ${targetId.substring(3)} (editing)`
-  let { diff: targetDiff } = li.dataset
-  // store info refs in addAllBtn btn
-  addAllBtn.dataset.refId = targetId
-  addAllBtn.dataset.refDiff = targetDiff
-  // change text and labels on add/delete btns
-  addAllBtn.setAttribute("aria-label", "Save problem")
-  addAllBtn.setAttribute("title", "Save problem")
-  p = addAllBtn.querySelector("p")
-  p.innerText = "Save Problem"
-  discardAllBtn.setAttribute("aria-label", "Discard changes")
-  discardAllBtn.setAttribute("title", "Discard changes")
-  p = discardAllBtn.querySelector("p")
-  p.innerText = "Discard Changes"
-  target.setAttribute("aria-label", "Cancel edit")
-  target.setAttribute("title", "Cancel edit")
-  let q = problems[targetDiff][targetId]
-  // locate info and add to DOM
-  //add question
-  questionTextArea.innerHTML = q.question
-  if (
-    q.question !== "<p><br></p>" &&
-    q.question !== '<p><br data-mce-bogus="1"></p>'
-  ) {
-    poseQ.classList.replace("not_met", "satisfied")
-    i = poseQ.querySelector("i")
-    i.classList.replace("fa-times-circle", "fa-check-circle")
-    addQBtn.dataset.refId = targetId
-    addQBtn.dataset.refDiff = targetDiff
-    addQ()
-  }
-  //set difficulty
-  difficultySelect.value = targetDiff
-  difficultySelect.dispatchEvent(new Event("pointerup"))
-  //add answer
-  if (q.choices.answer) {
-    correctAnswerTextArea.innerHTML = q.choices.answer
-    addAnsBtn.dispatchEvent(new Event("pointerup"))
-  }
-  //add choices
-  let keys = Object.keys(q.choices)
-  choices = { ...q.choices }
-  for (let key of keys) {
-    if (key.startsWith("cid")) {
-      choicesTextArea.innerHTML = q.choices[key]
-      addChoiceBtn.dataset.refId = key
-      addChoiceBtn.dispatchEvent(new Event("pointerup"))
-    }
+  let problemItem = e.target.parentElement
+  let editingItem = problemSet.querySelector("li.editing")
+  const { pid, diff } = problemItem.dataset
+  if (!editingItem) {
+    editThisOne(problemItem, diff, pid)
+  } else if (editingItem.dataset.pid === pid) {
+    editCancel(problemItem)
+  } else {
+    editCancel(editingItem)
+    editThisOne(problemItem, diff, pid)
   }
 }
 
 //delete
-const discardAll = () => {
-  document.activeElement.blur()
-  let problem = problemSet.querySelector("li.editing")
-  if (problem) {
-    problem.classList.remove("editing")
-    let p = problem.querySelector("p")
-    let id = problem.dataset.id
-    p.innerText = `Problem ID: ${id.substring(3)}`
-    delete addAllBtn.dataset.refId
-    delete addAllBtn.dataset.refDiff
-    addAllBtn.setAttribute("aria-label", "Add all to exercise")
-    addAllBtn.setAttribute("title", "Add all to exercise")
-    p = addAllBtn.querySelector("p")
-    p.innerText = "Add All"
-    discardAllBtn.setAttribute("aria-label", "Discard all")
-    discardAllBtn.setAttribute("title", "Discard all")
-    p = discardAllBtn.querySelector("p")
-    p.innerText = "Discard All"
-  }
-  discardQBtn.dispatchEvent(new Event("pointerup"))
-  deleteQ()
-  discardChoice()
-  deleteChoices()
-  discardAnsBtn.dispatchEvent(new Event("pointerup"))
-  deleteAns()
-}
-
-const delProblem = (e) => {
-  let item = e.target.parentElement
-  let section = item.parentElement
-  let list = section.querySelectorAll("li")
-  if (list.length === 1) {
-    section.classList.add("hide")
-  }
-  let hide = true
-  for (let ul of problemSet.querySelectorAll("ul")) {
-    if (!ul.classList.contains("hide")) {
-      hide = false
-      break
-    }
-  }
-  if (hide) {
-    noProblemsYet.classList.remove("hide")
-  }
-  let { id: qId, diff: qDiff } = item.dataset
-  if (qId === addAllBtn.dataset.refId) {
-    addAllBtn.setAttribute("aria-label", "Add all to exercise")
-    addAllBtn.setAttribute("title", "Add all to exercise")
-    let p = addAllBtn.querySelector("p")
-    p.innerText = "Add all"
-    discardAllBtn.setAttribute("aria-label", "Discard all")
-    discardAllBtn.setAttribute("title", "Discard all")
-    p = discardAllBtn.querySelector("p")
-    p.innerText = "Discard All"
-    delete addAllBtn.dataset.refId
-    delete addAllBtn.dataset.refDiff
-  }
-  delete problems[qDiff][qId]
-  item.remove()
-}
-
 const confirmDiscardAll = (e) => {
   switch (e.target) {
     case dA1:
       document.activeElement.blur()
-      dA2.scrollIntoView({ block: "nearest", inline: "nearest" })
+      sideScroll(dA2, dA1)
       break
     case discardBackBtn:
-      dA1.scrollIntoView({ block: "nearest", inline: "nearest" })
-      discardConf.value = ""
+      sideScroll(dA1, dA2)
       break
     case discardAllBtn:
+      document.activeElement.blur()
       if (discardConf.value !== "yes") {
         dA2p.classList.add("flash")
         setTimeout(() => {
@@ -454,15 +275,29 @@ const confirmDiscardAll = (e) => {
         }, 600)
         return
       } else {
+        let editingItem = problemSet.querySelector("li.editing")
+        if (editingItem) editCancel(editingItem)
         discardAll()
-        dA1.scrollIntoView({ block: "nearest", inline: "nearest" })
-        discardConf.value = ""
-        nav.scrollIntoView()
+        sideScroll(dA1, dA2)
       }
     default:
       break
   }
 }
+
+const discardAll = () => {
+  document.activeElement.blur()
+  deleteQ()
+  //   discardQBtn.dispatchEvent(new Event("pointerup"))  //looks like i don't need this
+  discardChoice()
+  deleteChoices()
+  deleteAns()
+  //   discardAnsBtn.dispatchEvent(new Event("pointerup")) //or this
+}
+
 addAllBtn.addEventListener("pointerup", addAll)
 discardAllSlider.addEventListener("pointerup", confirmDiscardAll)
-overlayCloseBtn.addEventListener("pointerup", closeOverlay)
+listTogglers.forEach((toggler) =>
+  toggler.addEventListener("pointerup", toggleList)
+)
+// overlayCloseBtn.addEventListener("pointerup", closeOverlay)

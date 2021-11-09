@@ -1,6 +1,6 @@
 //this is for the onload, draft, publish, and any util functions
 // that apply to multiple sections
-const publishQuestionReqs = document.querySelectorAll(".to_publish_question li")
+const publishQuestionReqs = document.querySelectorAll(".to_publish_reqs.q li")
 const labelPs = Array.from(
   document.querySelectorAll(".label-wrapper p")
 ).splice(3)
@@ -167,14 +167,11 @@ const publishExercise = (e) => {
   if (!value) {
     titleInput.value = ""
     nav.scrollIntoView({ block: "nearest", inline: "nearest" })
-    return unauthorized("Create to title to save this exercise.", pTitle)
+    return unauthorized(pTitle)
   }
   if (inputValues.length === 0) {
     nav.scrollIntoView({ block: "nearest", inline: "nearest" })
-    return unauthorized(
-      "Create at least one tag to publish this exercise.",
-      pTag
-    )
+    return unauthorized(pTag)
   }
   saveExercise("published")
 }
@@ -184,7 +181,7 @@ const draftExercise = () => {
   if (!value) {
     titleInput.value = ""
     nav.scrollIntoView({ block: "nearest", inline: "nearest" })
-    return unauthorized("Create to title to save this exercise", pTitle)
+    return unauthorized(pTitle)
   }
   saveExercise("draft")
 }

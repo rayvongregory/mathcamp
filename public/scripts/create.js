@@ -100,13 +100,10 @@ const addTag = (e) => {
 }
 tagsInput.addEventListener("keyup", addTag)
 
-const unauthorized = (string, element) => {
-  let text = element.innerHTML
-  element.innerHTML = `<p>${string}</p>`
-  element.style.color = "darkred"
+const unauthorized = (element) => {
+  element.classList.remove("hide")
   setTimeout(() => {
-    element.innerHTML = text
-    element.style.color = ""
+    element.classList.add("hide")
   }, 3000)
 }
 

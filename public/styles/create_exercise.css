@@ -280,7 +280,7 @@
 
 .add_delete_q_buttons i + p {
     margin-top: 5px;
-    font-size: 1rem;
+    font-size: 0.85rem;
     white-space: nowrap;
     pointer-events: none;
     user-select: none;
@@ -295,7 +295,7 @@
 }
 
 
-.problem_set ul {
+.problem_set section {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -303,9 +303,20 @@
     width: 100%;
     height: fit-content;
     height: -moz-fit-content;
-    padding: 1rem 1rem 2rem;
+    padding: 1rem;
     background-color: white;
     border: var(--tinymceBorder);
+}
+
+
+.problem_set section ul {
+    padding-top: 1rem;
+    transition: height 200ms ease-in-out;
+    /* overflow: hidden; */
+}
+
+.problem_set section ul.grow {
+    /* max-height: 1000px; */
 }
 
 .correct_answer, 
@@ -349,13 +360,27 @@
 .question_section li {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 10px;
     border: var(--border);
     color: var(--deepTeal);
     box-shadow: var(--boxShadow);
     pointer-events: none;
 }
+
+.question_choices li, 
+.correct_answer li, 
+.question_section li {
+    padding: 10px;
+    gap: 1rem;
+}
+
+.problem_set li {
+    padding: 5px 10px;
+}
+
+.problem_set li span {
+    margin-right: 0.75rem;
+}
+
 
 .problem_set li + li {
     margin-top: 10px;
@@ -379,6 +404,13 @@
     pointer-events: all;
 }
 
+.problem_set li > button {
+    width: 34px;
+    height: 34px;
+    border-radius: 3px;
+}
+
+
 .question_choices li > button i, 
 .problem_set li > button i, 
 .correct_answer li > button i, 
@@ -387,19 +419,21 @@
 }
 
 .question_choices button:hover, 
-.problem_set button:hover, 
 .correct_answer button:hover, 
 .question_section button:hover,
 .question_choices button:focus, 
-.problem_set button:focus, 
 .correct_answer button:focus, 
 .question_section button:focus  {
     color: var(--deepOrange);
     cursor: pointer;
 }
 
+.problem_set button:hover, 
+.problem_set button:focus {
+    cursor: pointer;
+}
+
 .question_choices button:active, 
-.problem_set button:active, 
 .correct_answer button:active, 
 .question_section button:active  {
     color: var(--brightOrange);
@@ -414,6 +448,40 @@
     padding: 10px;
     border: var(--tinymceBorder);
     background-color: white;
+}
+
+.problem_set .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px 0 5px;
+}
+
+.problem_set .header h4 {
+    font-size: 1.125rem;
+}
+
+.problem_set .header button {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+}
+
+.problem_set .header button i {
+    pointer-events: none;
+}
+
+.problem_set .header button:hover,
+.problem_set .header button:focus {
+    border: var(--border);
+    background-color: var(--tinymceGray);
+}
+
+.problem_set .header button:active {
+    border: var(--border);
+    background-color: var(--tinymceGrayActive);
 }
 
 .problem_set li.editing, 
@@ -453,4 +521,21 @@
 .correct_answer.pop-top, 
 .question_choices.pop-top {
     border-top: none;
+}
+
+.problem_set li.satisfied, .problem_set li.satisfied button {
+    color: var(--deepTeal);
+}
+
+.problem_set li.not_met, .problem_set li.not_met button {
+    color: darkred;
+}
+
+.problem_set li.not_met button:hover,
+.problem_set li.not_met button:focus {
+    background-color: var(--tinymceGray);
+}
+
+.problem_set li.not_met button:active {
+    background-color: var(--tinymceGrayActive);
 }

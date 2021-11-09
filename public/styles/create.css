@@ -58,6 +58,7 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-right: 5px;
     width: 100%;
     font-size: 1.125rem;
 }
@@ -177,7 +178,7 @@ footer {
 .publish_save_buttons p {
     padding-top: 5px;
     white-space: nowrap;
-    font-size: 0.85em;
+    font-size: 0.85rem;
     pointer-events: none;
 }
 

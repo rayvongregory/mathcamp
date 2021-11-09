@@ -1,4 +1,4 @@
-// I think this is done... 11/8/2021 @ 12:10 AM
+// I think this is done... 11/8/2021 @ 4:38PM
 const addChoiceBtn = document.querySelector("#choice_add")
 const discardChoiceBtn = document.querySelector("#choice_discard")
 const choicesSection = document.querySelector(".question_choices")
@@ -17,11 +17,11 @@ const checkForTen = () => {
 }
 
 const uniqueChoice = (text) => {
-  if (text === "<p><br></p>" || text === '<p><br data-mce-bogus="1"></p>') {
+  if (text.innerText.trim() === "" && !text.querySelector("img")) {
     return false
   }
   for (let choice in choices) {
-    if (choices[choice] === text) {
+    if (choices[choice] === text.innerHTML) {
       return false
     }
   }
@@ -48,9 +48,8 @@ const createChoiceItem = (id = null) => {
         id = id.padStart(3, "0")
       }
     } while (choices[`cid${id}`] !== undefined)
+    choices[`cid${id}`] = choicesTextArea.innerHTML
   }
-  choices[`cid${id}`] = choicesTextArea.innerHTML
-  //   console.log(choices)
   let choiceItem = document.createElement("li")
   let p = document.createElement("p")
   choiceItem.dataset.cid = id
@@ -78,7 +77,7 @@ const addChoice = (e) => {
   // try finding a choice (or answer) with the same innerHTML. if found, don't add
   let { cid } = e.target.dataset
   switch (
-    uniqueChoice(choicesTextArea.innerHTML) ||
+    uniqueChoice(choicesTextArea) ||
     (cid !== undefined && choicesTextArea.innerHTML === choices[`cid${cid}`])
   ) {
     case false:
@@ -101,13 +100,13 @@ const addChoice = (e) => {
       } else {
         // create a choice item and its id
         createChoiceItem()
+        choicesTextArea.innerHTML = "<p><br></p>"
       }
       break
     default:
       break
   }
   checkForTen()
-  choicesTextArea.innerHTML = "<p><br></p>"
 }
 
 //update
@@ -180,10 +179,10 @@ const deleteChoice = (e) => {
 const deleteChoices = () => {
   let choicesList = choicesSection.querySelectorAll("li")
   for (let choice of choicesList) {
-    delete choices[choice.dataset.id]
+    delete choices[`cid${choice.dataset.cid}`]
     choice.remove()
   }
-  if (addChoiceBtn.dataset.refId) delete addChoiceBtn.dataset.refId
+  if (addChoiceBtn.dataset.cid) delete addChoiceBtn.dataset.cid
   choicesSection.classList.add("hide")
   choicesTextArea.innerHTML = "<p><br></p>"
 }

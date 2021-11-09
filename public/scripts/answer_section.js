@@ -1,4 +1,4 @@
-// I think this is done... 11/7/2021 @ 6:48PM
+// I think this is done... 11/8/2021 @ 4:38PM
 //cache
 const extraOptions_1 = document.querySelectorAll(".extra-options")[1]
 const addAnsBtn = document.querySelector("#answer_add")
@@ -31,7 +31,7 @@ const addAns = (e) => {
   let { refId: ref } = e.target.dataset
   // not sure if i need to pass that ref, we'll see
   switch (
-    uniqueChoice(correctAnswerTextArea.innerHTML) ||
+    uniqueChoice(correctAnswerTextArea) ||
     correctAnswerTextArea.innerHTML === choices.answer
   ) {
     case false:
@@ -112,14 +112,14 @@ const deleteAns = () => {
   if (li) {
     li.remove()
     delete choices.answer
-    checkList(createCorrectAns, "uncheck")
-    hideOrShowThisTextArea("correctAnswerTextArea", "show")
-    correctAnswerTextArea.innerHTML = "<p><br></p>"
-    correctAnswerSection.classList.add("hide")
-    setAttr(addAnsBtn, "aria", "Add answer")
-    setAttr(discardAnsBtn, "aria", "Discard")
-    // delete addAnsBtn.dataset.ansRef
   }
+  checkList(createCorrectAns, "uncheck")
+  hideOrShowThisTextArea("correctAnswerTextArea", "show")
+  correctAnswerTextArea.innerHTML = "<p><br></p>"
+  correctAnswerSection.classList.add("hide")
+  setAttr(addAnsBtn, "aria", "Add answer")
+  setAttr(discardAnsBtn, "aria", "Discard")
+  // delete addAnsBtn.dataset.ansRef
   checkForTen()
 }
 
