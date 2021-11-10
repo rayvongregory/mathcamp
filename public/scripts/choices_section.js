@@ -92,7 +92,7 @@ const addChoice = (e) => {
         let p = choiceItem.querySelector("p")
         let editBtn = choiceItem.querySelector("button")
         removeNonsense(choicesTextArea)
-        choices[`$cid${cid}`] = choicesTextArea.innerHTML
+        choices[`cid${cid}`] = choicesTextArea.innerHTML
         choiceItem.classList.remove("editing")
         p.innerText = `Choice ID: ${cid}`
         setAttr(editBtn, "aria", "Edit choice")
