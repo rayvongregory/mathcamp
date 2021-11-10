@@ -1,4 +1,5 @@
 // I think this is done... 11/8/2021 @ 4:38PM
+// fuck there's something wrong... 11/10/2021 @ 6:00 AM
 const addChoiceBtn = document.querySelector("#choice_add")
 const discardChoiceBtn = document.querySelector("#choice_discard")
 const choicesSection = document.querySelector(".question_choices")
@@ -48,6 +49,7 @@ const createChoiceItem = (id = null) => {
         id = id.padStart(3, "0")
       }
     } while (choices[`cid${id}`] !== undefined)
+    removeNonsense(choicesTextArea)
     choices[`cid${id}`] = choicesTextArea.innerHTML
   }
   let choiceItem = document.createElement("li")
@@ -76,6 +78,7 @@ const addChoice = (e) => {
   document.activeElement.blur()
   // try finding a choice (or answer) with the same innerHTML. if found, don't add
   let { cid } = e.target.dataset
+  removeNonsense(choicesTextArea)
   switch (
     uniqueChoice(choicesTextArea) ||
     (cid !== undefined && choicesTextArea.innerHTML === choices[`cid${cid}`])
@@ -88,6 +91,7 @@ const addChoice = (e) => {
       if (choiceItem) {
         let p = choiceItem.querySelector("p")
         let editBtn = choiceItem.querySelector("button")
+        removeNonsense(choicesTextArea)
         choices[`$cid${cid}`] = choicesTextArea.innerHTML
         choiceItem.classList.remove("editing")
         p.innerText = `Choice ID: ${cid}`
@@ -95,12 +99,12 @@ const addChoice = (e) => {
         setAttr(addChoiceBtn, "aria", "Add choice")
         setAttr(discardChoiceBtn, "aria", "Discard")
         delete e.target.dataset.cid
-        choicesTextArea.innerHTML = "<p><br></p>"
+        choicesTextArea.innerHTML = "<p></p>"
         // don't need to create a choice item, just need to update the obj using id
       } else {
         // create a choice item and its id
         createChoiceItem()
-        choicesTextArea.innerHTML = "<p><br></p>"
+        choicesTextArea.innerHTML = "<p></p>"
       }
       break
     default:
@@ -141,7 +145,7 @@ const editChoice = (e) => {
 //delete
 const discardChoice = () => {
   document.activeElement.blur()
-  choicesTextArea.innerHTML = "<p><br></p>"
+  choicesTextArea.innerHTML = "<p></p>"
   let { cid } = addChoiceBtn.dataset
   if (cid) {
     setAttr(addChoiceBtn, "aria", "Add choice to question")
@@ -163,10 +167,10 @@ const deleteChoice = (e) => {
     delete addChoiceBtn.dataset.cid
     setAttr(addChoiceBtn, "aria", "Add choice to question")
     setAttr(discardChoiceBtn, "aria", "Discard")
+    choicesTextArea.innerHTML = "<p></p>"
   }
   item.remove()
   delete choices[`cid${cid}`]
-  choicesTextArea.innerHTML = "<p><br></p>"
   checkForTen()
   if (
     Object.keys(choices).length === 0 ||
@@ -184,7 +188,7 @@ const deleteChoices = () => {
   }
   if (addChoiceBtn.dataset.cid) delete addChoiceBtn.dataset.cid
   choicesSection.classList.add("hide")
-  choicesTextArea.innerHTML = "<p><br></p>"
+  choicesTextArea.innerHTML = "<p></p>"
 }
 
 addChoiceBtn.addEventListener("pointerup", addChoice)

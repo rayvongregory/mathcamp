@@ -15,10 +15,10 @@ const unauthorized = (string, remove = false) => {
     response.classList.remove("success")
   }
   response.classList.add("unauthorized")
-  response.innerHTML = string
+  response.innerText = string
   if (remove) {
     setTimeout(() => {
-      response.innerHTML = ""
+      response.innerText = ""
       response.classList.remove("unauthorized")
     }, 3000)
   }
@@ -29,10 +29,10 @@ const authorized = (string, remove = false) => {
     response.classList.remove("unauthorized")
   }
   response.classList.add("success")
-  response.innerHTML = string
+  response.innerText = string
   if (remove) {
     setTimeout(() => {
-      response.innerHTML = ""
+      response.innerText = ""
       response.classList.remove("success")
     }, 3000)
   }
@@ -43,7 +43,7 @@ const backHome = (string = "Redirecting to home page...") => {
     setTimeout(() => {
       window.location.href = "/"
     }, 1000)
-    response.innerHTML = string
+    response.innerText = string
   }, 1000)
 }
 

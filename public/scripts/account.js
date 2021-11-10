@@ -12,10 +12,10 @@ const getAccountInfo = async () => {
     const {
       data: { fname, lname, dname, email },
     } = await axios.get(`/api/v1/users/${token.split(" ")[1]}`)
-    firstName.innerHTML = fname
-    lastName.innerHTML = lname
-    displayName.innerHTML = dname
-    accountEmail.innerHTML = email
+    firstName.innerText = fname
+    lastName.innerText = lname
+    displayName.innerText = dname
+    accountEmail.innerText = email
   } catch (err) {
     console.error(err)
   }
@@ -95,17 +95,17 @@ const handleUpdate = async () => {
   let name = ""
   let { fname, lname, dname } = formData
   if (!fname) {
-    name += firstName.innerHTML
+    name += firstName.innerText
   } else {
     name += fname
   }
   if (!lname) {
-    name += ` ${lastName.innerHTML}`
+    name += ` ${lastName.innerText}`
   } else {
     name += ` ${lname}`
   }
-  if (name !== `${firstName.innerHTML} ${lastName.innerHTML}` || dname) {
-    response.innerHTML = "Updating your name(s)..."
+  if (name !== `${firstName.innerText} ${lastName.innerText}` || dname) {
+    response.innerText = "Updating your name(s)..."
     try {
       const { data } = await axios.patch(
         `/api/v1/users/${token.split(" ")[1]}`,
@@ -116,15 +116,15 @@ const handleUpdate = async () => {
       )
       if (!fname) {
       } else {
-        firstName.innerHTML = fname
+        firstName.innerText = fname
       }
       if (!lname) {
       } else {
-        lastName.innerHTML = lname
+        lastName.innerText = lname
       }
       if (dname) {
-        displayName.innerHTML = dname
-        nameWrapH3.innerHTML = dname
+        displayName.innerText = dname
+        nameWrapH3.innerText = dname
         asideLinks.style.width = `${nameWrap.offsetWidth}px`
       }
       authorized(data.msg, true)
@@ -138,8 +138,8 @@ const handleUpdate = async () => {
   let { email } = formData
   if (email && !email.match(emailPattern)) {
     return unauthorized("Please enter a valid email address.", true)
-  } else if (email && email !== accountEmail.innerHTML) {
-    response.innerHTML = "Updating your email..."
+  } else if (email && email !== accountEmail.innerText) {
+    response.innerText = "Updating your email..."
     console.log(token)
     try {
       const { data } = await axios.patch(
@@ -150,7 +150,7 @@ const handleUpdate = async () => {
       localStorage.setItem("token", data.accessToken)
       token = data.accessToken
       authorized(data.msg, true)
-      accountEmail.innerHTML = email
+      accountEmail.innerText = email
       console.log(accountEmail)
     } catch (err) {
       console.error(err)
@@ -174,7 +174,7 @@ const handleUpdate = async () => {
   }
 
   if (password && npassword) {
-    response.innerHTML = "Updating your password..."
+    response.innerText = "Updating your password..."
     try {
       const { data } = await axios.patch(
         `/api/v1/users/${token.split(" ")[1]}`,
@@ -189,18 +189,7 @@ const handleUpdate = async () => {
       console.error(err)
     }
   }
-  // if (!response.classList.contains("unauthorized")) {
-  //   setTimeout(() => {
-  //     setTimeout(() => {
-  //       location.reload()
-  //     }, 1000)
-  //     authorized("Info updated...")
-  //   }, 1000)
-  // } else {
-  //   response.innerHTML += " Other account information may have been updated."
-  // setTimeout(() => {
-  //   location.reload()
-  // }, 2000)
+
   //! don't reload the page, that's lazy
   for (let button of editBtns) {
     let i = button.querySelector("i")

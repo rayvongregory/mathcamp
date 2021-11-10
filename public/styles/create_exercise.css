@@ -10,15 +10,30 @@
     z-index: 5;
 }
 
-.overlay___center {
+.overlay___card {
     position: relative;
-    width: 500px;
+    width: clamp(600px, 80vw, 800px);
     background-color: var(--neutralLight);
     border-radius: 10px;
     overflow: hidden;
 }
 
-.overlay___center span {
+.overlay___header h3 {
+    height: 58px;
+    padding: 10px 15px;
+    color: white;
+    font-size: 2rem;
+}
+
+.overlay___header h3.not_met {
+    background-color: var(--deepOrange);
+}
+
+.overlay___header h3.satisfied {
+    background-color: var(--deepTeal);
+}
+
+.overlay___header span {
     position: absolute;
     top: 10px;
     right: 11px;
@@ -28,30 +43,83 @@
     pointer-events: all;
 }
 
-.overlay___center span:hover {
+.overlay___header span:hover {
     cursor: pointer;
     color: var(--tinymceGray);
 }
 
 .overlay___body {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     margin: auto;
-}
-
-.overlay___body h3 {
-    font-size: 2rem;
-    background-color: var(--deepOrange);
-    color: white;
-    padding: 10px 15px;
-}
-
-.overlay___body p {
-    font-size: 1.25rem;
-}
-
-.overlay___content {
     padding: 1rem 1rem 2rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
+.overlay___body > p {
+    font-size: 1.25rem;
+    margin: 0 1rem;
+}
+
+.overlay___body form {
+    display: flex;
+    flex-direction: column;
+    margin: 1.5rem 1rem;
+}
+
+.overlay___body label {
+    display: flex;
+    gap: 0.75rem;
+    width: fit-content;
+    width: -moz-fit-content;
+    /* align-items:baseline; */
+}
+
+.overlay___body label + label {
+    margin-top: 1rem;
+}
+
+
+
+.overlay___body button {
+    width: fit-content;
+    width: -moz-fit-content;
+    align-self: center;
+    padding: 1rem;
+    border-radius: 50%;
+    color: white;
+    border: none;
+    box-shadow: var(--boxShadow);
+    font-size: 1rem;
+    transition: transform 25ms ease-in-out;
+}
+
+.overlay___body button.not_met {
+    background-color: var(--deepOrange);
+}
+
+.overlay___body button.not_met:hover,
+.overlay___body button.not_met:focus {
+    background-color: var(--brightOrange);
+    cursor: pointer;
+}
+
+.overlay___body button.satisfied {
+    background-color: var(--deepTeal);
+}
+
+.overlay___body button.satisfied:hover,
+.overlay___body button.satisfied:focus {
+    background-color: var(--brightTeal);
+    cursor: pointer;
+}
+
+.overlay___body button.not_met:active,
+.overlay___body button.satisfied:active {
+    transform: scale(0.95);
+}
+
 
 .three-two-grid {
     display: grid;
@@ -311,12 +379,9 @@
 
 .problem_set section ul {
     padding-top: 1rem;
-    transition: height 200ms ease-in-out;
-    /* overflow: hidden; */
-}
-
-.problem_set section ul.grow {
-    /* max-height: 1000px; */
+    height: auto;
+    transition: height 100ms ease-in-out;
+    overflow: hidden;
 }
 
 .correct_answer, 

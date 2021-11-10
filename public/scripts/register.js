@@ -21,7 +21,7 @@ const handleRegistration = async () => {
     return unauthorized("Passwords do not match.")
   }
 
-  response.innerHTML = "Registering..."
+  response.innerText = "Registering..."
   const name = `${fname} ${lname}`
   const displayName = `${fname} ${lname[0]}.`
   try {

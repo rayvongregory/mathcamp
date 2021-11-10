@@ -397,6 +397,7 @@ pointer-events: none;
     justify-content: center;
     align-items: center;
     font-size: 0.65rem;
+    background-color: white;
 }
 
 #delpassword {
@@ -466,8 +467,8 @@ pointer-events: none;
 }
 
 @media (min-width: 320px) {
-    #q, #delpassword {
-        font-size: 0.75rem;
+    #q {
+        font-size: 0.8rem;
     }
 
     #cancel, #proceed, #back, #confirm {
@@ -485,10 +486,15 @@ pointer-events: none;
 }
 
 @media (min-width: 576px) {
-    #q, #delpassword {
-        font-size: 0.8rem;
+    #q {
+        font-size: 1rem;
+
     }
 
+    #delpassword {
+        font-size: 0.9rem;
+    }
+    
     .grid {
         padding: 0.75rem 0.75rem 4rem;
     }
@@ -519,9 +525,9 @@ pointer-events: none;
 }
 
 @media (min-width: 768px) {
-    #q, #delpassword {
+    /* #q {
         font-size: 0.9rem;
-    }
+    } */
 
     .grid, 
     .grid.register {
@@ -561,8 +567,8 @@ pointer-events: none;
 }
 
 @media (min-width: 992px) {
-    #q {
+    /* #q {
         font-size: 1rem;
     }
-    
+     */
 }

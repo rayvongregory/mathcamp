@@ -28,7 +28,7 @@ let questionTextAreaDiv,
 const hideOrShowThisTextArea = (textarea, action) => {
   switch (`${textarea} ${action}`) {
     case "questionTextArea hide":
-      questionTextArea.innerHTML = "<p><br></p>"
+      questionTextArea.innerHTML = "<p></p>"
       questionSection.classList.remove("hide")
       questionSection.classList.remove("pop-top")
       questionTextAreaDiv.classList.add("hide")
@@ -40,7 +40,7 @@ const hideOrShowThisTextArea = (textarea, action) => {
       extraOptions_0.classList.remove("hide")
       break
     case "correctAnswerTextArea hide":
-      correctAnswerTextArea.innerHTML = "<p><br></p>"
+      correctAnswerTextArea.innerHTML = "<p></p>"
       correctAnswerSection.classList.remove("hide")
       correctAnswerSection.classList.remove("pop-top")
       correctAnswerTextAreaDiv.classList.add("hide")
@@ -84,12 +84,22 @@ const setAttr = (btn, attr, val) => {
     btn.setAttribute("aria-label", val)
     btn.setAttribute("title", val)
   } else if (attr !== "aria" && val) {
-    //not tested
-    btn.setAttr(attr, val)
-  } else if (attr && !val) {
-    //not tested
-    delete btn[attr]
+    //not tested, probably works
+    btn.setAttribute(attr, val)
   }
+}
+
+const removeNonsense = (codeBlock) => {
+  let breaks = codeBlock.querySelectorAll("br")
+  let ps = codeBlock.querySelectorAll("p")
+  breaks.forEach((br) => {
+    br.remove()
+  })
+  ps.forEach((p) => {
+    if (p.innerText.trim() === "" && !p.querySelector("img")) {
+      p.remove()
+    }
+  })
 }
 
 //create
@@ -143,9 +153,9 @@ const defineTextAreas = () => {
   questionTextArea = tinymce.DOM.win[0].document.body
   correctAnswerTextArea = tinymce.DOM.win[1].document.body
   choicesTextArea = tinymce.DOM.win[2].document.body
-  questionTextArea.innerHTML = "<p><br></p>"
-  correctAnswerTextArea.innerHTML = "<p><br></p>"
-  choicesTextArea.innerHTML = "<p><br></p>"
+  questionTextArea.innerHTML = "<p></p>"
+  correctAnswerTextArea.innerHTML = "<p></p>"
+  choicesTextArea.innerHTML = "<p></p>"
 }
 
 const saveExercise = async (status) => {

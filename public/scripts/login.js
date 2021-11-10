@@ -5,7 +5,7 @@ const handleLogin = async () => {
       return unauthorized("Please fill out all fields to continue.", true)
     }
   }
-  response.innerHTML = "Logging in..."
+  response.innerText = "Logging in..."
   let { email, password } = formData
   email = email.toLowerCase()
   try {

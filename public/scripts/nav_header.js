@@ -51,7 +51,7 @@ const getDisplayName = async () => {
   if (token) {
     try {
       const { data } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
-      nameWrapH3.innerHTML = data.displayName
+      nameWrapH3.innerText = data.displayName
       avatar.classList.remove("hide")
       avatar.src = data.avatar
       role = data.role
@@ -70,7 +70,7 @@ const getDisplayName = async () => {
       location.reload()
     }
   } else {
-    nameWrapH3.innerHTML = "Guest"
+    nameWrapH3.innerText = "Guest"
   }
   html.classList.remove("invis")
   let noClass = document.querySelectorAll('[class=""]')

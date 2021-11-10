@@ -6,7 +6,7 @@ const discardQBtn = document.querySelector("#q_discard")
 const poseQItem = document.querySelector("#question")
 const questionSection = document.querySelector(".question_section")
 const selectDiffItem = document.querySelector("#difficulty")
-let question = "<p><br></p>"
+let question = "<p></p>"
 let qDiff = "no_choice"
 
 //util
@@ -88,51 +88,6 @@ const createQItem = () => {
   questionSection.appendChild(questionItem)
 }
 
-//create
-// const addQ_OLD = () => {
-//   document.activeElement.blur()
-//   if (!uniqueQ(questionTextArea.innerHTML)) {
-//     labelPs[0].classList.remove("hide")
-//     setTimeout(() => {
-//       labelPs[0].classList.add("hide")
-//     }, 2000)
-//     //why delete it? wouldn't that make the util fcn not work properly the next time?
-//     // delete addQBtn.dataset.refId
-//     // delete addQBtn.dataset.refDiff
-//     return
-//   }
-//   question = questionTextArea.innerHTML
-//   let questionItem = questionSection.querySelector("li")
-//   if (!questionItem) {
-//     createQItem()
-//     i = poseQItem.querySelector("i")
-//     questionSection.classList.remove("pop-top")
-//   } else {
-//     question = questionTextArea.innerHTML
-//     questionItem.classList.remove("editing")
-//     let p = questionItem.querySelector("p")
-//     p.innerText = "Question"
-//     questionSection.classList.remove("pop-top")
-//     addQBtn.setAttribute("aria-label", "Add question")
-//     addQBtn.setAttribute("title", "Add question")
-//   }
-//   let questionIT = questionTextArea.innerText.trim()
-//   if (
-//     question !== "<p><br></p>" &&
-//     question !== '<p><br data-mce-bogus="1"></p>' &&
-//     questionIT !== "" &&
-//     questionIT !== "\n"
-//   ) {
-//     i.classList.replace("fa-times-circle", "fa-check-circle")
-//     poseQItem.classList.replace("not_met", "satisfied")
-//   }
-//   questionSection.classList.remove("hide")
-//   questionTextAreaDiv.classList.add("hide")
-//   extraOptions_0.classList.add("hide")
-//   delete addQBtn.dataset.refId
-//   delete addQBtn.dataset.refDiff
-// }
-
 const addQ = () => {
   document.activeElement.blur()
   switch (uniqueQ(questionTextArea)) {
@@ -140,6 +95,7 @@ const addQ = () => {
       showNotUniqueMsg(labelPs[0])
       break
     case true:
+      removeNonsense(questionTextArea)
       question = questionTextArea.innerHTML
       checkList(poseQItem, "check")
       hideOrShowThisTextArea("questionTextArea", "hide")
@@ -203,7 +159,7 @@ const editQ = (e) => {
 const discardQ = (e) => {
   document.activeElement.blur()
   let { target } = e
-  questionTextArea.innerHTML = "<p><br></p>"
+  questionTextArea.innerHTML = "<p></p>"
   setDiff(qDiff)
   let li = questionSection.querySelector("li")
   if (li) {
@@ -216,7 +172,7 @@ const discardQ = (e) => {
     let p = li.querySelector("p")
     p.innerText = "Question"
   } else {
-    question = "<p><br></p>"
+    question = "<p></p>"
     difficultySelect.value = "no_choice"
   }
 }
@@ -225,8 +181,8 @@ const deleteQ = () => {
   document.activeElement.blur()
   let li = questionSection.querySelector("li")
   if (li) li.remove()
-  question = "<p><br></p>"
-  questionTextArea.innerHTML = "<p><br></p>"
+  question = "<p></p>"
+  questionTextArea.innerHTML = "<p></p>"
   setAttr(addQBtn, "aria", "Add question")
   setAttr(discardQBtn, "aria", "Discard")
   checkList(poseQItem, "uncheck")

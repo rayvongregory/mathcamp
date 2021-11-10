@@ -38,6 +38,7 @@ const addAns = (e) => {
       showNotUniqueMsg(labelPs[1])
       break
     case true:
+      removeNonsense(correctAnswerTextArea)
       choices.answer = correctAnswerTextArea.innerHTML
       checkList(createCorrectAns, "check")
       hideOrShowThisTextArea("correctAnswerTextArea", "hide")
@@ -92,7 +93,7 @@ const editAns = (e) => {
 const discardAns = (e) => {
   document.activeElement.blur()
   let { target } = e
-  correctAnswerTextArea.innerHTML = "<p><br></p>"
+  correctAnswerTextArea.innerHTML = "<p></p>"
   let correctAnswerItem = correctAnswerSection.querySelector("li")
   if (correctAnswerItem) {
     let edit = correctAnswerItem.querySelector("button")
@@ -115,7 +116,7 @@ const deleteAns = () => {
   }
   checkList(createCorrectAns, "uncheck")
   hideOrShowThisTextArea("correctAnswerTextArea", "show")
-  correctAnswerTextArea.innerHTML = "<p><br></p>"
+  correctAnswerTextArea.innerHTML = "<p></p>"
   correctAnswerSection.classList.add("hide")
   setAttr(addAnsBtn, "aria", "Add answer")
   setAttr(discardAnsBtn, "aria", "Discard")
