@@ -1,10 +1,10 @@
 // I think this is done... 11/8/2021 @ 4:38PM
 //cache
-const extraOptions_1 = document.querySelectorAll(".extra-options")[1]
-const addAnsBtn = document.querySelector("#answer_add")
-const discardAnsBtn = document.querySelector("#answer_discard")
-const createCorrectAns = document.querySelector("#correct_answer")
-const correctAnswerSection = document.querySelector(".correct_answer")
+const extraOptions_1 = extraOptions[1]
+const addAnsBtn = document.getElementById("answer_add")
+const discardAnsBtn = document.getElementById("answer_discard")
+const createCorrectAns = document.getElementById("create_correct_answer")
+const correctAnswerSection = document.getElementById("correct_answer_section")
 
 //util
 const createAnsItem = () => {
@@ -12,11 +12,11 @@ const createAnsItem = () => {
   let p = document.createElement("p")
   p.innerText = "Answer"
   let edit = document.createElement("button")
-  setAttr(edit, "aria", "Edit answer")
+  setAria(edit, "Edit answer")
   edit.innerHTML = '<i class="fas fa-edit"></i>'
   edit.addEventListener("pointerup", editAns)
   let del = document.createElement("button")
-  setAttr(del, "aria", "Delete answer")
+  setAria(del, "Delete answer")
   del.innerHTML = '<i class="fas fa-trash"></i>'
   del.addEventListener("pointerup", deleteAns)
   correctAnswerItem.appendChild(p)
@@ -51,9 +51,9 @@ const addAns = (e) => {
         let p = correctAnswerItem.querySelector("p")
         let btn = correctAnswerItem.querySelector("button")
         correctAnswerItem.classList.remove("editing")
-        setAttr(btn, "aria", "Edit answer")
+        setAria(btn, "Edit answer")
         p.innerText = "Answer"
-        // setAttr(addAnsBtn, "aria", "Add answer to question")
+        // setAria(addAnsBtn,  "Add answer to question")
       }
       break
     default:
@@ -76,15 +76,15 @@ const editAns = (e) => {
   if (li.classList.contains("editing")) {
     li.classList.remove("editing")
     p.innerText = "Answer"
-    setAttr(target, "aria", "Edit answer")
+    setAria(target, "Edit answer")
     hideOrShowThisTextArea("correctAnswerTextArea", "hide")
   } else {
     li.classList.add("editing")
     p.innerText = "Answer (editing)"
     correctAnswerTextArea.innerHTML = choices.answer
-    setAttr(target, "aria", "Cancel edit")
-    setAttr(addAnsBtn, "aria", "Save answer")
-    setAttr(discardAnsBtn, "aria", "Discard changes")
+    setAria(target, "Cancel edit")
+    setAria(addAnsBtn, "Save answer")
+    setAria(discardAnsBtn, "Discard changes")
     hideOrShowThisTextArea("correctAnswerTextArea", "show")
   }
 }
@@ -97,9 +97,9 @@ const discardAns = (e) => {
   let correctAnswerItem = correctAnswerSection.querySelector("li")
   if (correctAnswerItem) {
     let edit = correctAnswerItem.querySelector("button")
-    setAttr(edit, "aria", "Edit answer")
-    setAttr(target, "aria", "Discard")
-    setAttr(target.previousElementSibling, "aria", "Add answer to question")
+    setAria(edit, "Edit answer")
+    setAria(target, "Discard")
+    setAria(target.previousElementSibling, "Add answer to question")
     hideOrShowThisTextArea("correctAnswerTextArea", "hide")
     correctAnswerItem.classList.remove("editing")
     let p = correctAnswerItem.querySelector("p")
@@ -118,8 +118,8 @@ const deleteAns = () => {
   hideOrShowThisTextArea("correctAnswerTextArea", "show")
   correctAnswerTextArea.innerHTML = "<p></p>"
   correctAnswerSection.classList.add("hide")
-  setAttr(addAnsBtn, "aria", "Add answer")
-  setAttr(discardAnsBtn, "aria", "Discard")
+  setAria(addAnsBtn, "Add answer")
+  setAria(discardAnsBtn, "Discard")
   // delete addAnsBtn.dataset.ansRef
   checkForTen()
 }

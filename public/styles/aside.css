@@ -31,7 +31,7 @@ aside h3 {
     overflow: hidden;
 }
 
-aside .links {
+aside #links {
     list-style: none;
     grid-column: 2;
 }
@@ -63,7 +63,7 @@ aside a:active, #logout:active {
     cursor: pointer;
 }
 
-.name-wrapper {
+#name-wrapper {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -71,14 +71,14 @@ aside a:active, #logout:active {
     background-color: var(--deepTeal);
 }
 
-.name-wrapper img {
+#name-wrapper img {
     width: 1.125rem;
     height: 1.125rem;
     clip-path: circle(50%);
     display: none;
 }
 
-.name-wrapper i {
+#name-wrapper i {
     display: none;
     font-size: 1.125rem;
     color: black;
@@ -110,7 +110,7 @@ aside a:active, #logout:active {
     pointer-events: all;
 }
 
-.sticky-div {
+#sticky-div {
     grid-column: 1/span 2;
     position: sticky;
     top: 60px;
@@ -198,7 +198,7 @@ aside a:active, #logout:active {
         transition: right 0.45s ease-in-out, opacity 0.4s ease-out;
         z-index: 2;
     }
-    .sticky-div {
+    #sticky-div {
         top: 45px;
         height: 30px;
         grid-row: 2;
@@ -278,7 +278,7 @@ aside a:active, #logout:active {
     background-color: transparent;
     }  
 
-    aside .links {
+    aside #links {
         position: absolute;
         top: 40px;
         min-width: 185px;
@@ -298,7 +298,7 @@ aside a:active, #logout:active {
         padding-left: 30px;
     }
 
-    .name-wrapper {
+    #name-wrapper {
         justify-content: space-around;
         min-width: 185px;
         max-width: 300px;
@@ -313,12 +313,12 @@ aside a:active, #logout:active {
         user-select: none;
     }
 
-    .name-wrapper:hover {
+    #name-wrapper:hover {
         box-shadow: var(--boxShadow);
         border-color: rgba(0, 0, 0, 0.05);
     }
 
-    .name-wrapper h3 {
+    #name-wrapper h3 {
         width: unset;
         min-width: 100px;
         max-width: 250px;
@@ -328,12 +328,12 @@ aside a:active, #logout:active {
         font-size: 1.25rem;
     }
 
-    .name-wrapper i {
+    #name-wrapper i {
         display: unset;
         transition: transform 0.1s ease-in;
     }
 
-    .name-wrapper img {
+    #name-wrapper img {
         display: unset;
         /* margin: 5px 10px 5px 0; */
     }
@@ -343,7 +343,7 @@ aside a:active, #logout:active {
     }
 }
 
-aside .links.slide-down {
+aside #links.slide-down {
     max-height: 180px;
 }
 

@@ -1,0 +1,181 @@
+.overlay {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inset: 0;
+    width: 100vw;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5;
+}
+
+.overlay___card {
+    position: relative;
+    width: clamp(600px, 80vw, 800px);
+    background-color: var(--neutralLight);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.overlay___header h3 {
+    height: 58px;
+    padding: 10px 15px;
+    color: white;
+    font-size: 2rem;
+}
+
+.overlay___header h3.not_met {
+    background-color: var(--deepOrange);
+}
+
+.overlay___header h3.satisfied {
+    background-color: var(--deepTeal);
+}
+
+.overlay___header span {
+    position: absolute;
+    top: 10px;
+    right: 11px;
+    font-size: 2em;
+    border-radius: 50%;
+    color: var(--neutralLight);
+    pointer-events: all;
+}
+
+.overlay___header span:hover {
+    cursor: pointer;
+    color: var(--tinymceGray);
+}
+
+.overlay___body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: auto;
+    padding: 1rem 1rem 2rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.overlay___body > p {
+    font-size: 1.6rem;
+    margin: 0 1rem;
+}
+
+.overlay___body .choices {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1.5rem 1rem;
+}
+
+.choices .choice {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 32px; */
+    border: 2px solid var(--tinymceGray);
+    border-radius: 3px;
+    /* box-shadow: var(--boxShadow); */
+    /* gap: 0.75rem; */
+    background-color: white;
+}
+
+.choices .choice:hover,
+.choices .choice:focus {
+    cursor: pointer;
+    border-color: var(--tinymceGrayActive);
+}
+
+.choices .choice:hover span,
+.choices .choice:focus span {
+    background-color: var(--tinymceGrayActive);
+}
+
+.choices .choice.selected_s {
+    border-color: var(--deepTeal);
+}
+
+.choices .choice.selected_n {
+    border-color: var(--deepOrange);
+}
+
+.choices .choice.selected_s span {
+    background-color: var(--deepTeal);
+    color: white;
+}
+
+.choices .choice.selected_n span {
+    background-color: var(--deepOrange);
+    color: white;
+}
+
+.choices .choice input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+.choices .choice p {
+    min-width: 35px;
+    padding: 5px 10px;
+    font-size: 1.125rem;
+    pointer-events: none;
+}
+
+.choices .choice span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 35px;
+    background-color: var(--tinymceGray);
+    color: black;
+    font-size: 1.125rem;
+    pointer-events: none;
+}
+
+.choices .choice input:checked span {
+    background-color: var(--deepTeal);    
+}
+
+.overlay___body button:not(.choice) {
+    width: fit-content;
+    width: -moz-fit-content;
+    align-self: center;
+    padding: 0.5rem;
+    margin-top: 2rem;
+    border-radius: 20px;
+    color: white;
+    border: none;
+    box-shadow: var(--boxShadow);
+    font-size: 1.25rem;
+    transition: transform 25ms ease-in-out;
+}
+
+.overlay___body button.not_met {
+    background-color: var(--deepOrange);
+}
+
+.overlay___body button.not_met:hover,
+.overlay___body button.not_met:focus {
+    background-color: var(--brightOrange);
+    cursor: pointer;
+}
+
+.overlay___body button.satisfied {
+    background-color: var(--deepTeal);
+}
+
+.overlay___body button.satisfied:hover,
+.overlay___body button.satisfied:focus {
+    background-color: var(--brightTeal);
+    cursor: pointer;
+}
+
+.overlay___body button.not_met:active,
+.overlay___body button.satisfied:active {
+    transform: scale(0.95);
+}

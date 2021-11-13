@@ -1,6 +1,7 @@
 //this is for the onload, draft, publish, and any util functions
 // that apply to multiple sections
 const publishQuestionReqs = document.querySelectorAll(".to_publish_reqs.q li")
+const publishExerciseReqs = document.querySelector(".to_publish_reqs:not(.q)")
 const labelPs = Array.from(
   document.querySelectorAll(".label-wrapper p")
 ).splice(3)
@@ -63,30 +64,9 @@ const showNotUniqueMsg = (p) => {
   }, 2000)
 }
 
-const checkList = (li, action) => {
-  let i = li.querySelector("i")
-  switch (action) {
-    case "check":
-      li.classList.replace("not_met", "satisfied")
-      i.classList.replace("fa-times-circle", "fa-check-circle")
-      break
-    case "uncheck":
-      li.classList.replace("satisfied", "not_met")
-      i.classList.replace("fa-check-circle", "fa-times-circle")
-      break
-    default:
-      break
-  }
-}
-
-const setAttr = (btn, attr, val) => {
-  if (attr === "aria") {
-    btn.setAttribute("aria-label", val)
-    btn.setAttribute("title", val)
-  } else if (attr !== "aria" && val) {
-    //not tested, probably works
-    btn.setAttribute(attr, val)
-  }
+const setAria = (btn, val) => {
+  btn.setAttribute("aria-label", val)
+  btn.setAttribute("title", val)
 }
 
 const removeNonsense = (codeBlock) => {
@@ -102,6 +82,31 @@ const removeNonsense = (codeBlock) => {
   })
 }
 
+const listenForChangesToPublishExerciseList = () => {
+  let satisfied
+  const callback = () => {
+    let unsatisfied = publishExerciseReqs.querySelector(".not_met")
+    if (unsatisfied !== null) {
+      satisfied = false
+    } else {
+      satisfied = true
+    }
+    if (satisfied && publishBtn.classList.contains("no-click")) {
+      publishBtn.classList.remove("no-click")
+      publishBtn.addEventListener("pointerup", publishExercise)
+    } else if (!satisfied && !publishBtn.classList.contains("no-click")) {
+      publishBtn.classList.add("no-click")
+      publishBtn.removeEventListener("pointerup", publishExercise)
+    }
+  }
+  const observer = new MutationObserver(callback)
+  observer.observe(publishExerciseReqs, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+  })
+}
+
 //create
 
 //read
@@ -113,8 +118,7 @@ const getRole = async () => {
     const {
       data: { role },
     } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
-    if (role === "admin") {
-    } else {
+    if (role !== "admin") {
       window.location.href = "/"
     }
   } catch (err) {
@@ -124,25 +128,29 @@ const getRole = async () => {
   window.removeEventListener("load", getRole)
 }
 
-// const getInfo = async (id) => {
-//   try {
-//     const {
-//       data: { title, tags, text },
-//     } = await axios.get(`/api/v1/${type}s/${id}`)
-//     titleInput.value = title
-//     textAreaText =
-//       tinymce.activeEditor.iframeElement.contentWindow.document.querySelector(
-//         "body"
-//       )
-//     textAreaText.innerHTML = text
-//     lastSave = { title, tags: tags.slice(), text }
-//     currentDoc = { title, tags: tags.slice(), text }
-//     textAreaText.dispatchEvent(new KeyboardEvent("keyup"))
-//     addTags(tags)
-//   } catch (err) {
-//     console.error(err)
-//   }
-// }
+const getInfo = async (id) => {
+  try {
+    const {
+      data: { title, tags, subject, problems: p, usedPIDs: upids },
+    } = await axios.get(`/api/v1/exercises/${id}`)
+    titleInput.value = title
+    titleInput.dispatchEvent(new KeyboardEvent("keyup"))
+    addTags(tags)
+    console.log(inputValues, subject)
+    subjectSelect.value = subject
+    subjectSelect.dispatchEvent(new Event("pointerup"))
+    problems = p
+    usedPIDs = upids
+    addAllProblems()
+
+    // lastSave = { title, tags: tags.slice(), text }
+    // currentDoc = { title, tags: tags.slice(), text }
+    // textAreaText.dispatchEvent(new KeyboardEvent("keyup"))
+    // addTags(tags)
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 const defineTextAreas = () => {
   questionTextAreaDiv = document.querySelectorAll('[role="application"]')[0]
@@ -159,16 +167,47 @@ const defineTextAreas = () => {
 }
 
 const saveExercise = async (status) => {
-  try {
-    const { data } = await axios.post("/api/v1/exercises", {
-      title: titleInput.value.trim(),
-      tags: inputValues,
-      problems,
-      status,
-    })
-    console.log(data)
-  } catch (err) {
-    console.error(err)
+  document.activeElement.blur()
+  if (resourceId) {
+    try {
+      const {
+        data: { id },
+      } = await axios.patch(`/api/v1/exercises/${resourceId}`, {
+        title: titleInput.value.trim(),
+        tags: inputValues,
+        subject,
+        problems,
+        status,
+        usedPIDs,
+      })
+      // if (status === "draft") {
+      //   window.location.href = `/drafts/exercise/${id}`
+      // } else {
+      //   window.location.href = `/exercises`
+      // }
+    } catch (err) {
+      console.error(err)
+    }
+  } else {
+    try {
+      const {
+        data: { id },
+      } = await axios.post("/api/v1/exercises", {
+        title: titleInput.value.trim(),
+        tags: inputValues,
+        subject,
+        problems,
+        status,
+        usedPIDs,
+      })
+      if (status === "draft") {
+        window.location.href = `/drafts/exercise/${id}`
+      } else {
+        window.location.href = `/exercises`
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 
@@ -176,12 +215,13 @@ const publishExercise = (e) => {
   let value = titleInput.value.trim()
   if (!value) {
     titleInput.value = ""
-    nav.scrollIntoView({ block: "nearest", inline: "nearest" })
-    return unauthorized(pTitle)
+    return giveFeedback("Create to title to save this resource.", "not_met")
   }
   if (inputValues.length === 0) {
-    nav.scrollIntoView({ block: "nearest", inline: "nearest" })
-    return unauthorized(pTag)
+    return giveFeedback("Add tags to publish this exercise.", "not_met")
+  }
+  if (subject.value === "no_choice") {
+    return giveFeedback("Choose a subject to publish this exercise.", "not_met")
   }
   saveExercise("published")
 }
@@ -190,8 +230,7 @@ const draftExercise = () => {
   let value = titleInput.value.trim()
   if (!value) {
     titleInput.value = ""
-    nav.scrollIntoView({ block: "nearest", inline: "nearest" })
-    return unauthorized(pTitle)
+    return giveFeedback("Create to title to save this resource.", "not_met")
   }
   saveExercise("draft")
 }
@@ -199,11 +238,11 @@ const draftExercise = () => {
 const init = () => {
   getRole()
   defineTextAreas()
-  //   const path = window.location.pathname
-  //   if (path.split("/")[3]) {
-  //     resourceId = path.split("/")[3]
-  //     getInfo(resourceId)
-  //   } else {
+  listenForChangesToPublishExerciseList()
+  if (path.split("/")[3]) {
+    resourceId = path.split("/")[3]
+    getInfo(resourceId)
+  }
   // tinymce.activeEditor.iframeElement.contentWindow.document.querySelector(
   //   "body"
   // ).innerHTML = ""

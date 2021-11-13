@@ -23,6 +23,10 @@ const exerciseSchema = new Schema(
       type: Object,
       required: [true, "Please provide a set of problems"],
     },
+    usedPIDs: {
+      type: Array,
+      required: [true, "Please provide a list of all problem IDs"],
+    },
   },
   { timestamps: true }
 )

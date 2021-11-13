@@ -1,103 +1,147 @@
-.drafts-wrapper {
-    padding: 1rem;
-    width: 100%;
-    max-width: 1000px;
-    margin: auto;
-    margin-bottom: var(--offset);
-}
-
-.drafts-wrapper > * {
-    padding: 0 1rem;
-}
-
 .h3style {
     font-size: 1.5em;
 }
 
 #drafts___section {
+    position: relative;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 30px;
-    padding: 0 1rem 1rem;
-    overflow: unset;
+    padding: 1.5rem 1rem 5rem;
+    margin: auto;
+    width: fit-content;
+    width: -moz-fit-content;
 
 }
 
-#drafts___section > * {
+#drafts___lessons, 
+#drafts___exercises {
+    display: grid;
+    place-self: center;
     width: 100%;
-    list-style: none;
-    text-decoration: none;
 }
 
-#drafts___section li,
-#drafts___lessons li, 
-#drafts___practices li{
+#drafts___section li {
     display: flex;
     align-items: center;
     border: var(--border);
+    border-radius: 3px;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 500px;
+    height: 50px;
     box-shadow: var(--boxShadow);
     background-color: white;
-    border-radius: 3px;
-    padding: 10px;
-    margin-top: 10px;
     pointer-events: none;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    opacity: 1;
+    transition: opacity 1s ease-out 1s;
 }
 
-#drafts___section li > :first-child, 
-#drafts___lessons li > :first-child, 
-#drafts___practices li > :first-child {
+#drafts___section li.fade_out {
+    opacity: 0;
+}
+
+
+#drafts___section li button {
+
+    pointer-events: all;
+
+}
+
+#drafts___section li .front,
+#drafts___section li .back {
+    display: flex;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+#drafts___section li .front {
+    padding: 10px 20px 10px 10px;
+}
+
+
+#drafts___section li .front > :first-child {
     margin-right: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-#drafts___section li > :nth-child(2), 
-#drafts___lessons li > :nth-child(2), 
-#drafts___practices li > :nth-child(2) {
-    margin-left: 3em;
+#drafts___section li .front > :nth-child(2),
+#drafts___section li .front > :nth-child(3) {
+    margin-left: 1rem;
     pointer-events: all;
 }
 
-#drafts___section li > :nth-child(3), 
-#drafts___lessons li > :nth-child(3), 
-#drafts___practices li > :nth-child(3) {
-    margin-left: 1em;
-    pointer-events: all;
+#drafts___section li .back button {
+    background-color: var(--deepTeal);
+    color: white;
+    font-size: 1rem;
+    border:none;
 }
 
-#drafts___section button, 
-#drafts___lessons button, 
-#drafts___practices button {
+#drafts___section li .back button:nth-of-type(1) {
+    width: 20%;
+
+}
+
+#drafts___section li .back input {
+    width: 50%;
+    margin: 15px 0.5rem;
+}
+
+#drafts___section li .back button:nth-of-type(2) {
+
+    width: 30%
+}
+
+#drafts___section li .front button {
     border: none;
     font-size: 1rem;
     background-color: transparent;
     color: var(--deepTeal);
 }
 
+#drafts___section input {
+    pointer-events: all;
+}
+
 #drafts___section button:hover, 
-#drafts___lessons button:hover, 
-#drafts___practices button:hover,
-#drafts___section button:focus, 
-#drafts___lessons button:focus, 
-#drafts___practices button:focus {
+#drafts___section button:focus {
     color: var(--deepOrange);
     cursor: pointer;
 }
 
-#drafts___section button:active, 
-#drafts___lessons button:active, 
-#drafts___practices button:active {
+#drafts___section button:active {
     color: var(--brightOrange);
 
 }
 
-#drafts___section button i, 
-#drafts___lessons button i, 
-#drafts___practices button i {
+#drafts___section button i {
     pointer-events: none;
+}
+
+.not_met {
+    color: darkred;
 }
 
 
 @media (min-width: 768px) {
     #drafts___section {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: unset;
         column-gap: 20px;
     }
+
+    #drafts___lessons, 
+    #drafts___exercises {
+        place-self: flex-start;
+    }
+
+    #drafts___lessons {
+        margin-left: auto;
+    } 
+
 }

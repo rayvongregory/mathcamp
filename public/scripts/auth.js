@@ -2,13 +2,9 @@ const form = document.querySelectorAll(
   "input:not(.nav___search-input):not(#delpassword)"
 )
 const seeBtns = document.querySelectorAll('[aria-label="See"]')
-const submit = document.querySelector("#submit")
-const response = document.querySelector("#response")
+const submit = document.getElementById("submit")
+const response = document.getElementById("response")
 const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-const firstName = document.querySelector("#fname+p")
-const lastName = document.querySelector("#lname+p")
-const displayName = document.querySelector("#dname+p")
-const accountEmail = document.querySelector("#email+p")
 let formData = {}
 const unauthorized = (string, remove = false) => {
   if (response.classList.contains("success")) {

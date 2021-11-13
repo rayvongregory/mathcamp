@@ -17,10 +17,11 @@
     display: flex;
     align-items: center;
     padding: 5px;
+    margin-bottom: 1rem;
     border: var(--border);
     border-radius: 2em;
     box-shadow: var(--boxShadow);
-    margin-bottom: 1rem;
+    background-color: white;
 }
 
 .add_post img {

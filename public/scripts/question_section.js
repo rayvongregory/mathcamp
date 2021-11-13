@@ -1,11 +1,12 @@
 // I think this is done... 11/8/2021 @ 4:38PM
-const extraOptions_0 = document.querySelectorAll(".extra-options")[0]
-const difficultySelect = document.querySelector("#choose_difficulty")
-const addQBtn = document.querySelector("#q_add")
-const discardQBtn = document.querySelector("#q_discard")
-const poseQItem = document.querySelector("#question")
-const questionSection = document.querySelector(".question_section")
-const selectDiffItem = document.querySelector("#difficulty")
+const extraOptions = document.querySelectorAll(".extra-options")
+const extraOptions_0 = extraOptions[0]
+const difficultySelect = document.getElementById("choose_difficulty")
+const addQBtn = document.getElementById("q_add")
+const discardQBtn = document.getElementById("q_discard")
+const poseQItem = document.getElementById("question")
+const questionSection = document.getElementById("question_section")
+const selectDiffItem = document.getElementById("difficulty")
 let question = "<p></p>"
 let qDiff = "no_choice"
 
@@ -75,11 +76,11 @@ const createQItem = () => {
   let p = document.createElement("p")
   p.innerText = "Question"
   let edit = document.createElement("button")
-  setAttr(edit, "aria", "Edit question")
+  setAria(edit, "Edit question")
   edit.innerHTML = '<i class="fas fa-edit"></i>'
   edit.addEventListener("pointerup", editQ)
   let del = document.createElement("button")
-  setAttr(del, "aria", "Delete question")
+  setAria(del, "Delete question")
   del.innerHTML = '<i class="fas fa-trash"></i>'
   del.addEventListener("pointerup", deleteQ)
   questionItem.appendChild(p)
@@ -117,7 +118,7 @@ const addQ = () => {
 //update
 const checkForDiff = (e) => {
   const { target } = e
-  qDiff = difficultySelect.value // does this make more sense here? i think so
+  qDiff = difficultySelect.value
   if (target.value !== "no_choice") {
     checkList(selectDiffItem, "check")
   } else {
@@ -141,16 +142,16 @@ const editQ = (e) => {
     if (qDiff != difficultySelect.value) {
       setDiff(qDiff)
     }
-    setAttr(target, "aria", "Edit question")
+    setAria(target, "Edit question")
     hideOrShowThisTextArea("questionTextArea", "hide")
   } else {
     li.classList.add("editing")
     p.innerText = "Question (editing)"
-    setAttr(target, "aria", "Cancel edit")
+    setAria(target, "Cancel edit")
     questionTextArea.innerHTML = question
     setDiff(qDiff)
-    setAttr(addQBtn, "aria", "Save question")
-    setAttr(discardQBtn, "aria", "Discard changes")
+    setAria(addQBtn, "Save question")
+    setAria(discardQBtn, "Discard changes")
     hideOrShowThisTextArea("questionTextArea", "show")
   }
 }
@@ -164,9 +165,9 @@ const discardQ = (e) => {
   let li = questionSection.querySelector("li")
   if (li) {
     let edit = li.querySelectorAll("button")[0]
-    setAttr(target, "aria", "Discard")
-    setAttr(edit, "aria", "Edit question")
-    setAttr(target.previousElementSibling, "aria", "Add question")
+    setAria(target, "Discard")
+    setAria(edit, "Edit question")
+    setAria(target.previousElementSibling, "Add question")
     hideOrShowThisTextArea("questionTextArea", "hide")
     li.classList.remove("editing")
     let p = li.querySelector("p")
@@ -183,8 +184,8 @@ const deleteQ = () => {
   if (li) li.remove()
   question = "<p></p>"
   questionTextArea.innerHTML = "<p></p>"
-  setAttr(addQBtn, "aria", "Add question")
-  setAttr(discardQBtn, "aria", "Discard")
+  setAria(addQBtn, "Add question")
+  setAria(discardQBtn, "Discard")
   checkList(poseQItem, "uncheck")
   hideOrShowThisTextArea("questionTextArea", "show")
   questionSection.classList.add("hide")

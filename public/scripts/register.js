@@ -8,7 +8,6 @@ const handleRegistration = async () => {
   let { fname, lname, email, cemail, password, cpassword } = formData
   email = email.toLowerCase()
   cemail = cemail.toLowerCase()
-  console.log(formData)
   if (!email.match(emailPattern) || !cemail.match(emailPattern)) {
     return unauthorized("Email is invalid.")
   }

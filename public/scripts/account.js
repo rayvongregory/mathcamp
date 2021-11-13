@@ -1,12 +1,16 @@
 const sdb = document.querySelector(".save_discard_buttons")
-const discardBtn = document.querySelector("#discard_all")
+const discardBtn = document.getElementById("discard_all")
 const editBtns = document.querySelectorAll('[aria-label="Edit"]')
-const delBtn = document.querySelector("#db")
-const cancBtn = document.querySelector("#cancel")
-const procBtn = document.querySelector("#proceed")
-const backBtn = document.querySelector("#back")
-const delPasswrd = document.querySelector("#delpassword")
-const confBtn = document.querySelector("#confirm")
+const delBtn = document.getElementById("db")
+const cancBtn = document.getElementById("cancel")
+const procBtn = document.getElementById("proceed")
+const backBtn = document.getElementById("back")
+const delPasswrd = document.getElementById("delpassword")
+const confBtn = document.getElementById("confirm")
+const firstName = document.querySelector("#fname+p")
+const lastName = document.querySelector("#lname+p")
+const displayName = document.querySelector("#dname+p")
+const accountEmail = document.querySelector("#email+p")
 const getAccountInfo = async () => {
   try {
     const {
@@ -140,18 +144,15 @@ const handleUpdate = async () => {
     return unauthorized("Please enter a valid email address.", true)
   } else if (email && email !== accountEmail.innerText) {
     response.innerText = "Updating your email..."
-    console.log(token)
     try {
       const { data } = await axios.patch(
         `/api/v1/users/${token.split(" ")[1]}`,
         { email }
       )
-      console.log(email, data)
       localStorage.setItem("token", data.accessToken)
       token = data.accessToken
       authorized(data.msg, true)
       accountEmail.innerText = email
-      console.log(accountEmail)
     } catch (err) {
       console.error(err)
       return unauthorized(

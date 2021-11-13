@@ -30,7 +30,7 @@ footer {
 
 .tts-grid {
     display: grid;
-    grid-template-columns: minmax(auto, 600px) 1fr;
+    grid-template-columns: minmax(auto, 600px) 375px;
     gap: 0.5rem;
 }
 
@@ -43,6 +43,10 @@ footer {
 .tts-grid :nth-child(4) {
     grid-column: 2;
     grid-row: 1;
+}
+
+#subject:hover {
+    cursor: pointer;
 }
 
 .flex-wrapper {
@@ -60,13 +64,13 @@ footer {
     align-items: center;
     padding-right: 5px;
     width: 100%;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
 }
 
 .flex-wrapper input {
     height: 30px;
     width: 100%;
-    font-size: 0.85em;
+    font-size: 1rem;
     padding-left: 5px;
     display: inline-block;
     border: var(--tinymceBorder);
@@ -119,9 +123,9 @@ footer {
     padding: 0 0.5em;
     margin: 0.125em;
     border: none;
-    background-color: var(--brightOrange);
+    background-color: var(--deepTeal);
     color: white;
-    font-size: 0.85em;
+    font-size: 1rem;
 }
 
 #tags button span {
@@ -190,6 +194,15 @@ footer {
 .publish_save_buttons button:active, 
 .publish_save_buttons button:focus {
     background-color: var(--tinymceGrayActive);
+}
+
+#feedback {
+    margin: 10px auto auto;
+    background-color: white;
+    border: var(--tinymceBorder);
+    font-size: 1rem;
+    padding: 5px;
+    text-align: center;
 }
 
 .to_publish_reqs {

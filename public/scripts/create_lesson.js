@@ -29,7 +29,7 @@ const observeWordCount = () => {
     mutations.forEach((mutation) => {
       let count = Number(mutation.target.innerHTML.split(" ")[0])
       if (count >= 500) {
-        p.innerText = `This ${type} has enough words to be published`
+        p.innerText = `This lesson has enough words to be published`
         p.classList.remove("need-more")
         p.classList.add("limit-met")
         publishBtn.classList.remove("no-click")
@@ -102,58 +102,48 @@ const saveText = async (status) => {
 
   if (resourceId) {
     try {
-      const { data } = await axios.patch(`/api/v1/${type}s/${resourceId}`, {
+      const { data } = await axios.patch(`/api/v1/lessons/${resourceId}`, {
         title: titleInput.value.trim(),
         text: textAreaText,
         tags: inputValues,
         status,
       })
     } catch (err) {
-      unauthorized(`A ${type} with this title already exists`, pTitle)
+      unauthorized(`A lesson with this title already exists`, pTitle)
       console.log(err)
     }
   } else {
     try {
       const {
         data: { id },
-      } = await axios.post(`/api/v1/${type}s`, {
+      } = await axios.post(`/api/v1/lessons`, {
         title: titleInput.value.trim(),
         text: textAreaText,
         tags: inputValues,
         status,
       })
       if (status === "draft") {
-        window.location.href = `/drafts/${type}/${id}`
+        window.location.href = `/drafts/lesson/${id}`
       } else {
-        window.location.href = `/${type}s`
+        window.location.href = `/lessons`
       }
     } catch (err) {
-      unauthorized(`A ${type} with this title already exists`, pTitle)
+      giveFeedback(`A lesson with this title already exists`, "not_met")
       console.log(err)
     }
   }
-}
-
-const unauthorized = (string, element) => {
-  let text = element.innerHTML
-  element.innerHTML = `<p>${string}</p>`
-  element.style.color = "darkred"
-  setTimeout(() => {
-    element.innerHTML = text
-    element.style.color = ""
-  }, 3000)
 }
 
 const publishText = (e) => {
   let value = titleInput.value.trim()
   if (!value) {
     titleInput.value = ""
-    return unauthorized("Create to title to save this resource.", pTitle)
+    return giveFeedback("Create to title to save this resource.", "not_met")
   }
   if (inputValues.length === 0) {
-    return unauthorized(
+    return giveFeedback(
       "Create at least one tag to publish this resource.",
-      pTag
+      "not_met"
     )
   }
 
@@ -164,7 +154,7 @@ const draftText = () => {
   let value = titleInput.value.trim()
   if (!value) {
     titleInput.value = ""
-    return unauthorized("Create to title to save this resource", pTitle)
+    return giveFeedback("Create to title to save this resource.", "not_met")
   }
   saveText("draft")
 }
@@ -172,14 +162,15 @@ const draftText = () => {
 const getInfo = async (id) => {
   try {
     const {
-      data: { title, tags, text },
-    } = await axios.get(`/api/v1/${type}s/${id}`)
+      data: { title, tags, subject, text },
+    } = await axios.get(`/api/v1/lessons/${id}`)
     titleInput.value = title
     textAreaText =
       tinymce.activeEditor.iframeElement.contentWindow.document.querySelector(
         "body"
       )
     textAreaText.innerHTML = text
+    subjectSelect.value = subject
     lastSave = { title, tags: tags.slice(), text }
     currentDoc = { title, tags: tags.slice(), text }
     textAreaText.dispatchEvent(new KeyboardEvent("keyup"))

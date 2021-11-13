@@ -14,16 +14,25 @@ const getExercise = async (req, res) => {
       .status(StatusCodes.NOT_FOUND)
       .json({ msg: `Exercise with id ${id} does not exist.` })
   }
-  const { title, tags, text } = practice
-  res.status(StatusCodes.OK).json({ title, tags, text })
+  const { title, tags, subject, problems, usedPIDs } = exercise
+  res.status(StatusCodes.OK).json({ title, tags, subject, problems, usedPIDs })
 }
 
 const postExercise = async (req, res) => {
-  let exercise = new Exercise(req.body)
-  console.log(req.body)
-  console.log("here")
+  let { title } = req.body
+  let exercise = await Exercise.findOne({ title })
 
-  res.send("hopefully posting an exercise")
+  if (exercise) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      msg: "An exercise with this title already exists. Please choose another name for this exercise.",
+    })
+  }
+
+  exercise = new Exercise(req.body)
+  await exercise.save()
+  res
+    .status(StatusCodes.CREATED)
+    .json({ msg: "Exercise saved successfully", id: exercise.id })
 }
 
 const updateExercise = async (req, res) => {
@@ -50,7 +59,18 @@ const updateExercise = async (req, res) => {
 }
 
 const deleteExercise = async (req, res) => {
-  res.send("hopefully deleting an exercise")
+  let { id } = req.params
+  let lesson = await Exercise.findOneAndDelete({ _id: id }, (err, result) => {
+    if (err) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: `Exercise with id ${id} does not exist.` })
+    } else {
+      return res
+        .status(StatusCodes.OK)
+        .json({ msg: `Exercise with id ${id} was deleted.` })
+    }
+  })
 }
 module.exports = {
   getAllExercises,

@@ -1,126 +1,3 @@
-.overlay {
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    inset: 0;
-    width: 100vw;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 5;
-}
-
-.overlay___card {
-    position: relative;
-    width: clamp(600px, 80vw, 800px);
-    background-color: var(--neutralLight);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.overlay___header h3 {
-    height: 58px;
-    padding: 10px 15px;
-    color: white;
-    font-size: 2rem;
-}
-
-.overlay___header h3.not_met {
-    background-color: var(--deepOrange);
-}
-
-.overlay___header h3.satisfied {
-    background-color: var(--deepTeal);
-}
-
-.overlay___header span {
-    position: absolute;
-    top: 10px;
-    right: 11px;
-    font-size: 2em;
-    border-radius: 50%;
-    color: var(--neutralLight);
-    pointer-events: all;
-}
-
-.overlay___header span:hover {
-    cursor: pointer;
-    color: var(--tinymceGray);
-}
-
-.overlay___body {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin: auto;
-    padding: 1rem 1rem 2rem;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-.overlay___body > p {
-    font-size: 1.25rem;
-    margin: 0 1rem;
-}
-
-.overlay___body form {
-    display: flex;
-    flex-direction: column;
-    margin: 1.5rem 1rem;
-}
-
-.overlay___body label {
-    display: flex;
-    gap: 0.75rem;
-    width: fit-content;
-    width: -moz-fit-content;
-    /* align-items:baseline; */
-}
-
-.overlay___body label + label {
-    margin-top: 1rem;
-}
-
-
-
-.overlay___body button {
-    width: fit-content;
-    width: -moz-fit-content;
-    align-self: center;
-    padding: 1rem;
-    border-radius: 50%;
-    color: white;
-    border: none;
-    box-shadow: var(--boxShadow);
-    font-size: 1rem;
-    transition: transform 25ms ease-in-out;
-}
-
-.overlay___body button.not_met {
-    background-color: var(--deepOrange);
-}
-
-.overlay___body button.not_met:hover,
-.overlay___body button.not_met:focus {
-    background-color: var(--brightOrange);
-    cursor: pointer;
-}
-
-.overlay___body button.satisfied {
-    background-color: var(--deepTeal);
-}
-
-.overlay___body button.satisfied:hover,
-.overlay___body button.satisfied:focus {
-    background-color: var(--brightTeal);
-    cursor: pointer;
-}
-
-.overlay___body button.not_met:active,
-.overlay___body button.satisfied:active {
-    transform: scale(0.95);
-}
-
-
 .three-two-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -134,21 +11,11 @@
     column-gap: 10px;
 }
 
-.difficulty {
-    position: absolute;
-    top: 28.5px;
-    right: 10px;
-    z-index: 2;
-}
-
-.difficulty select:hover {
-    cursor: pointer;
-}
 
 .extra-options {
     position: absolute;
     right: 5px;
-    top: 24.5px;
+    top: 27px;
     display: flex;
     align-items: center;
     background-color: white;
@@ -177,7 +44,7 @@
 }
 
 .extra-options button:hover, 
-.add_delete_q_buttons button:hover {
+#add_delete_q_buttons button:hover {
     background-color: var(--tinymceGray);
     cursor: pointer;
 }
@@ -188,8 +55,8 @@
 
 .extra-options button:active, 
 .extra-options button:focus, 
-.add_delete_q_buttons button:active, 
-.add_delete_q_buttons button:focus {
+#add_delete_q_buttons button:active, 
+#add_delete_q_buttons button:focus {
     background-color: var(--tinymceGrayActive);
     outline: none;
 }
@@ -216,12 +83,12 @@
 .to_publish_add_question {
     position: sticky;
     top: 0;
-    margin-top: 22px;
+    margin-top: 24px;
     height: fit-content;
     height: -moz-fit-content;
 }
 
-.add_delete_q_buttons {
+#add_delete_q_buttons {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -346,7 +213,7 @@
     outline: none;
 }
 
-.add_delete_q_buttons i + p {
+#add_delete_q_buttons i + p {
     margin-top: 5px;
     font-size: 0.85rem;
     white-space: nowrap;
@@ -355,7 +222,7 @@
     pointer-events: none;
 }
 
-.problem_set {
+#problem_set {
     display: grid;
     gap: 10px;
     height: fit-content;
@@ -363,7 +230,7 @@
 }
 
 
-.problem_set section {
+#problem_set section {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -377,15 +244,15 @@
 }
 
 
-.problem_set section ul {
+#problem_set section ul {
     padding-top: 1rem;
     height: auto;
     transition: height 100ms ease-in-out;
     overflow: hidden;
 }
 
-.correct_answer, 
-.question_section {
+#correct_answer_section, 
+#question_section {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -395,7 +262,7 @@
     /* border-top: none; */
 }
 
-.question_choices {
+#question_choices {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
@@ -406,23 +273,23 @@
     /* border-top: none; */
 }
 
-.question_choices > ul{
+#question_choices > ul{
     width: 100%;
     list-style: none;
     text-decoration: none;
 }
 
-.correct_answer > li, 
-.question_section > li {
+#correct_answer_section > li, 
+#question_section > li {
     width: 50%;
     list-style: none;
     text-decoration: none;
 }
 
-.problem_set li, 
-.question_choices li, 
-.correct_answer li, 
-.question_section li {
+#problem_set li, 
+#question_choices li, 
+#correct_answer_section li, 
+#question_section li {
     display: flex;
     align-items: center;
     border: var(--border);
@@ -431,37 +298,37 @@
     pointer-events: none;
 }
 
-.question_choices li, 
-.correct_answer li, 
-.question_section li {
+#question_choices li, 
+#correct_answer_section li, 
+#question_section li {
     padding: 10px;
     gap: 1rem;
 }
 
-.problem_set li {
+#problem_set li {
     padding: 5px 10px;
 }
 
-.problem_set li span {
+#problem_set li span {
     margin-right: 0.75rem;
 }
 
 
-.problem_set li + li {
+#problem_set li + li {
     margin-top: 10px;
 }
 
-.question_choices li > :first-child,
-.problem_set li > :nth-child(2), 
-.correct_answer li > :nth-child(1), 
-.question_section li > :nth-child(1) {
+#question_choices li > :first-child,
+#problem_set li > :nth-child(2), 
+#correct_answer_section li > :nth-child(1), 
+#question_section li > :nth-child(1) {
     margin-right: auto;
 }
 
-.question_choices li > button, 
-.problem_set li > button, 
-.correct_answer li > button, 
-.question_section li > button {
+#question_choices li > button, 
+#problem_set li > button, 
+#correct_answer_section li > button, 
+#question_section li > button {
     border: none;
     background-color: transparent;
     color: var(--deepTeal);
@@ -469,42 +336,42 @@
     pointer-events: all;
 }
 
-.problem_set li > button {
+#problem_set li > button {
     width: 34px;
     height: 34px;
     border-radius: 3px;
 }
 
 
-.question_choices li > button i, 
-.problem_set li > button i, 
-.correct_answer li > button i, 
-.question_section li > button i {
+#question_choices li > button i, 
+#problem_set li > button i, 
+#correct_answer_section li > button i, 
+#question_section li > button i {
     pointer-events: none;
 }
 
-.question_choices button:hover, 
-.correct_answer button:hover, 
-.question_section button:hover,
-.question_choices button:focus, 
-.correct_answer button:focus, 
-.question_section button:focus  {
+#question_choices button:hover, 
+#correct_answer_section button:hover, 
+#question_section button:hover,
+#question_choices button:focus, 
+#correct_answer_section button:focus, 
+#question_section button:focus  {
     color: var(--deepOrange);
     cursor: pointer;
 }
 
-.problem_set button:hover, 
-.problem_set button:focus {
+#problem_set button:hover, 
+#problem_set button:focus {
     cursor: pointer;
 }
 
-.question_choices button:active, 
-.correct_answer button:active, 
-.question_section button:active  {
+#question_choices button:active, 
+#correct_answer_section button:active, 
+#question_section button:active  {
     color: var(--brightOrange);
 }
 
-.no_problems_yet {
+#no_problems_yet {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -515,18 +382,18 @@
     background-color: white;
 }
 
-.problem_set .header {
+#problem_set .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 10px 0 5px;
 }
 
-.problem_set .header h4 {
+#problem_set .header h4 {
     font-size: 1.125rem;
 }
 
-.problem_set .header button {
+#problem_set .header button {
     width: 25px;
     height: 25px;
     border-radius: 50%;
@@ -534,73 +401,73 @@
     background: white;
 }
 
-.problem_set .header button i {
+#problem_set .header button i {
     pointer-events: none;
 }
 
-.problem_set .header button:hover,
-.problem_set .header button:focus {
+#problem_set .header button:hover,
+#problem_set .header button:focus {
     border: var(--border);
     background-color: var(--tinymceGray);
 }
 
-.problem_set .header button:active {
+#problem_set .header button:active {
     border: var(--border);
     background-color: var(--tinymceGrayActive);
 }
 
-.problem_set li.editing, 
-.question_choices li.editing, 
-.correct_answer li.editing, 
-.question_section li.editing {
+#problem_set li.editing, 
+#question_choices li.editing, 
+#correct_answer_section li.editing, 
+#question_section li.editing {
     background-color: var(--deepTeal);
     color: white;
 }
 
-.problem_set li.editing button, 
-.question_choices li.editing button, 
-.correct_answer li.editing button, 
-.question_section li.editing button {
+#problem_set li.editing button, 
+#question_choices li.editing button, 
+#correct_answer_section li.editing button, 
+#question_section li.editing button {
     color: white;
 }
 
-.problem_set li.editing button:hover, 
-.question_choices li.editing button:hover, 
-.correct_answer li.editing button:hover, 
-.question_section li.editing button:hover,
-.problem_set li.editing button:focus, 
-.question_choices li.editing button:focus, 
-.correct_answer li.editing button:focus, 
-.question_section li.editing button:focus {
+#problem_set li.editing button:hover, 
+#question_choices li.editing button:hover, 
+#correct_answer_section li.editing button:hover, 
+#question_section li.editing button:hover,
+#problem_set li.editing button:focus, 
+#question_choices li.editing button:focus, 
+#correct_answer_section li.editing button:focus, 
+#question_section li.editing button:focus {
     color: var(--tinymceGray);
 }
 
-.problem_set li.editing button:active, 
-.question_choices li.editing button:active, 
-.correct_answer li.editing button:active, 
-.question_section li.editing button:active {
+#problem_set li.editing button:active, 
+#question_choices li.editing button:active, 
+#correct_answer_section li.editing button:active, 
+#question_section li.editing button:active {
     color: var(--tinymceGrayActive);
 }
 
-.question_section.pop-top, 
-.correct_answer.pop-top, 
-.question_choices.pop-top {
+#question_section.pop-top, 
+#correct_answer_section.pop-top, 
+#question_choices.pop-top {
     border-top: none;
 }
 
-.problem_set li.satisfied, .problem_set li.satisfied button {
+#problem_set li.satisfied, #problem_set li.satisfied button {
     color: var(--deepTeal);
 }
 
-.problem_set li.not_met, .problem_set li.not_met button {
+#problem_set li.not_met, #problem_set li.not_met button {
     color: darkred;
 }
 
-.problem_set li.not_met button:hover,
-.problem_set li.not_met button:focus {
+#problem_set li.not_met button:hover,
+#problem_set li.not_met button:focus {
     background-color: var(--tinymceGray);
 }
 
-.problem_set li.not_met button:active {
+#problem_set li.not_met button:active {
     background-color: var(--tinymceGrayActive);
 }

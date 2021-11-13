@@ -8,13 +8,10 @@
     <%- include('../partials/aside'); %> <%- include('../partials/nav'); %> <%-
     include('../partials/banner'); %>
     <div class="msg"><%=msg%></div>
-    <div class="drafts-wrapper">
-      <section id="drafts___section">
-        <ul id="drafts___lessons"></ul>
-        <ul id="drafts___exercises"></ul>
-      </section>
-    </div>
-    <footer><%- include('../partials/footer'); %></footer>
+    <section id="drafts___section">
+      <ul id="drafts___lessons"></ul>
+      <ul id="drafts___exercises"></ul>
+    </section>
     <%- include('../partials/universal_scripts'); %>
     <script type="module" src="/scripts/draft.js"></script>
   </body>
