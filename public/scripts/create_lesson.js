@@ -77,7 +77,6 @@ const compareText = (e = null) => {
   currentDoc.title = titleInput.value.trim()
   currentDoc.tags = inputValues.slice()
   currentDoc.subject = subject
-  console.log(currentDoc, lastSave)
   if (e && !isEqual(currentDoc, lastSave)) {
     e.preventDefault()
     e.returnValue = ""

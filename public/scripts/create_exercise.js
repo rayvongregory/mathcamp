@@ -229,7 +229,6 @@ const saveExercise = async (status) => {
       console.error(err)
     }
   } else {
-    console.log(problems)
     try {
       const {
         data: { id },
