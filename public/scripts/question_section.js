@@ -99,6 +99,7 @@ const addQ = () => {
       removeNonsense(questionTextArea)
       question = questionTextArea.innerHTML
       checkList(poseQItem, "check")
+      checkReqs()
       hideOrShowThisTextArea("questionTextArea", "hide")
       let questionItem = questionSection.querySelector("li")
       if (!questionItem) {
@@ -124,6 +125,7 @@ const checkForDiff = (e) => {
   } else {
     checkList(selectDiffItem, "uncheck")
   }
+  checkReqs()
 }
 
 const editQ = (e) => {
@@ -187,6 +189,7 @@ const deleteQ = () => {
   setAria(addQBtn, "Add question")
   setAria(discardQBtn, "Discard")
   checkList(poseQItem, "uncheck")
+  checkReqs()
   hideOrShowThisTextArea("questionTextArea", "show")
   questionSection.classList.add("hide")
   qDiff = "no_choice"

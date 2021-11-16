@@ -15,7 +15,7 @@
 
 .three-one-grid {
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr);
     column-gap: 10px;
 }
 
@@ -150,15 +150,29 @@ footer {
     border: none;
 }
 
+.container {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    margin: 10px auto auto;
+    width: 100%;
+    height: 90px;
+    flex-shrink: 0;
+    border: var(--tinymceBorder);
+    overflow: hidden;
+    scroll-behavior: smooth;
+    pointer-events: none;
+}
+
 .publish_save_buttons {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px auto auto;
+    flex-shrink: 0;
     padding: 5px; 
     width: 100%;
+    height: 90px;
     background-color: white;
-    border: var(--tinymceBorder);
 }
 
 .publish_save_buttons button {
@@ -171,6 +185,16 @@ footer {
     width: 125px;
     border: var(--border);
     border-radius: 3px;
+    pointer-events: all;
+}
+
+#publish.no-click {
+    background-color: var(--tinymceGrayActive);
+    pointer-events: none;
+}
+
+#publish-btn-wrapper.no-click {
+    cursor: not-allowed;
     pointer-events: all;
 }
 
@@ -197,12 +221,23 @@ footer {
 }
 
 #feedback {
-    margin: 10px auto auto;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    height: 90px;
     background-color: white;
-    border: var(--tinymceBorder);
     font-size: 1rem;
-    padding: 5px;
-    text-align: center;
+}
+
+#feedback.satisfied {
+    color: var(--deepTeal);
+}
+
+#feedback.not_met {
+    color: darkred;
 }
 
 .to_publish_reqs {
@@ -252,10 +287,6 @@ footer {
     color: darkred;
 }
 
-.no-click {
-    background-color: var(--tinymceGrayActive);
-    cursor: not-allowed;
-}
 
 @media screen and (min-width: 768px) and (min-height: 500px) {
     .too-small {
@@ -267,7 +298,7 @@ footer {
     }
 }
 
-@media screen and (max-width: 768px), (max-height: 500px) {
+@media screen and (max-width: 767px), (max-height: 500px) {
     .too-small {
         display: flex;
     }

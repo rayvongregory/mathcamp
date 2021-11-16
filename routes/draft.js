@@ -21,14 +21,14 @@ router.route("/").get((req, res, next) => {
 router.route("/lesson/:id").get((req, res, next) => {
   res.render("pages/create_lesson", {
     type: "lesson",
-    title: "Draft",
+    title: "Draft Lesson",
     bannerTitle: "Draft Lesson",
   })
 })
 router.route("/exercise/:id").get((req, res, next) => {
   res.render("pages/create_exercise", {
     type: "practice",
-    title: "Exercise",
+    title: "Draft Exercise",
     bannerTitle: "Draft Exercise",
   })
 })

@@ -1,6 +1,9 @@
 const draftsSection = document.getElementById("drafts___section")
 const draftsLessons = document.getElementById("drafts___lessons")
 const draftsExercises = document.getElementById("drafts___exercises")
+const nothingHere = document.getElementById("nothing-here")
+let lessons = [],
+  exercises = []
 
 const editLesson = async (e) => {
   window.location.href = `/drafts/lesson/${e.target.parentElement.parentElement.dataset.id}`
@@ -10,62 +13,59 @@ const editExercise = async (e) => {
   window.location.href = `/drafts/exercise/${e.target.parentElement.parentElement.dataset.id}`
 }
 
-const deleteDraft = async (e) => {
-  const { target } = e
-  const { parentElement } = target
-  switch (target.name) {
-    case "trash":
-      parentElement.nextElementSibling.scrollIntoView({
-        block: "nearest",
-        inline: "nearest",
-      })
-      break
-    case "back":
-      parentElement.previousElementSibling.scrollIntoView({
-        block: "nearest",
-        inline: "nearest",
-      })
-      break
-    case "delete":
-      if (target.previousElementSibling.value !== "yes") {
-        // be mad but kindly ask user to type "yes"
-      } else {
-        const { previousElementSibling } = parentElement
-        const { id, type } = parentElement.parentElement.dataset
-        try {
-          // await axios.delete(`/api/v1/${type}s/${id}`)
-          let p = previousElementSibling.querySelector("p")
-          p.classList.add("not_met")
-          p.innerText = "Resource has been successfully deleted."
-          previousElementSibling.scrollIntoView({
-            block: "nearest",
-            inline: "nearest",
-          })
-          parentElement.parentElement.classList.add("fade_out")
-          setTimeout(() => {
-            parentElement.parentElement.remove()
-          }, 2000)
-        } catch (err) {
-          console.log(err)
-        }
-      }
-      break
+const getDrafts = async () => {
+  try {
+    let {
+      data: { lessons: l, exercises: e },
+    } = await axios.get("/api/v1/drafts")
+    lessons = l
+    exercises = e
+    setGrid()
+    if (lessons.length === 0) {
+      draftsLessons.classList.add("hide")
+    } else {
+      addTo(draftsLessons, lessons, "lesson")
+    }
+    if (exercises.length === 0) {
+      draftsExercises.classList.add("hide")
+    } else {
+      addTo(draftsExercises, exercises, "exercise")
+    }
+  } catch (err) {
+    console.log(err)
   }
-
-  //
 }
 
-const setGrid = (lessons, exercises) => {
+const fadeList = (type) => {
+  let list, section
+  if (type === "lesson") {
+    list = lessons
+    section = draftsLessons
+  } else {
+    list = exercises
+    section = draftsExercises
+  }
+  if (list.length === 1) {
+    section.classList.add("fade_out")
+  }
+}
+
+const setGrid = () => {
   if (
     (lessons.length === 0 && exercises.length !== 0) ||
     (exercises.length === 0 && lessons.length !== 0)
   ) {
-    draftsSection.style.gridTemplateColumns = "unset"
+    draftsSection.classList.add("unset-grid")
   } else if (lessons.length === 0 && exercises.length === 0) {
-    //hide both sections and reveal a whole other thing with a big header
-    //indicating that there are no drafts to edit
-    // maybe add two large btns that are links to the create lesson
-    // and create exercise pages
+    nothingHere.classList.remove("hide")
+  }
+
+  if (lessons.length === 0) {
+    draftsLessons.remove()
+  }
+
+  if (exercises.length === 0) {
+    draftsExercises.remove()
   }
 }
 
@@ -121,38 +121,76 @@ const addH3 = (string) => {
   draftsLessons.classList.add("hide")
   draftsExercises.classList.add("hide")
   let h3 = document.createElement("h3")
-  h3.classList.add("h3style")
   h3.innerText = string
   draftsSection.appendChild(h3)
 }
 
-const getDrafts = async () => {
-  try {
-    let {
-      data: { lessons, exercises },
-    } = await axios.get("/api/v1/drafts")
-    exercises = []
-    lessons = []
+const deleteDraft = async (e) => {
+  const { target } = e
+  const { parentElement } = target
+  switch (target.name) {
+    case "trash":
+      parentElement.nextElementSibling.scrollIntoView({
+        block: "nearest",
+        inline: "nearest",
+      })
+      break
+    case "back":
+      parentElement.previousElementSibling.scrollIntoView({
+        block: "nearest",
+        inline: "nearest",
+      })
+      break
+    case "delete":
+      document.activeElement.blur()
+      if (target.previousElementSibling.value !== "yes") {
+        target.previousElementSibling.classList.add("flash")
+        setTimeout(() => {
+          target.previousElementSibling.classList.remove("flash")
+        }, 600)
+      } else {
+        const { previousElementSibling } = parentElement
+        const { id, type } = parentElement.parentElement.dataset
+        try {
+          await axios.delete(`/api/v1/${type}s/${id}`)
+          let p = previousElementSibling.querySelector("p")
+          p.classList.add("not_met")
+          p.innerText = "Resource has been successfully deleted."
+          previousElementSibling.scrollIntoView({
+            block: "nearest",
+            inline: "nearest",
+          })
+          parentElement.parentElement.classList.add("fade_out")
+          fadeList(type)
+          removeFromList(type, id)
+          setTimeout(() => {
+            parentElement.parentElement.remove()
+            setGrid()
+          }, 2000)
+        } catch (err) {
+          console.log(err)
+        }
+      }
+      break
+  }
+}
 
-    setGrid(lessons, exercises)
-    if (lessons.length === 0) {
-      draftsLessons.classList.add("hide")
-    } else {
-      draftsLessons.innerHTML = "<h3 class='h3style'>Lessons</h3>"
-      addTo(draftsLessons, lessons, "lesson")
+const removeFromList = (type, id) => {
+  let list
+  if (type === "lesson") {
+    list = lessons
+  } else {
+    list = exercises
+  }
+  for (let item in list) {
+    if (list[item]._id === id) {
+      list.splice(item, 1)
     }
-    if (exercises.length === 0) {
-      draftsExercises.classList.add("hide")
-    } else {
-      draftsExercises.innerHTML = "<h3 class='h3style'>Exercises</h3>"
-      addTo(draftsExercises, exercises, "exercise")
-    }
-  } catch (err) {
-    console.log(err)
   }
 }
 
 if (!token) {
   window.location.href = "/"
 }
+
 getDrafts()

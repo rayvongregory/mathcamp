@@ -33,7 +33,6 @@
 
 html, button, input, select {
     font-family: "Urbanist", Arial, Helvetica, sans-serif ;
-    scroll-behavior: smooth;
 }
 
 body {

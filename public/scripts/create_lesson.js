@@ -1,12 +1,15 @@
 let textArea, textAreaText, fullscreenBtn, wordCountDiv, p, resourceId
+let enoughWordsItem = document.getElementById("at_least_500")
 let lastSave = {
   title: "",
   text: "",
+  subject: "no_choice",
   tags: [],
 }
 let currentDoc = {
   title: "",
   text: "",
+  subject: "no_choice",
   tags: [],
 }
 
@@ -28,20 +31,19 @@ const observeWordCount = () => {
   const callback = (mutations) => {
     mutations.forEach((mutation) => {
       let count = Number(mutation.target.innerHTML.split(" ")[0])
-      if (count >= 500) {
-        p.innerText = `This lesson has enough words to be published`
-        p.classList.remove("need-more")
-        p.classList.add("limit-met")
-        publishBtn.classList.remove("no-click")
-        publishBtn.addEventListener("click", publishText)
-      } else {
+      if (count >= 500 && p.classList.contains("need-more")) {
+        p.innerText = `This has enough words to be published`
+        p.classList.replace("need-more", "limit-met")
+        checkList(enoughWordsItem, "check")
+      } else if (count < 500) {
         p.innerText = `Add ${500 - count} more words to publish`
-        p.classList.remove("limit-met")
-        p.classList.add("need-more")
-        publishBtn.classList.add("no-click")
-        publishBtn.removeEventListener("click", publishText)
+        if (p.classList.contains("limit-met")) {
+          p.classList.replace("limit-met", "need-more")
+          checkList(enoughWordsItem, "uncheck")
+        }
       }
     })
+    checkReqs()
   }
   const observer = new MutationObserver(callback)
   observer.observe(wordCountDiv, {
@@ -49,65 +51,68 @@ const observeWordCount = () => {
   })
 }
 
-const getRole = async () => {
-  try {
-    const {
-      data: { role },
-    } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
-    if (role === "admin") {
-      fullscreenBtn = document.querySelector('[aria-label="Fullscreen"]')
-      fullscreenBtn.addEventListener("pointerup", changeTextAreaSize)
-      changeTextAreaSize()
-      wordCountDiv = document.querySelector(".tox-statusbar__wordcount")
-      addWordCountP()
-      observeWordCount()
-    } else {
-      window.removeEventListener("beforeunload", compareText)
-      window.location.href = "/"
+const isEqual = (obj1, obj2) => {
+  for (let key in obj1) {
+    if (key === "tags") {
+      if (obj1.tags.length !== obj2.tags.length) {
+        return false
+      }
+      continue
+    } else if (obj1[key] !== obj2[key]) {
+      return false
     }
-  } catch (err) {
-    console.log(err)
-    window.removeEventListener("beforeunload", compareText)
-    window.location.href = "/"
   }
-  window.removeEventListener("load", getRole)
+  for (let index in obj1.tags) {
+    if (obj1.tags[index] !== obj2.tags[index]) {
+      return false
+    }
+  }
+  return true
 }
-
-const compareText = (e) => {
+const compareText = (e = null) => {
   currentDoc.text =
     tinymce.activeEditor.iframeElement.contentWindow.document.querySelector(
       "body"
     ).innerHTML
   currentDoc.title = titleInput.value.trim()
   currentDoc.tags = inputValues.slice()
-  if (!isEqual(currentDoc, lastSave)) {
+  currentDoc.subject = subject
+  console.log(currentDoc, lastSave)
+  if (e && !isEqual(currentDoc, lastSave)) {
     e.preventDefault()
     e.returnValue = ""
+  } else if (!isEqual(currentDoc, lastSave)) {
+    return false
+  } else {
+    return true
   }
 }
 
 const saveText = async (status) => {
+  if (compareText()) {
+    return giveFeedback("No changes were made since the last save.", "not_met")
+  }
   textAreaText =
     tinymce.activeEditor.iframeElement.contentWindow.document.querySelector(
       "body"
     ).innerHTML
-  lastSave.text = textAreaText
-  lastSave.tags = inputValues.slice()
-  lastSave.title = titleInput.value.trim()
-  currentDoc = {
+  lastSave = {
     text: textAreaText,
     tags: inputValues.slice(),
     title: titleInput.value.trim(),
+    subject,
   }
-
+  currentDoc = { ...lastSave }
   if (resourceId) {
     try {
       const { data } = await axios.patch(`/api/v1/lessons/${resourceId}`, {
         title: titleInput.value.trim(),
         text: textAreaText,
         tags: inputValues,
+        subject,
         status,
       })
+      giveFeedback("Save successful", "satisfied")
     } catch (err) {
       unauthorized(`A lesson with this title already exists`, pTitle)
       console.log(err)
@@ -120,6 +125,7 @@ const saveText = async (status) => {
         title: titleInput.value.trim(),
         text: textAreaText,
         tags: inputValues,
+        subject,
         status,
       })
       if (status === "draft") {
@@ -138,13 +144,16 @@ const publishText = (e) => {
   let value = titleInput.value.trim()
   if (!value) {
     titleInput.value = ""
-    return giveFeedback("Create to title to save this resource.", "not_met")
+    return giveFeedback("Create a title to save this lesson.", "not_met")
   }
   if (inputValues.length === 0) {
     return giveFeedback(
-      "Create at least one tag to publish this resource.",
+      "Create at least one tag to publish this lesson.",
       "not_met"
     )
+  }
+  if (subject === "no_choice") {
+    return giveFeedback("Choose a subject to publish this lesson.", "not_met")
   }
 
   saveText("published")
@@ -154,7 +163,7 @@ const draftText = () => {
   let value = titleInput.value.trim()
   if (!value) {
     titleInput.value = ""
-    return giveFeedback("Create to title to save this resource.", "not_met")
+    return giveFeedback("Create a title to save this lesson.", "not_met")
   }
   saveText("draft")
 }
@@ -165,14 +174,16 @@ const getInfo = async (id) => {
       data: { title, tags, subject, text },
     } = await axios.get(`/api/v1/lessons/${id}`)
     titleInput.value = title
+    titleInput.dispatchEvent(new KeyboardEvent("keyup"))
     textAreaText =
       tinymce.activeEditor.iframeElement.contentWindow.document.querySelector(
         "body"
       )
     textAreaText.innerHTML = text
     subjectSelect.value = subject
-    lastSave = { title, tags: tags.slice(), text }
-    currentDoc = { title, tags: tags.slice(), text }
+    subjectSelect.dispatchEvent(new Event("pointerup"))
+    lastSave = { title, tags: tags.slice(), text, subject }
+    currentDoc = { title, tags: tags.slice(), text, subject }
     textAreaText.dispatchEvent(new KeyboardEvent("keyup"))
     addTags(tags)
   } catch (err) {
@@ -182,7 +193,12 @@ const getInfo = async (id) => {
 
 const init = () => {
   getRole()
-  const path = window.location.pathname
+  fullscreenBtn = document.querySelector('[aria-label="Fullscreen"]')
+  fullscreenBtn.addEventListener("pointerup", changeTextAreaSize)
+  changeTextAreaSize()
+  wordCountDiv = document.querySelector(".tox-statusbar__wordcount")
+  addWordCountP()
+  observeWordCount()
   if (path.split("/")[3]) {
     resourceId = path.split("/")[3]
     getInfo(resourceId)
@@ -194,5 +210,6 @@ const init = () => {
 }
 
 window.addEventListener("load", init)
-draftBtn.addEventListener("click", draftText)
 window.addEventListener("beforeunload", compareText)
+draftBtn.addEventListener("click", draftText)
+publishBtn.addEventListener("pointerup", publishText)

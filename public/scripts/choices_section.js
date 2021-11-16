@@ -15,6 +15,7 @@ const checkForTen = () => {
   } else {
     checkList(tenChoices, "uncheck")
   }
+  checkReqs()
 }
 
 const uniqueChoice = (text) => {

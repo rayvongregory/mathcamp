@@ -14,16 +14,20 @@ let questionTextAreaDiv,
   resourceId,
   i
 
-// let lastSave = {
-//   title: "",
-//   text: "",
-//   tags: [],
-// }
-// let currentDoc = {
-//   title: "",
-//   text: "",
-//   tags: [],
-// }
+let lastSave = {
+  title: "",
+  subject: "no_choice",
+  tags: [],
+  problems: { easy: {}, standard: {}, hard: {}, advanced: {}, no_choice: {} },
+  usedPIDs: [],
+}
+let currentExercise = {
+  title: "",
+  subject: "no_choice",
+  tags: [],
+  problems: { easy: {}, standard: {}, hard: {}, advanced: {}, no_choice: {} },
+  usedPIDs: [],
+}
 
 //util
 const hideOrShowThisTextArea = (textarea, action) => {
@@ -113,42 +117,78 @@ const listenForChangesToPublishExerciseList = () => {
 
 //delete
 
-const getRole = async () => {
-  try {
-    const {
-      data: { role },
-    } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
-    if (role !== "admin") {
-      window.location.href = "/"
-    }
-  } catch (err) {
-    console.log(err)
-    window.location.href = "/"
-  }
-  window.removeEventListener("load", getRole)
-}
-
 const getInfo = async (id) => {
   try {
     const {
       data: { title, tags, subject, problems: p, usedPIDs: upids },
     } = await axios.get(`/api/v1/exercises/${id}`)
     titleInput.value = title
-    titleInput.dispatchEvent(new KeyboardEvent("keyup"))
+    checkList(createTitleItem, "check")
     addTags(tags)
-    console.log(inputValues, subject)
     subjectSelect.value = subject
     subjectSelect.dispatchEvent(new Event("pointerup"))
     problems = p
     usedPIDs = upids
     addAllProblems()
-
-    // lastSave = { title, tags: tags.slice(), text }
-    // currentDoc = { title, tags: tags.slice(), text }
-    // textAreaText.dispatchEvent(new KeyboardEvent("keyup"))
-    // addTags(tags)
+    checkReqs()
+    lastSave = {
+      title,
+      tags: tags.slice(),
+      subject,
+      problems: { ...p },
+      usedPIDs: upids.slice(),
+    }
+    currentExercise = { ...lastSave }
   } catch (err) {
     console.error(err)
+  }
+}
+
+const isEqual = (obj1, obj2) => {
+  for (let key in obj1) {
+    if (key === "tags" || key === "usedPIDs" || key == "problems") {
+      continue
+    } else if (obj1[key] !== obj2[key]) {
+      return false
+    }
+  }
+  if (obj1.tags.length !== obj2.tags.length) {
+    return false
+  }
+  for (let index of obj1.tags) {
+    if (obj1.tags[index] !== obj2.tags[index]) {
+      return false
+    }
+  }
+  if (obj1.usedPIDs.length !== obj2.usedPIDs.length) {
+    return false
+  }
+  for (let index in obj1.usedPIDs) {
+    if (obj1.usedPIDs[index] !== obj2.usedPIDs[index]) {
+      return false
+    }
+  }
+  return true
+}
+
+const sameProblemSet = (e = null) => {
+  currentExercise = {
+    title: titleInput.value.trim(),
+    subject: subjectSelect.value,
+    tags: inputValues,
+    problems,
+    usedPIDs,
+  }
+  if (isEqual(currentExercise, lastSave)) {
+    return true
+  } else {
+    if (e) {
+      if (e) {
+        e.preventDefault()
+        e.returnValue = ""
+      }
+    }
+    return false
   }
 }
 
@@ -169,10 +209,12 @@ const defineTextAreas = () => {
 const saveExercise = async (status) => {
   document.activeElement.blur()
   if (resourceId) {
+    if (sameProblemSet()) {
+      giveFeedback("No changes were made since the last save.", "not_met")
+      return
+    }
     try {
-      const {
-        data: { id },
-      } = await axios.patch(`/api/v1/exercises/${resourceId}`, {
+      await axios.patch(`/api/v1/exercises/${resourceId}`, {
         title: titleInput.value.trim(),
         tags: inputValues,
         subject,
@@ -180,15 +222,14 @@ const saveExercise = async (status) => {
         status,
         usedPIDs,
       })
-      // if (status === "draft") {
-      //   window.location.href = `/drafts/exercise/${id}`
-      // } else {
-      //   window.location.href = `/exercises`
-      // }
+      giveFeedback("Save successful", "satisfied")
     } catch (err) {
+      giveFeedback("An exercise with that title already exists.", "not_met")
+
       console.error(err)
     }
   } else {
+    console.log(problems)
     try {
       const {
         data: { id },
@@ -215,12 +256,12 @@ const publishExercise = (e) => {
   let value = titleInput.value.trim()
   if (!value) {
     titleInput.value = ""
-    return giveFeedback("Create to title to save this resource.", "not_met")
+    return giveFeedback("Create a title to save this exercise.", "not_met")
   }
   if (inputValues.length === 0) {
     return giveFeedback("Add tags to publish this exercise.", "not_met")
   }
-  if (subject.value === "no_choice") {
+  if (subject === "no_choice") {
     return giveFeedback("Choose a subject to publish this exercise.", "not_met")
   }
   saveExercise("published")
@@ -230,7 +271,7 @@ const draftExercise = () => {
   let value = titleInput.value.trim()
   if (!value) {
     titleInput.value = ""
-    return giveFeedback("Create to title to save this resource.", "not_met")
+    return giveFeedback("Create a title to save this exercise.", "not_met")
   }
   saveExercise("draft")
 }
@@ -243,13 +284,9 @@ const init = () => {
     resourceId = path.split("/")[3]
     getInfo(resourceId)
   }
-  // tinymce.activeEditor.iframeElement.contentWindow.document.querySelector(
-  //   "body"
-  // ).innerHTML = ""
-  //   }
 }
 
-draftBtn.addEventListener("pointerup", draftExercise)
-//remove styles on publishBtn when the reqs are met and then add the event listener
-// remove event listener if the reqs are no longer being met
 window.addEventListener("load", init)
+window.addEventListener("beforeunload", sameProblemSet)
+draftBtn.addEventListener("pointerup", draftExercise)
+publishBtn.addEventListener("pointerup", publishExercise)

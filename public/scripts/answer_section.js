@@ -28,8 +28,6 @@ const createAnsItem = () => {
 //create
 const addAns = (e) => {
   document.activeElement.blur()
-  let { refId: ref } = e.target.dataset
-  // not sure if i need to pass that ref, we'll see
   switch (
     uniqueChoice(correctAnswerTextArea) ||
     correctAnswerTextArea.innerHTML === choices.answer
@@ -41,19 +39,18 @@ const addAns = (e) => {
       removeNonsense(correctAnswerTextArea)
       choices.answer = correctAnswerTextArea.innerHTML
       checkList(createCorrectAns, "check")
+      checkReqs()
       hideOrShowThisTextArea("correctAnswerTextArea", "hide")
       let correctAnswerItem = correctAnswerSection.querySelector("li")
       if (!correctAnswerItem) {
         createAnsItem()
         checkForTen()
-        // addAnsBtn.dataset.ansRef = "ans"
       } else {
         let p = correctAnswerItem.querySelector("p")
         let btn = correctAnswerItem.querySelector("button")
         correctAnswerItem.classList.remove("editing")
         setAria(btn, "Edit answer")
         p.innerText = "Answer"
-        // setAria(addAnsBtn,  "Add answer to question")
       }
       break
     default:
@@ -67,10 +64,6 @@ const addAns = (e) => {
 const editAns = (e) => {
   document.activeElement.blur()
   let { target } = e
-  // if (addAllBtn.dataset.refId) {
-  //   addAnsBtn.dataset.refId = addAllBtn.dataset.refId
-  //   addAnsBtn.dataset.refDiff = addAllBtn.dataset.refDiff
-  // }
   let li = target.parentElement
   let p = li.querySelector("p")
   if (li.classList.contains("editing")) {
@@ -115,12 +108,12 @@ const deleteAns = () => {
     delete choices.answer
   }
   checkList(createCorrectAns, "uncheck")
+  checkReqs()
   hideOrShowThisTextArea("correctAnswerTextArea", "show")
   correctAnswerTextArea.innerHTML = "<p></p>"
   correctAnswerSection.classList.add("hide")
   setAria(addAnsBtn, "Add answer")
   setAria(discardAnsBtn, "Discard")
-  // delete addAnsBtn.dataset.ansRef
   checkForTen()
 }
 

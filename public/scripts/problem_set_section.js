@@ -3,7 +3,7 @@ const addAllBtn = document.getElementById("add_all")
 const discardAllSlider = document.getElementById("discard_all_slider")
 const dA1 = document.getElementById("d_a1")
 const dA2 = document.getElementById("d_a2")
-const dA2p = dA2.getElementsByTagName("p")
+const dA2p = dA2.querySelector("p")
 const discardBackBtn = document.getElementById("discard_btn_back")
 const discardConf = document.getElementById("discard_confirm")
 const discardAllBtn = document.getElementById("discard_all")
@@ -46,15 +46,6 @@ const toggleList = (e) => {
   }
 }
 
-const checkReqs = () => {
-  for (let req of publishQuestionReqs) {
-    if (req.classList.contains("not_met")) {
-      return false
-    }
-  }
-  return true
-}
-
 const checkForTwenty = (diff) => {
   let item
   switch (diff) {
@@ -85,14 +76,22 @@ const checkForTwenty = (diff) => {
   ) {
     checkList(item, "uncheck")
   }
+  checkReqs()
 }
 
 const checkAllMeet = () => {
   let unsatisfied = problemSet.querySelector('[data-satisfied="false"]')
+  let aProb = problemSet.querySelector("li")
   if (unsatisfied && allMeetReqs.classList.contains("satisfied")) {
     checkList(allMeetReqs, "uncheck")
-  } else if (!unsatisfied && allMeetReqs.classList.contains("not_met"))
+  } else if (
+    !unsatisfied &&
+    aProb &&
+    allMeetReqs.classList.contains("not_met")
+  ) {
     checkList(allMeetReqs, "check")
+  }
+  checkReqs()
 }
 
 const createProblemItem = (diff, id = null, satisfied = null) => {
@@ -193,12 +192,9 @@ const appendThisToThat = (el, diff) => {
 }
 
 const sideScroll = (vis, hidden) => {
-  // lil weird in moz when dA1 isn't scrolled into view during onload
-  if (vis.dataset.hidden === "true") {
-    vis.scrollIntoView({ block: "nearest", inline: "nearest" })
-    hidden.dataset.hidden = true
-    delete vis.dataset.hidden
-  }
+  vis.scrollIntoView({ block: "nearest", inline: "nearest" })
+  hidden.dataset.hidden = true
+  delete vis.dataset.hidden
   if (vis === dA1) {
     discardConf.value = ""
   }
@@ -246,6 +242,7 @@ const editThisOne = (problemItem, diff, pid) => {
     }
   }
   checkForTen()
+  checkReqs()
   let editBtn = problemItem.querySelectorAll("button")[1]
   addAllBtn.dataset.refId = pid
   addAllBtn.dataset.refDiff = diff
@@ -536,6 +533,7 @@ const deleteProblemItem = (problemItem) => {
     if (!problemSet.querySelector("li")) {
       noProblemsYet.classList.remove("hide")
       checkList(allMeetReqs, "uncheck")
+      checkReqs()
     }
   }
 

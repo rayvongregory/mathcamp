@@ -1,5 +1,6 @@
 //overlapping util functions
 const publishBtn = document.getElementById("publish")
+const publishReqs = document.querySelectorAll(".to_publish_reqs:not(.q) li")
 const draftBtn = document.getElementById("draft")
 const titleInput = document.getElementById("title")
 const createTitleItem = document.getElementById("create_title")
@@ -9,6 +10,7 @@ const addTagsItem = document.getElementById("add_tags")
 const subjectSelect = document.getElementById("subject")
 const chooseSubjectItem = document.getElementById("choose_subject")
 const feedback = document.getElementById("feedback")
+const container = document.querySelector(".container")
 let subject = "no_choice"
 let inputValues = []
 
@@ -25,6 +27,23 @@ const checkList = (li, action) => {
       break
     default:
       break
+  }
+}
+
+const checkReqs = () => {
+  let satisfied = true
+  for (let item of publishReqs) {
+    if (item.classList.contains("not_met")) {
+      satisfied = false
+      break
+    }
+  }
+  if (satisfied && publishBtn.classList.contains("no-click")) {
+    publishBtn.classList.remove("no-click")
+    publishBtn.parentElement.classList.remove("no-click")
+  } else if (!satisfied && !publishBtn.classList.contains("no-click")) {
+    publishBtn.classList.add("no-click")
+    publishBtn.parentElement.classList.add("no-click")
   }
 }
 
@@ -69,29 +88,8 @@ const removeTag = (e) => {
   if (inputValues.length === 0) {
     tags.classList.add("hide")
     checkList(addTagsItem, "uncheck")
+    checkReqs()
   }
-}
-
-const isEqual = (obj1, obj2) => {
-  //this can be an external function
-  for (let key in obj1) {
-    if (key === "tags") {
-      continue
-    } else if (obj1[key] !== obj2[key]) {
-      return false
-    }
-  }
-
-  if (obj1.tags.length !== obj2.tags.length) {
-    return false
-  }
-
-  for (let index of obj1.tags) {
-    if (obj1.tags[index] !== obj2.tags[index]) {
-      return false
-    }
-  }
-  return true
 }
 
 const addTag = (e) => {
@@ -112,10 +110,10 @@ const addTag = (e) => {
     tag.addEventListener("click", removeTag)
     tags.appendChild(tag)
     inputValues.push(value)
-    console.log("here?")
     if (inputValues.length > 0 && tags.classList.contains("hide")) {
       tags.classList.remove("hide")
       checkList(addTagsItem, "check")
+      checkReqs()
     }
     tagsInput.value = ""
   }
@@ -124,11 +122,10 @@ const addTag = (e) => {
 const giveFeedback = (msg, status) => {
   feedback.innerText = msg
   feedback.classList.add(status)
-  feedback.classList.remove("hide")
+  feedback.scrollIntoView()
   setTimeout(() => {
-    feedback.innerText = ""
+    container.scrollLeft = 0
     feedback.classList.remove(status)
-    feedback.classList.add("hide")
   }, 3000)
 }
 
@@ -137,6 +134,7 @@ const addTags = (incomingTags) => {
   if (inputValues.length > 0) {
     tags.classList.remove("hide")
     checkList(addTagsItem, "check")
+    checkReqs()
   }
   for (let tag of incomingTags) {
     let newTag = document.createElement("button")
@@ -159,11 +157,13 @@ const titleAdded = (e) => {
     createTitleItem.classList.contains("not_met")
   ) {
     checkList(createTitleItem, "check")
+    checkReqs()
   } else if (
     target.value.length === 0 &&
     createTitleItem.classList.contains("satisfied")
   ) {
     checkList(createTitleItem, "uncheck")
+    checkReqs()
   }
 }
 
@@ -174,6 +174,21 @@ const subjectPicked = (e) => {
     checkList(chooseSubjectItem, "check")
   } else {
     checkList(chooseSubjectItem, "uncheck")
+  }
+  checkReqs()
+}
+
+const getRole = async () => {
+  try {
+    const {
+      data: { role },
+    } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
+    if (role !== "admin") {
+      window.location.href = "/"
+    }
+  } catch (err) {
+    console.log(err)
+    window.location.href = "/"
   }
 }
 

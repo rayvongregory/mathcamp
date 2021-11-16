@@ -1,17 +1,41 @@
-.h3style {
+#drafts___section h3 {
     font-size: 1.5em;
 }
+
+#nothing-here {
+    display: inherit;
+    gap: 20px;
+}
+
+#nothing-here a {
+    padding: 20px;
+    border: var(--border);
+    background-color: white;
+    color: var(--deepTeal);
+    border-radius: 3px;
+    text-align: center;
+    text-decoration: none;
+}
+
+#nothing-here a:hover,
+#nothing-here a:focus {
+    color: var(--deepOrange)
+}
+
 
 #drafts___section {
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 30px;
-    padding: 1.5rem 1rem 5rem;
+    padding: 2rem 1rem 5rem;
     margin: auto;
     width: fit-content;
     width: -moz-fit-content;
+}
 
+#drafts___section.unset-grid {
+    grid-template-columns: unset;
 }
 
 #drafts___lessons, 
@@ -19,6 +43,8 @@
     display: grid;
     place-self: center;
     width: 100%;
+    opacity: 1;
+    transition: opacity 2s ease-out;
 }
 
 #drafts___section li {
@@ -36,18 +62,16 @@
     overflow: hidden;
     scroll-behavior: smooth;
     opacity: 1;
-    transition: opacity 1s ease-out 1s;
+    transition: opacity 2s ease-out;
 }
 
-#drafts___section li.fade_out {
+#drafts___section li.fade_out,
+#drafts___section ul.fade_out {
     opacity: 0;
 }
 
-
 #drafts___section li button {
-
     pointer-events: all;
-
 }
 
 #drafts___section li .front,
@@ -92,8 +116,29 @@
     margin: 15px 0.5rem;
 }
 
-#drafts___section li .back button:nth-of-type(2) {
+#drafts___section li .back input.flash {
+    animation: color-in-out 600ms ease-in-out;
+}
 
+#drafts___section li .back input.flash::placeholder {
+    opacity: 1;
+}
+
+
+@keyframes color-in-out {
+    0%, 50% {
+        color: var(--deepOrange);
+    }
+    25%, 75% {
+        color: var(--tinymceGrayActive);
+    }
+    100% {
+        color: #767676;
+    }
+}
+
+
+#drafts___section li .back button:nth-of-type(2) {
     width: 30%
 }
 
@@ -108,15 +153,24 @@
     pointer-events: all;
 }
 
-#drafts___section button:hover, 
-#drafts___section button:focus {
+#drafts___section li .front button:hover, 
+#drafts___section li .front button:focus {
     color: var(--deepOrange);
     cursor: pointer;
 }
 
-#drafts___section button:active {
+#drafts___section li .front button:active {
     color: var(--brightOrange);
+}
 
+#drafts___section li .back button:hover, 
+#drafts___section li .back button:focus {
+    background-color: var(--deepOrange);
+    cursor: pointer;
+}
+
+#drafts___section li .back button:active {
+    background-color: var(--brightOrange);
 }
 
 #drafts___section button i {
@@ -127,8 +181,15 @@
     color: darkred;
 }
 
+@media (min-width: 576px) {
+    #drafts___lessons, 
+    #drafts___exercises {
+        width: 500px;
+    }
+    
+}
 
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
     #drafts___section {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-template-rows: unset;

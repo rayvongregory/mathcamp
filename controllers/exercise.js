@@ -29,6 +29,7 @@ const postExercise = async (req, res) => {
   }
 
   exercise = new Exercise(req.body)
+  console.log(exercise)
   await exercise.save()
   res
     .status(StatusCodes.CREATED)

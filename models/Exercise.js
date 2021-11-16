@@ -28,7 +28,10 @@ const exerciseSchema = new Schema(
       required: [true, "Please provide a list of all problem IDs"],
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    minimize: false,
+  }
 )
 
 module.exports = mongoose.model("Exercise", exerciseSchema)

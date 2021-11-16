@@ -19,7 +19,7 @@ const {
 router.route("/lesson").get((req, res) => {
   res.render("pages/create_lesson", {
     type: "lesson",
-    title: "Create",
+    title: "Create Lesson",
     bannerTitle: "Create Lesson",
   })
 })
@@ -27,7 +27,7 @@ router.route("/lesson").get((req, res) => {
 router.route("/exercise").get((req, res) => {
   res.render("pages/create_exercise", {
     type: "exercise",
-    title: "Create",
+    title: "Create Exercise",
     bannerTitle: "Create Exercise",
   })
 })

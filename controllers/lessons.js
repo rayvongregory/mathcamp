@@ -16,8 +16,8 @@ const getLesson = async (req, res) => {
       .json({ msg: `Lesson with id ${id} does not exist.` })
   }
 
-  const { title, tags, text } = lesson
-  res.status(StatusCodes.OK).json({ title, tags, text })
+  const { title, tags, text, subject } = lesson
+  res.status(StatusCodes.OK).json({ title, tags, text, subject })
 }
 
 //! only admin can create, update. or delete
