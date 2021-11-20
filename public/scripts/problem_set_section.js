@@ -15,11 +15,12 @@ const hardProblemsSection = document.getElementById("hard_problems")
 const advancedProblemsSection = document.getElementById("advanced_problems")
 const noDiffProblemsSection = document.getElementById("no_difficulty_problems")
 const noProblemsYet = document.getElementById("no_problems_yet")
-const twentyEZ = document.getElementById("twenty_easy")
-const twentyStnd = document.getElementById("twenty_standard")
-const twentyHard = document.getElementById("twenty_hard")
-const twentyAdv = document.getElementById("twenty_advanced")
+const tenEZ = document.getElementById("ten_easy")
+const tenStnd = document.getElementById("ten_standard")
+const tenHard = document.getElementById("ten_hard")
+const tenAdv = document.getElementById("ten_advanced")
 const allMeetReqs = document.getElementById("all_meet_reqs")
+const publishQuestionReqs = document.querySelector(".to_publish_reqs.q")
 const overlay = document.querySelector(".overlay")
 const overlayCloseBtn = overlay.querySelector(".close")
 let overlayHeader = overlay.querySelector("h3")
@@ -46,32 +47,32 @@ const toggleList = (e) => {
   }
 }
 
-const checkForTwenty = (diff) => {
+const checkForTen = (diff) => {
   let item
   switch (diff) {
     case "easy":
-      item = twentyEZ
+      item = tenEZ
       break
     case "standard":
-      item = twentyStnd
+      item = tenStnd
       break
     case "hard":
-      item = twentyHard
+      item = tenHard
       break
     case "advanced":
-      item = twentyAdv
+      item = tenAdv
       break
     default:
       break
   }
 
   if (
-    Object.keys(problems[diff]).length >= 20 &&
+    Object.keys(problems[diff]).length >= 10 &&
     item.classList.contains("not_met")
   ) {
     checkList(item, "check")
   } else if (
-    Object.keys(problems[diff]).length < 20 &&
+    Object.keys(problems[diff]).length < 10 &&
     item.classList.contains("satisfied")
   ) {
     checkList(item, "uncheck")
@@ -94,6 +95,14 @@ const checkAllMeet = () => {
   checkReqs()
 }
 
+const checkQuestionReqs = () => {
+  let unsatisfied = publishQuestionReqs.querySelector(".not_met")
+  if (unsatisfied) {
+    return false
+  }
+  return true
+}
+
 const createProblemItem = (diff, id = null, satisfied = null) => {
   // id will not be null when we're fetching this data from the db and have to
   // recreate these items
@@ -110,7 +119,7 @@ const createProblemItem = (diff, id = null, satisfied = null) => {
   let problemItem = document.createElement("li")
   let icon = document.createElement("span")
   if (satisfied === null) {
-    if (checkReqs()) {
+    if (checkQuestionReqs()) {
       satisfied = true
     } else {
       satisfied = false
@@ -167,22 +176,22 @@ const appendThisToThat = (el, diff) => {
     case "easy":
       easyProblemsSection.appendChild(el)
       unhideSection(easyProblemsSection)
-      checkForTwenty(diff)
+      checkForTen(diff)
       break
     case "standard":
       standardProblemsSection.appendChild(el)
       unhideSection(standardProblemsSection)
-      checkForTwenty(diff)
+      checkForTen(diff)
       break
     case "hard":
       hardProblemsSection.appendChild(el)
       unhideSection(hardProblemsSection)
-      checkForTwenty(diff)
+      checkForTen(diff)
       break
     case "advanced":
       advancedProblemsSection.appendChild(el)
       unhideSection(advancedProblemsSection)
-      checkForTwenty(diff)
+      checkForTen(diff)
       break
     default:
       noDiffProblemsSection.appendChild(el)
@@ -241,7 +250,7 @@ const editThisOne = (problemItem, diff, pid) => {
       createChoiceItem(choice.substring(3))
     }
   }
-  checkForTen()
+  checkForFive()
   checkReqs()
   let editBtn = problemItem.querySelectorAll("button")[1]
   addAllBtn.dataset.refId = pid
@@ -284,12 +293,12 @@ const updateProblem = (pid, diff, newDiff = null) => {
     problems[newDiff][`pid${pid}`] = problemToMove // move it
     diff = newDiff //update the diff
     problemItem.dataset.diff = diff //update the diff property
+    deleteProblemItem(problemItem)
+    appendThisToThat(problemItem, diff)
   }
   problems[diff][`pid${pid}`].question = question
   problems[diff][`pid${pid}`].choices = { ...choices }
-  deleteProblemItem(problemItem)
-  appendThisToThat(problemItem, diff)
-  if (checkReqs()) {
+  if (checkQuestionReqs()) {
     problemItem.dataset.satisfied = "true"
     if (icon.classList.contains("fa-times-circle")) {
       icon.classList.replace("fa-times-circle", "fa-check-circle")
@@ -382,19 +391,19 @@ const addAllProblems = () => {
   for (let p in easy) {
     createProblemItem("easy", p.substring(3), easy[p].satisfied)
   }
-  checkForTwenty("easy")
+  checkForTen("easy")
   for (let p in standard) {
     createProblemItem("standard", p.substring(3), standard[p].satisfied)
   }
-  checkForTwenty("standard")
+  checkForTen("standard")
   for (let p in hard) {
     createProblemItem("hard", p.substring(3), hard[p].satisfied)
   }
-  checkForTwenty("hard")
+  checkForTen("hard")
   for (let p in advanced) {
     createProblemItem("advanced", p.substring(3), advanced[p].satisfied)
   }
-  checkForTwenty("advanced")
+  checkForTen("advanced")
   for (let p in no_choice) {
     createProblemItem("no_choice", p.substring(3), no_choice[p].satisfied)
   }
@@ -552,7 +561,7 @@ const delProblem = (e) => {
   usedPIDs.splice(usedPIDs.indexOf(pid), 1)
   deleteProblemItem(problemItem)
   if (diff !== "no_choice") {
-    checkForTwenty(diff)
+    checkForTen(diff)
   }
   checkAllMeet()
 }

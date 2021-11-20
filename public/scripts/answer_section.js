@@ -44,7 +44,7 @@ const addAns = (e) => {
       let correctAnswerItem = correctAnswerSection.querySelector("li")
       if (!correctAnswerItem) {
         createAnsItem()
-        checkForTen()
+        checkForFive()
       } else {
         let p = correctAnswerItem.querySelector("p")
         let btn = correctAnswerItem.querySelector("button")
@@ -114,7 +114,7 @@ const deleteAns = () => {
   correctAnswerSection.classList.add("hide")
   setAria(addAnsBtn, "Add answer")
   setAria(discardAnsBtn, "Discard")
-  checkForTen()
+  checkForFive()
 }
 
 addAnsBtn.addEventListener("pointerup", addAns)

@@ -4,16 +4,16 @@ const addChoiceBtn = document.getElementById("choice_add")
 const discardChoiceBtn = document.getElementById("choice_discard")
 const choicesSection = document.getElementById("question_choices")
 const extraOptions_2 = extraOptions[2]
-const tenChoices = document.getElementById("ten_choices")
+const fiveChoices = document.getElementById("five_choices")
 let choices = {}
 
 //util
-const checkForTen = () => {
-  i = tenChoices.querySelector("i")
-  if (Object.keys(choices).length >= 10) {
-    checkList(tenChoices, "check")
+const checkForFive = () => {
+  i = fiveChoices.querySelector("i")
+  if (Object.keys(choices).length >= 5) {
+    checkList(fiveChoices, "check")
   } else {
-    checkList(tenChoices, "uncheck")
+    checkList(fiveChoices, "uncheck")
   }
   checkReqs()
 }
@@ -111,7 +111,7 @@ const addChoice = (e) => {
     default:
       break
   }
-  checkForTen()
+  checkForFive()
 }
 
 //update
@@ -172,7 +172,7 @@ const deleteChoice = (e) => {
   }
   item.remove()
   delete choices[`cid${cid}`]
-  checkForTen()
+  checkForFive()
   if (
     Object.keys(choices).length === 0 ||
     (Object.keys(choices).length === 1 && choices.answer)

@@ -1,6 +1,5 @@
 //this is for the onload, draft, publish, and any util functions
 // that apply to multiple sections
-const publishQuestionReqs = document.querySelectorAll(".to_publish_reqs.q li")
 const publishExerciseReqs = document.querySelector(".to_publish_reqs:not(.q)")
 const labelPs = Array.from(
   document.querySelectorAll(".label-wrapper p")

@@ -35,15 +35,16 @@ const observeWordCount = () => {
         p.innerText = `This has enough words to be published`
         p.classList.replace("need-more", "limit-met")
         checkList(enoughWordsItem, "check")
+        checkReqs()
       } else if (count < 500) {
         p.innerText = `Add ${500 - count} more words to publish`
         if (p.classList.contains("limit-met")) {
           p.classList.replace("limit-met", "need-more")
           checkList(enoughWordsItem, "uncheck")
+          checkReqs()
         }
       }
     })
-    checkReqs()
   }
   const observer = new MutationObserver(callback)
   observer.observe(wordCountDiv, {
