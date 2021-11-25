@@ -1,10 +1,12 @@
 const Lesson = require("../models/Lesson")
 const { StatusCodes } = require("http-status-codes")
 
-//!every user gets access to get a lesson/the lessons
-
 const getAllLessons = async (req, res) => {
-  res.send("hopefully getting all lessons")
+  const publishedLessons = await Lesson.find(
+    { status: "published" },
+    "id title"
+  )
+  res.status(StatusCodes.OK).json(publishedLessons)
 }
 
 const getLesson = async (req, res) => {

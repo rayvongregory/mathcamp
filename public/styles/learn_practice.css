@@ -1,0 +1,163 @@
+.grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 10px;
+    padding: 0.75rem 0.75rem 6.5rem;
+}
+
+#filters {
+    display: flex;
+    grid-template-columns: 40px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.gr {
+    display: grid;
+    place-items: center;
+    grid-column: 1;
+    width: 40px;
+    height: 40px;
+    box-shadow: var(--boxShadow);
+    border: none;
+    border-radius: 3px;
+    background-color: var(--deepTeal);
+    font-size: 1rem;
+    color: white;
+}
+
+.gr:hover, 
+.gr:focus {
+    background-color: var(--deepOrange);
+    cursor: pointer;
+}
+
+.gr:active,
+.gr.selected {
+    background-color: var(--brightOrange);
+}
+
+#chptr_select {
+    position: relative;
+    margin-bottom: 10px;
+    width: 100%;
+    height: fit-content;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.15s ease-in 0.1s, top 0.15s ease-in;
+    pointer-events: none;
+}
+
+#chptr_select.reveal {
+    opacity: 1;
+    z-index: unset;
+    top: unset;
+}
+
+.select-selected {
+    background-color: var(--deepTeal);
+    border-radius: 3px;
+    box-shadow: var(--boxShadow);
+}
+
+.select-selected:after {
+    position: absolute;
+    content: "";
+    top: 17px;
+    right: 14px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
+}
+
+.select-selected.select-arrow-active {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.select-selected.select-arrow-active:after {
+    border-color: transparent transparent #fff transparent;
+    top: 10px;
+}
+
+.select-items div,.select-selected {
+    display: flex;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    pointer-events: all;
+    user-select: none;
+}
+
+.select-selected {
+    min-height: 40px;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+}
+
+.select-items {
+    background-color: var(--deepTeal);
+    top: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.select-items div {
+    padding: 0.5rem 1rem;
+}
+
+.select-items div:hover,
+.select-items div:focus, 
+.same-as-selected {
+    background-color: var(--brightTeal);
+}
+
+.select-items div:last-of-type {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    box-shadow: var(--boxShadow);
+}
+
+.lessons {
+    width: 100%;
+    /* height: 50vh; */
+    padding: 1em;
+    /* background-color: red; */
+    display: grid;
+}
+
+
+@media (min-width: 576px) {
+    .grid {
+        padding: 0.75rem;
+    }
+
+    #filters {
+        flex-direction: column;
+    }
+
+    .gr {
+        grid-row: 1;
+        grid-column: unset;
+    }
+    
+    #chptr_select {
+        grid-row: 1;
+        grid-column: 2;
+    }
+    
+}
+
+@media (min-width: 768px) {
+    .grid {
+        flex-direction: row;
+        max-width: 992px;
+        margin: 0 auto;
+    }
+
+}

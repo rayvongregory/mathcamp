@@ -37,7 +37,11 @@ const observeWordCount = () => {
         checkList(enoughWordsItem, "check")
         checkReqs()
       } else if (count < 500) {
-        p.innerText = `Add ${500 - count} more words to publish`
+        if (count === 499) {
+          p.innerText = `Add 1 more word to publish`
+        } else {
+          p.innerText = `Add ${500 - count} more words to publish`
+        }
         if (p.classList.contains("limit-met")) {
           p.classList.replace("limit-met", "need-more")
           checkList(enoughWordsItem, "uncheck")
@@ -52,24 +56,6 @@ const observeWordCount = () => {
   })
 }
 
-const isEqual = (obj1, obj2) => {
-  for (let key in obj1) {
-    if (key === "tags") {
-      if (obj1.tags.length !== obj2.tags.length) {
-        return false
-      }
-      continue
-    } else if (obj1[key] !== obj2[key]) {
-      return false
-    }
-  }
-  for (let index in obj1.tags) {
-    if (obj1.tags[index] !== obj2.tags[index]) {
-      return false
-    }
-  }
-  return true
-}
 const compareText = (e = null) => {
   currentDoc.text =
     tinymce.activeEditor.iframeElement.contentWindow.document.querySelector(
@@ -89,7 +75,7 @@ const compareText = (e = null) => {
 }
 
 const saveText = async (status) => {
-  if (compareText()) {
+  if (compareText() && status === "draft") {
     return giveFeedback("No changes were made since the last save.", "not_met")
   }
   textAreaText =
@@ -112,7 +98,11 @@ const saveText = async (status) => {
         subject,
         status,
       })
-      giveFeedback("Save successful", "satisfied")
+      if (status === "draft") {
+        giveFeedback("Save successful", "satisfied")
+      } else {
+        giveFeedback("This lesson has been published", "satisfied")
+      }
     } catch (err) {
       unauthorized(`A lesson with this title already exists`, pTitle)
       console.log(err)
@@ -193,6 +183,7 @@ const getInfo = async (id) => {
 
 const init = () => {
   getRole()
+  getChapters()
   fullscreenBtn = document.querySelector('[aria-label="Fullscreen"]')
   fullscreenBtn.addEventListener("pointerup", changeTextAreaSize)
   changeTextAreaSize()

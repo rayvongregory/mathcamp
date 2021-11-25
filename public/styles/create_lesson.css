@@ -11,12 +11,10 @@
 
 .need-more {
     color: darkred !important;
-    margin-right: 2em !important;
 }
 
 .limit-met {
     color: var(--deepTeal) !important;
-    margin-right: 2em !important;
 }
 
 .tox-tinymce:not(.tox-fullscreen) {

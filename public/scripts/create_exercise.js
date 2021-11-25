@@ -143,33 +143,6 @@ const getInfo = async (id) => {
   }
 }
 
-const isEqual = (obj1, obj2) => {
-  for (let key in obj1) {
-    if (key === "tags" || key === "usedPIDs" || key == "problems") {
-      continue
-    } else if (obj1[key] !== obj2[key]) {
-      return false
-    }
-  }
-  if (obj1.tags.length !== obj2.tags.length) {
-    return false
-  }
-  for (let index of obj1.tags) {
-    if (obj1.tags[index] !== obj2.tags[index]) {
-      return false
-    }
-  }
-  if (obj1.usedPIDs.length !== obj2.usedPIDs.length) {
-    return false
-  }
-  for (let index in obj1.usedPIDs) {
-    if (obj1.usedPIDs[index] !== obj2.usedPIDs[index]) {
-      return false
-    }
-  }
-  return true
-}
-
 const sameProblemSet = (e = null) => {
   currentExercise = {
     title: titleInput.value.trim(),
@@ -182,10 +155,8 @@ const sameProblemSet = (e = null) => {
     return true
   } else {
     if (e) {
-      if (e) {
-        e.preventDefault()
-        e.returnValue = ""
-      }
+      e.preventDefault()
+      e.returnValue = ""
     }
     return false
   }
@@ -224,7 +195,6 @@ const saveExercise = async (status) => {
       giveFeedback("Save successful", "satisfied")
     } catch (err) {
       giveFeedback("An exercise with that title already exists.", "not_met")
-
       console.error(err)
     }
   } else {
@@ -240,11 +210,13 @@ const saveExercise = async (status) => {
         usedPIDs,
       })
       if (status === "draft") {
+        window.removeEventListener("beforeunload", sameProblemSet)
         window.location.href = `/drafts/exercise/${id}`
       } else {
         window.location.href = `/exercises`
       }
     } catch (err) {
+      giveFeedback("An exercise with that title already exists.", "not_met")
       console.error(err)
     }
   }
@@ -276,6 +248,7 @@ const draftExercise = () => {
 
 const init = () => {
   getRole()
+  getChapters()
   defineTextAreas()
   listenForChangesToPublishExerciseList()
   if (path.split("/")[3]) {

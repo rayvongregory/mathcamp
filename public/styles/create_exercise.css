@@ -11,11 +11,10 @@
     column-gap: 10px;
 }
 
-
 .extra-options {
     position: absolute;
     right: 5px;
-    top: 27px;
+    top: 25px;
     display: flex;
     align-items: center;
     background-color: white;

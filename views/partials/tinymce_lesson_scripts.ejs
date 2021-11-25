@@ -7,13 +7,15 @@
   tinymce.init({
     selector: "#mytextarea",
     plugins:
-      "advlist autolink charmap code emoticons fullscreen hr image importcss lists media wordcount",
+      "advlist autolink autosave charmap code emoticons fullscreen hr image importcss lists link media table wordcount",
     external_plugins: {
       tiny_mce_wiris: "https://www.wiris.net/demo/plugins/tiny_mce/plugin.js",
     },
     toolbar:
-      "fullscreen | undo redo | tiny_mce_wiris_formulaEditor charmap image media emoticons hr | cut copy | fontselect | fontsizeselect | forecolor backcolor | bold italic underline strikethrough superscript subscript numlist bullist code | alignleft aligncenter alignright alignjustify lineheight | outdent indent ",
-    fontsize_formats: "8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt 60pt",
+      "fullscreen | undo redo | tiny_mce_wiris_formulaEditor charmap image media link emoticons hr | fontselect | fontsizeselect | forecolor backcolor " +
+      " numlist bullist | alignleft aligncenter alignright alignjustify lineheight | outdent indent ",
+    fontsize_formats:
+      "8pt 10pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 30pt 32pt 36pt 40pt 48pt 60pt",
     content_style:
       ".left { text-align: left; } " +
       "img.left { float: left; } " +
@@ -30,7 +32,7 @@
       ".bold { font-weight: bolder; } " +
       ".italic { font-style: italic; } " +
       ".underline { text-decoration: underline; } " +
-      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px; margin: 1rem; max-width: 800px; }",
+      "body { font-family:Helvetica,Arial,sans-serif; font-size: 12pt; line-height: 1; margin: 1rem; max-width: 886px;}",
     formats: {
       alignleft: {
         selector:
@@ -57,6 +59,40 @@
       underline: { inline: "span", classes: "underline", exact: true },
       strikethrough: { inline: "del" },
     },
-    menubar: "",
+    link_assume_external_targets: true,
+    link_context_toolbar: true,
+    link_default_protocol: "https",
+    menu: {
+      file: {
+        title: "File",
+        items: "newdocument restoredraft ",
+      },
+      edit: {
+        title: "Edit",
+        items: "undo redo | cut copy paste | selectall | searchreplace",
+      },
+      view: {
+        title: "View",
+        items: "",
+      },
+      insert: {
+        title: "Insert",
+        items:
+          "image link media inserttable | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime",
+      },
+      format: {
+        title: "Format",
+        items:
+          "bold italic underline strikethrough superscript subscript codeformat | numlist bullist | blockformats fontformats align lineheight | forecolor backcolor | removeformat",
+      },
+      table: {
+        title: "Table",
+        items: "inserttable | cell row column | tableprops deletetable",
+      },
+      tools: {
+        title: "Tools",
+        items: "spellchecker spellcheckerlanguage | code wordcount",
+      },
+    },
   })
 </script>

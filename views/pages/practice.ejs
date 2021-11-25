@@ -2,12 +2,15 @@
 <html class="invis" lang="en">
   <head>
     <%- include('../partials/head'); %>
+    <link rel="stylesheet" href="/styles/learn_practice.css" />
   </head>
   <body>
     <%- include('../partials/aside'); %> <%- include('../partials/nav'); %> <%-
     include('../partials/banner'); %>
     <div class="msg"><%=msg%></div>
+    <%- include('../partials/activity_filter'); %>
     <footer><%- include('../partials/footer'); %></footer>
     <%- include('../partials/universal_scripts'); %>
+    <script src="/scripts/learn_practice.js"></script>
   </body>
 </html>

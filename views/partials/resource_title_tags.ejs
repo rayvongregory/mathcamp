@@ -1,8 +1,6 @@
 <div class="tts-grid">
   <div class="flex-wrapper">
-    <div class="label-wrapper">
-      <label for="title">Title</label>
-    </div>
+    <label for="title">Title</label>
     <input
       id="title"
       type="text"
@@ -10,9 +8,7 @@
     />
   </div>
   <div class="flex-wrapper">
-    <div class="label-wrapper">
-      <label for="tags_input">Tags</label>
-    </div>
+    <label for="tags_input">Tags</label>
     <input
       type="text"
       name="input"
@@ -24,13 +20,11 @@
     <section class="hide" id="tags"></section>
   </div>
   <div class="flex-wrapper">
-    <div class="label-wrapper">
-      <label for="subject">Subject</label>
-    </div>
+    <label for="subject">Subject</label>
     <select name="subject" id="subject">
       <option value="no_choice">Choose a subject</option>
-      <option value="7">7th Grade</option>
-      <option value="8">8th Grade</option>
+      <option value="seven">7th Grade</option>
+      <option value="eight">8th Grade</option>
       <option value="alg">Algebra</option>
       <option value="geo">Geometry</option>
       <option value="p_s">Probability & Statistics</option>
@@ -39,5 +33,19 @@
       <option value="calc">Calculus</option>
       <option value="calc2">Calculus 2</option>
     </select>
+  </div>
+  <div class="two-columns hide">
+    <div class="flex-wrapper">
+      <label for="chapter">Chapter</label>
+      <select name="chapter" id="chapter">
+        <option value="no_choice">Choose a chapter</option>
+      </select>
+    </div>
+    <div class="flex-wrapper hide">
+      <label for="section">Section</label>
+      <select name="section" id="section">
+        <option value="no_choice">Choose a section</option>
+      </select>
+    </div>
   </div>
 </div>

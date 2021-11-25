@@ -8,11 +8,46 @@ const tagsInput = document.getElementById("tags_input")
 const tags = document.getElementById("tags")
 const addTagsItem = document.getElementById("add_tags")
 const subjectSelect = document.getElementById("subject")
+const chapterSelect = document.getElementById("chapter")
+const sectionSelect = document.getElementById("section")
+const chapter_sectionDiv = document.querySelector(".two-columns")
 const chooseSubjectItem = document.getElementById("choose_subject")
+const pickChapterSectionItem = document.getElementById("pick_chapter_section")
 const feedback = document.getElementById("feedback")
 const container = document.querySelector(".container")
-let subject = "no_choice"
-let inputValues = []
+let subject = "no_choice",
+  inputValues = [],
+  chapters = {
+    seven: {},
+    eight: {},
+    alg: {},
+    geo: {},
+    p_s: {},
+    alg2: {},
+    pc: {},
+    calc: {},
+    calc2: {},
+  },
+  selected_chapter = "all"
+
+const getChapters = async () => {
+  try {
+    const {
+      data: { _seven, _eight, _alg, _geo, _p_s, _alg2, _pc, _calc, _calc2 },
+    } = await axios.get("/api/v1/chapters")
+    chapters.seven = _seven
+    chapters.eight = _eight
+    chapters.alg = _alg
+    chapters.geo = _geo
+    chapters.p_s = _p_s
+    chapters.alg2 = _alg2
+    chapters.pc = _pc
+    chapters.calc = _calc
+    chapters.calc2 = _calc2
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 const checkList = (li, action) => {
   let i = li.querySelector("i")
@@ -167,15 +202,151 @@ const titleAdded = (e) => {
   }
 }
 
+const removeOptions = (select) => {
+  let options = Array.from(select.querySelectorAll("option"))
+  for (let i = 1; i < options.length; i++) {
+    options[i].remove()
+  }
+}
+
 const subjectPicked = (e) => {
   const { target } = e
-  subject = subjectSelect.value
-  if (target.value !== "no_choice") {
+  if (subject !== target.value) {
+    subject = target.value
+    removeOptions(chapterSelect)
+    resetChapterSection()
+    if (target.value !== "no_choice") {
+      addChapters(target.value)
+    }
+  }
+  if (
+    target.value !== "no_choice" &&
+    chooseSubjectItem.classList.contains("not_met")
+  ) {
     checkList(chooseSubjectItem, "check")
-  } else {
+    chapter_sectionDiv.classList.remove("hide")
+  } else if (
+    target.value === "no_choice" &&
+    chooseSubjectItem.classList.contains("satisfied")
+  ) {
     checkList(chooseSubjectItem, "uncheck")
+    if (pickChapterSectionItem.classList.contains("satisfied")) {
+      checkList(pickChapterSectionItem, "uncheck")
+    }
+    chapter_sectionDiv.classList.add("hide")
+    resetChapterSection()
   }
   checkReqs()
+}
+
+const addChapters = (val) => {
+  let list = chapters[val]
+  for (let c = 0; c < list.length; c++) {
+    let chapter = document.createElement("option")
+    chapter.innerHTML = `Chapter ${list[c].title.number}: ${list[c].title.name}`
+    chapter.setAttribute("value", `${list[c].title.number}`)
+    chapterSelect.appendChild(chapter)
+  }
+}
+
+const chapterPicked = (e) => {
+  const { target } = e
+  if (
+    target.value === "no_choice" &&
+    !sectionSelect.parentElement.classList.contains("hide")
+  ) {
+    sectionSelect.parentElement.classList.add("hide")
+    selected_chapter = "no_choice"
+    sectionSelect.value = "no_choice"
+    removeOptions(sectionSelect)
+    if (pickChapterSectionItem.classList.contains("satisfied")) {
+      checkList(pickChapterSectionItem, "uncheck")
+    }
+    checkReqs()
+  } else if (target.value !== "no_choice") {
+    if (selected_chapter !== target.value) {
+      selected_chapter = target.value
+      removeOptions(sectionSelect)
+      addSections()
+    }
+    if (sectionSelect.parentElement.classList.contains("hide")) {
+      sectionSelect.parentElement.classList.remove("hide")
+    }
+  }
+}
+
+const addSections = () => {
+  let sections = chapters[subject][selected_chapter - 1].sections
+  for (let s in sections) {
+    let option = document.createElement("option")
+    option.setAttribute("value", s)
+    option.innerHTML = `Section ${s}: ${sections[s]}`
+    sectionSelect.appendChild(option)
+  }
+}
+
+const sectionPicked = (e) => {
+  const { target } = e
+  if (
+    target.value !== "no_choice" &&
+    pickChapterSectionItem.classList.contains("not_met")
+  ) {
+    checkList(pickChapterSectionItem, "check")
+  } else if (
+    target.value === "no_choice" &&
+    pickChapterSectionItem.classList.contains("satisfied")
+  ) {
+    checkList(pickChapterSectionItem, "uncheck")
+  }
+  checkReqs()
+}
+
+const resetChapterSection = () => {
+  // this gets called when the subject is "no_choice"
+  if (chapterSelect.value !== "no_choice") {
+    chapterSelect.value = "no_choice"
+    removeOptions(chapterSelect)
+  }
+  if (sectionSelect.value !== "no_choice") {
+    sectionSelect.value = "no_choice"
+    removeOptions(sectionSelect)
+  }
+  sectionSelect.parentElement.classList.add("hide")
+
+  if (pickChapterSectionItem.classList.contains("satisfied")) {
+    checkList(pickChapterSectionItem, "uncheck")
+  }
+}
+
+const isEqual = (obj1, obj2) => {
+  for (let key in obj1) {
+    if (key === "tags") {
+      if (obj1.tags.length !== obj2.tags.length) {
+        return false
+      }
+    } else if (key === "usedPIDs") {
+      if (obj1.usedPIDs.length !== obj2.usedPIDs.length) {
+        return false
+      }
+    } else if (key === "problems") {
+      continue
+    } else if (obj1[key] !== obj2[key]) {
+      return false
+    }
+  }
+  for (let index of obj1.tags) {
+    if (obj1.tags[index] !== obj2.tags[index]) {
+      return false
+    }
+  }
+  if (obj1.usedPIDs) {
+    for (let index in obj1.usedPIDs) {
+      if (obj1.usedPIDs[index] !== obj2.usedPIDs[index]) {
+        return false
+      }
+    }
+  }
+  return true
 }
 
 const getRole = async () => {
@@ -198,6 +369,6 @@ if (!token) {
 
 titleInput.addEventListener("keyup", titleAdded)
 tagsInput.addEventListener("keyup", addTag)
-subjectSelect.addEventListener("pointerup", subjectPicked)
 subjectSelect.addEventListener("click", subjectPicked)
-subjectSelect.addEventListener("keyup", subjectPicked)
+chapterSelect.addEventListener("click", chapterPicked)
+sectionSelect.addEventListener("click", sectionPicked)

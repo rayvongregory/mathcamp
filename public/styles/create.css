@@ -9,7 +9,7 @@
 .create-wrapper {
     padding: 2rem;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1300px;
     margin: auto;
 }
 
@@ -34,19 +34,23 @@ footer {
     gap: 0.5rem;
 }
 
-.tts-grid :nth-child(1),
-.tts-grid :nth-child(2),
-.tts-grid :nth-child(3) {
+.tts-grid > :nth-child(1),
+.tts-grid > :nth-child(2) {
     grid-column: 1;
 }
 
-.tts-grid :nth-child(4) {
+.tts-grid > :nth-child(3) {
+    grid-column: 1/span 2;
+}
+
+.tts-grid > :nth-child(4) {
     grid-column: 2;
     grid-row: 1;
 }
 
-#subject:hover {
-    cursor: pointer;
+.tts-grid > :nth-child(5) {
+    grid-column: 2;
+    grid-row: 2;
 }
 
 .flex-wrapper {
@@ -58,22 +62,17 @@ footer {
     max-width: 600px;
 }
 
-.label-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-right: 5px;
-    width: 100%;
+.flex-wrapper label {
     font-size: 1.25rem;
 }
 
 .flex-wrapper input {
-    height: 30px;
+    height: 20px;
     width: 100%;
-    font-size: 1rem;
     padding-left: 5px;
     display: inline-block;
     border: var(--tinymceBorder);
+    border-radius: 3px;
 }
 
 .flex-wrapper p {
@@ -82,8 +81,11 @@ footer {
 }
 
 .flex-wrapper select {
-    margin: 5px 0;
-    width: 170px;
+    width: 185px;
+}
+
+.flex-wrapper select:hover {
+    cursor: pointer;
 }
 
 .tags-wrapper {
@@ -105,9 +107,6 @@ footer {
 #tags {
     display: flex;
     flex-wrap: wrap;
-    width: fit-content;
-    width: -moz-fit-content;
-    max-width: 600px;
     padding: 0.125em 0.1em;
     border: var(--tinymceBorder);
     background-color: white;
@@ -150,14 +149,17 @@ footer {
     border: none;
 }
 
+.two-columns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
 .container {
     display: flex;
     align-items: center;
-    justify-items: center;
     margin: 10px auto auto;
     width: 100%;
     height: 90px;
-    flex-shrink: 0;
     border: var(--tinymceBorder);
     overflow: hidden;
     scroll-behavior: smooth;

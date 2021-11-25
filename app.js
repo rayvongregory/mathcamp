@@ -11,14 +11,15 @@ const usersRouter = require("./routes/users")
 const tokenRouter = require("./routes/token")
 const createRouter = require("./routes/create")
 const draftRouter = require("./routes/draft")
+const chaptersRouter = require("./routes/chapters")
 
 const express = require("express")
 const app = express()
 
 app.set("view engine", "ejs")
 app.use(express.static(__dirname + "/public"))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.json({ limit: "200mb" }))
+app.use(express.urlencoded({ limit: "200mb", extended: false }))
 
 app.use("/api/v1/lessons", lessonsRouter) //protect this route
 app.use("/api/v1/exercises", exercisesRouter) //protect this route
@@ -27,6 +28,7 @@ app.use("/api/v1/help", helpRouter)
 app.use("/api/v1/token", tokenRouter)
 app.use("/api/v1/auth", authRouter) //register, login, logout
 app.use("/api/v1/users", usersRouter) // admin only (if you ever decide to flesh this is)
+app.use("/api/v1/chapters", chaptersRouter)
 app.use("/create", createRouter)
 app.use("/drafts", draftRouter)
 
