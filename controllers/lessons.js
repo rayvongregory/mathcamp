@@ -2,11 +2,18 @@ const Lesson = require("../models/Lesson")
 const { StatusCodes } = require("http-status-codes")
 
 const getAllLessons = async (req, res) => {
+  const { gr } = req.params
   const publishedLessons = await Lesson.find(
-    { status: "published" },
-    "id title"
+    // { status: "published", subject: gr },
+    { subject: gr },
+    "id title subject chapter section"
   )
-  res.status(StatusCodes.OK).json(publishedLessons)
+  res.status(StatusCodes.OK).json({ publishedLessons })
+}
+
+const getFilteredLessons = async (req, res) => {
+  console.log(req.params)
+  res.status(StatusCodes.OK).json({ msg: "Getting filtered lessons" })
 }
 
 const getLesson = async (req, res) => {
@@ -18,8 +25,10 @@ const getLesson = async (req, res) => {
       .json({ msg: `Lesson with id ${id} does not exist.` })
   }
 
-  const { title, tags, text, subject } = lesson
-  res.status(StatusCodes.OK).json({ title, tags, text, subject })
+  const { title, tags, text, subject, chapter, section } = lesson
+  res
+    .status(StatusCodes.OK)
+    .json({ title, tags, text, subject, chapter, section })
 }
 
 //! only admin can create, update. or delete
@@ -75,6 +84,7 @@ const deleteLesson = async (req, res) => {
 }
 module.exports = {
   getAllLessons,
+  getFilteredLessons,
   getLesson,
   postLesson,
   updateLesson,

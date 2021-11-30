@@ -4,12 +4,16 @@ let lastSave = {
   title: "",
   text: "",
   subject: "no_choice",
+  chapter: "no_choice",
+  section: "no_choice",
   tags: [],
 }
 let currentDoc = {
   title: "",
   text: "",
   subject: "no_choice",
+  chapter: "no_choice",
+  section: "no_choice",
   tags: [],
 }
 
@@ -64,6 +68,8 @@ const compareText = (e = null) => {
   currentDoc.title = titleInput.value.trim()
   currentDoc.tags = inputValues.slice()
   currentDoc.subject = subject
+  currentDoc.chapter = chapter
+  currentDoc.section = section
   if (e && !isEqual(currentDoc, lastSave)) {
     e.preventDefault()
     e.returnValue = ""
@@ -75,6 +81,7 @@ const compareText = (e = null) => {
 }
 
 const saveText = async (status) => {
+  document.activeElement.blur()
   if (compareText() && status === "draft") {
     return giveFeedback("No changes were made since the last save.", "not_met")
   }
@@ -87,6 +94,8 @@ const saveText = async (status) => {
     tags: inputValues.slice(),
     title: titleInput.value.trim(),
     subject,
+    chapter,
+    section,
   }
   currentDoc = { ...lastSave }
   if (resourceId) {
@@ -97,6 +106,8 @@ const saveText = async (status) => {
         tags: inputValues,
         subject,
         status,
+        chapter,
+        section,
       })
       if (status === "draft") {
         giveFeedback("Save successful", "satisfied")
@@ -117,6 +128,8 @@ const saveText = async (status) => {
         tags: inputValues,
         subject,
         status,
+        chapter,
+        section,
       })
       if (status === "draft") {
         window.location.href = `/drafts/lesson/${id}`
@@ -145,6 +158,12 @@ const publishText = (e) => {
   if (subject === "no_choice") {
     return giveFeedback("Choose a subject to publish this lesson.", "not_met")
   }
+  if (chapter === "no_choice") {
+    return giveFeedback("Pick a chapter to publish this lesson.", "not_met")
+  }
+  if (section === "no_choice") {
+    return giveFeedback("Pick a section to publish this lesson.", "not_met")
+  }
 
   saveText("published")
 }
@@ -161,7 +180,7 @@ const draftText = () => {
 const getInfo = async (id) => {
   try {
     const {
-      data: { title, tags, subject, text },
+      data: { title, tags, subject, chapter: c, section: s, text },
     } = await axios.get(`/api/v1/lessons/${id}`)
     titleInput.value = title
     titleInput.dispatchEvent(new KeyboardEvent("keyup"))
@@ -171,9 +190,32 @@ const getInfo = async (id) => {
       )
     textAreaText.innerHTML = text
     subjectSelect.value = subject
-    subjectSelect.dispatchEvent(new Event("pointerup"))
-    lastSave = { title, tags: tags.slice(), text, subject }
-    currentDoc = { title, tags: tags.slice(), text, subject }
+    subjectSelect.dispatchEvent(new Event("click"))
+    if (c !== "no_choice") {
+      chapterSelect.value = c
+      chapterSelect.dispatchEvent(new Event("click"))
+    }
+    console.log(typeof s, s)
+    if (s !== "no_choice") {
+      sectionSelect.value = s
+      sectionSelect.dispatchEvent(new Event("click"))
+    }
+    lastSave = {
+      title,
+      tags: tags.slice(),
+      text,
+      subject,
+      chapter: c,
+      section: s,
+    }
+    currentDoc = {
+      title,
+      tags: tags.slice(),
+      text,
+      subject,
+      chapter: c,
+      section: s,
+    }
     textAreaText.dispatchEvent(new KeyboardEvent("keyup"))
     addTags(tags)
   } catch (err) {
@@ -192,7 +234,9 @@ const init = () => {
   observeWordCount()
   if (path.split("/")[3]) {
     resourceId = path.split("/")[3]
-    getInfo(resourceId)
+    setTimeout(() => {
+      getInfo(resourceId)
+    }, 500)
   } else {
     tinymce.activeEditor.iframeElement.contentWindow.document.querySelector(
       "body"
@@ -202,5 +246,5 @@ const init = () => {
 
 window.addEventListener("load", init)
 window.addEventListener("beforeunload", compareText)
-draftBtn.addEventListener("click", draftText)
+draftBtn.addEventListener("pointerup", draftText)
 publishBtn.addEventListener("pointerup", publishText)

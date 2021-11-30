@@ -11,6 +11,14 @@ const lessonSchema = new Schema(
     subject: {
       type: String,
     },
+    chapter: {
+      type: String,
+      required: [true, "Please pick a chapter for this lesson"],
+    },
+    section: {
+      type: String,
+      required: [true, "Please pick a section for this lesson"],
+    },
     text: {
       type: String,
       default: "",

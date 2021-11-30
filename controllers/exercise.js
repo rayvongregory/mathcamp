@@ -14,8 +14,11 @@ const getExercise = async (req, res) => {
       .status(StatusCodes.NOT_FOUND)
       .json({ msg: `Exercise with id ${id} does not exist.` })
   }
-  const { title, tags, subject, problems, usedPIDs } = exercise
-  res.status(StatusCodes.OK).json({ title, tags, subject, problems, usedPIDs })
+  const { title, tags, subject, chapter, section, problems, usedPIDs } =
+    exercise
+  res
+    .status(StatusCodes.OK)
+    .json({ title, tags, subject, chapter, section, problems, usedPIDs })
 }
 
 const postExercise = async (req, res) => {

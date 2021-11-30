@@ -206,7 +206,7 @@ aside a:active, #logout:active {
     
     .menu-btn {
         left: -45px;
-        top: 3px;
+        top: 7px;
         z-index: 3;
     }
     
@@ -249,12 +249,6 @@ aside a:active, #logout:active {
     }
 }
 
-@media (min-width: 768px)  {
-    .menu-btn {
-        top: 7px;
-    }
-}
-
 @media (min-width: 992px) { 
     .menu-btn {
         display: none;
@@ -266,6 +260,7 @@ aside a:active, #logout:active {
         right: unset;
         width: unset;
         height: 30px;
+        min-height: unset;
         margin-right: auto;
         margin-left: 1.5rem;
         padding-left: 0;

@@ -16,6 +16,8 @@ let questionTextAreaDiv,
 let lastSave = {
   title: "",
   subject: "no_choice",
+  chapter: "no_choice",
+  section: "no_choice",
   tags: [],
   problems: { easy: {}, standard: {}, hard: {}, advanced: {}, no_choice: {} },
   usedPIDs: [],
@@ -23,6 +25,8 @@ let lastSave = {
 let currentExercise = {
   title: "",
   subject: "no_choice",
+  chapter: "no_choice",
+  section: "no_choice",
   tags: [],
   problems: { easy: {}, standard: {}, hard: {}, advanced: {}, no_choice: {} },
   usedPIDs: [],
@@ -119,13 +123,29 @@ const listenForChangesToPublishExerciseList = () => {
 const getInfo = async (id) => {
   try {
     const {
-      data: { title, tags, subject, problems: p, usedPIDs: upids },
+      data: {
+        title,
+        tags,
+        subject,
+        chapter: c,
+        section: s,
+        problems: p,
+        usedPIDs: upids,
+      },
     } = await axios.get(`/api/v1/exercises/${id}`)
     titleInput.value = title
     checkList(createTitleItem, "check")
     addTags(tags)
     subjectSelect.value = subject
-    subjectSelect.dispatchEvent(new Event("pointerup"))
+    subjectSelect.dispatchEvent(new Event("click"))
+    if (c !== "no_choice") {
+      chapterSelect.value = `${c}`
+      chapterSelect.dispatchEvent(new Event("click"))
+    }
+    if (s !== "no_choice") {
+      sectionSelect.value = `${s}`
+      sectionSelect.dispatchEvent(new Event("click"))
+    }
     problems = p
     usedPIDs = upids
     addAllProblems()
@@ -134,6 +154,8 @@ const getInfo = async (id) => {
       title,
       tags: tags.slice(),
       subject,
+      chapter: c,
+      section: s,
       problems: { ...p },
       usedPIDs: upids.slice(),
     }
@@ -146,7 +168,9 @@ const getInfo = async (id) => {
 const sameProblemSet = (e = null) => {
   currentExercise = {
     title: titleInput.value.trim(),
-    subject: subjectSelect.value,
+    subject,
+    chapter,
+    section,
     tags: inputValues,
     problems,
     usedPIDs,
@@ -190,6 +214,8 @@ const saveExercise = async (status) => {
         subject,
         problems,
         status,
+        chapter,
+        section,
         usedPIDs,
       })
       giveFeedback("Save successful", "satisfied")
@@ -205,6 +231,8 @@ const saveExercise = async (status) => {
         title: titleInput.value.trim(),
         tags: inputValues,
         subject,
+        chapter,
+        section,
         problems,
         status,
         usedPIDs,
@@ -234,6 +262,12 @@ const publishExercise = (e) => {
   if (subject === "no_choice") {
     return giveFeedback("Choose a subject to publish this exercise.", "not_met")
   }
+  if (chapter === "no_choice") {
+    return giveFeedback("Pick a chapter to publish this lesson.", "not_met")
+  }
+  if (section === "no_choice") {
+    return giveFeedback("Pick a section to publish this lesson.", "not_met")
+  }
   saveExercise("published")
 }
 
@@ -253,7 +287,9 @@ const init = () => {
   listenForChangesToPublishExerciseList()
   if (path.split("/")[3]) {
     resourceId = path.split("/")[3]
-    getInfo(resourceId)
+    setTimeout(() => {
+      getInfo(resourceId)
+    }, 500)
   }
 }
 

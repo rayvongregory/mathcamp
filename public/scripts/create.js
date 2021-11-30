@@ -16,6 +16,8 @@ const pickChapterSectionItem = document.getElementById("pick_chapter_section")
 const feedback = document.getElementById("feedback")
 const container = document.querySelector(".container")
 let subject = "no_choice",
+  chapter = "no_choice",
+  section = "no_choice",
   inputValues = [],
   chapters = {
     seven: {},
@@ -27,8 +29,7 @@ let subject = "no_choice",
     pc: {},
     calc: {},
     calc2: {},
-  },
-  selected_chapter = "all"
+  }
 
 const getChapters = async () => {
   try {
@@ -142,7 +143,7 @@ const addTag = (e) => {
     close.innerText = "×"
     tag.appendChild(val)
     tag.appendChild(close)
-    tag.addEventListener("click", removeTag)
+    tag.addEventListener("pointerup", removeTag)
     tags.appendChild(tag)
     inputValues.push(value)
     if (inputValues.length > 0 && tags.classList.contains("hide")) {
@@ -179,7 +180,7 @@ const addTags = (incomingTags) => {
     close.innerText = "×"
     newTag.appendChild(val)
     newTag.appendChild(close)
-    newTag.addEventListener("click", removeTag)
+    newTag.addEventListener("pointerup", removeTag)
     tags.appendChild(newTag)
   }
 }
@@ -210,6 +211,17 @@ const removeOptions = (select) => {
 }
 
 const subjectPicked = (e) => {
+  if (
+    e.type === "keyup" &&
+    e.keyCode !== 13 &&
+    e.keyCode !== 32 &&
+    e.keyCode !== 37 &&
+    e.keyCode !== 38 &&
+    e.keyCode !== 39 &&
+    e.keyCode !== 40
+  ) {
+    return
+  }
   const { target } = e
   if (subject !== target.value) {
     subject = target.value
@@ -250,13 +262,24 @@ const addChapters = (val) => {
 }
 
 const chapterPicked = (e) => {
+  if (
+    e.type === "keyup" &&
+    e.keyCode !== 13 &&
+    e.keyCode !== 32 &&
+    e.keyCode !== 37 &&
+    e.keyCode !== 38 &&
+    e.keyCode !== 39 &&
+    e.keyCode !== 40
+  ) {
+    return
+  }
   const { target } = e
   if (
     target.value === "no_choice" &&
     !sectionSelect.parentElement.classList.contains("hide")
   ) {
     sectionSelect.parentElement.classList.add("hide")
-    selected_chapter = "no_choice"
+    chapter = "no_choice"
     sectionSelect.value = "no_choice"
     removeOptions(sectionSelect)
     if (pickChapterSectionItem.classList.contains("satisfied")) {
@@ -264,8 +287,8 @@ const chapterPicked = (e) => {
     }
     checkReqs()
   } else if (target.value !== "no_choice") {
-    if (selected_chapter !== target.value) {
-      selected_chapter = target.value
+    if (chapter !== target.value) {
+      chapter = target.value
       removeOptions(sectionSelect)
       addSections()
     }
@@ -276,7 +299,8 @@ const chapterPicked = (e) => {
 }
 
 const addSections = () => {
-  let sections = chapters[subject][selected_chapter - 1].sections
+  console.log(subject, chapter)
+  let sections = chapters[subject][Number(chapter) - 1].sections
   for (let s in sections) {
     let option = document.createElement("option")
     option.setAttribute("value", s)
@@ -286,7 +310,21 @@ const addSections = () => {
 }
 
 const sectionPicked = (e) => {
+  if (
+    e.type === "keyup" &&
+    e.keyCode !== 13 &&
+    e.keyCode !== 32 &&
+    e.keyCode !== 37 &&
+    e.keyCode !== 38 &&
+    e.keyCode !== 39 &&
+    e.keyCode !== 40
+  ) {
+    return
+  }
   const { target } = e
+  if (section !== target.value) {
+    section = target.value
+  }
   if (
     target.value !== "no_choice" &&
     pickChapterSectionItem.classList.contains("not_met")
@@ -302,13 +340,14 @@ const sectionPicked = (e) => {
 }
 
 const resetChapterSection = () => {
-  // this gets called when the subject is "no_choice"
   if (chapterSelect.value !== "no_choice") {
     chapterSelect.value = "no_choice"
+    chapter = "no_choice"
     removeOptions(chapterSelect)
   }
   if (sectionSelect.value !== "no_choice") {
     sectionSelect.value = "no_choice"
+    section = "no_choice"
     removeOptions(sectionSelect)
   }
   sectionSelect.parentElement.classList.add("hide")
@@ -369,6 +408,12 @@ if (!token) {
 
 titleInput.addEventListener("keyup", titleAdded)
 tagsInput.addEventListener("keyup", addTag)
+subjectSelect.addEventListener("pointerup", subjectPicked)
+chapterSelect.addEventListener("pointerup", chapterPicked)
+sectionSelect.addEventListener("pointerup", sectionPicked)
 subjectSelect.addEventListener("click", subjectPicked)
 chapterSelect.addEventListener("click", chapterPicked)
 sectionSelect.addEventListener("click", sectionPicked)
+subjectSelect.addEventListener("keyup", subjectPicked)
+chapterSelect.addEventListener("keyup", chapterPicked)
+sectionSelect.addEventListener("keyup", sectionPicked)

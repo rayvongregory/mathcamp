@@ -6,10 +6,18 @@ const exerciseSchema = new Schema(
     title: {
       type: String,
       unique: true,
-      required: [true, "Please provide lesson title"],
+      required: [true, "Please provide exercise title"],
     },
     subject: {
       type: String,
+    },
+    chapter: {
+      type: String,
+      required: [true, "Please pick a chapter for this exercise"],
+    },
+    section: {
+      type: String,
+      required: [true, "Please pick a section for this exercise"],
     },
     tags: {
       type: Array,

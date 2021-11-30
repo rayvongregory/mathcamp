@@ -160,11 +160,7 @@ menuBtn.addEventListener("pointerup", () => {
       }, 500)
       setTimeout(() => {
         menuBtn.classList.replace("fixed", "abs")
-        if (lastWindowSize === "medium") {
-          menuBtn.style.top = `${top * -1 + 6}px`
-        } else {
-          menuBtn.style.top = `${top * -1 + 14}px`
-        }
+        menuBtn.style.top = `${top * -1 + 14}px`
         menuBtnBurgir.classList.remove("no-transitions")
         menuBtnBurgirB.classList.remove("no-transitions")
         menuBtnBurgirA.classList.remove("no-transitions")
@@ -180,6 +176,7 @@ menuBtn.addEventListener("pointerup", () => {
 })
 
 navSearch.addEventListener("pointerup", () => {
+  document.activeElement.blur()
   if (lastWindowSize === "medium") {
     navSearchContainer.classList.toggle("hide")
     if (navSearch.innerHTML === '<i class="fas fa-times"></i>') {
@@ -193,16 +190,11 @@ navSearch.addEventListener("pointerup", () => {
     }
     if (navSearch.innerHTML === '<i class="fas fa-times"></i>Search') {
       navSearch.innerHTML = '<i class="fas fa-search"></i>Search'
-      navSearchContainer.style.bottom = "11px"
+      navSearchContainer.style.bottom = "15px"
     } else {
       navSearch.innerHTML = '<i class="fas fa-times"></i>Search'
       navSearchContainer.style.bottom = ""
     }
-    // if (root.getPropertyValue("--offset") !== "100px") {
-    //   root.setProperty("--offset", "100px")
-    // } else {
-    //   root.setProperty("--offset", "90px")
-    // }
   }
 })
 
@@ -273,7 +265,7 @@ const checkWindowSize = () => {
       }
       if (!navSearchContainer.style.bottom) {
         navSearchContainer.classList.add("no-transitions")
-        navSearchContainer.style.bottom = "11px"
+        navSearchContainer.style.bottom = "15px"
       }
       if (aside.classList.contains("slide")) {
         aside.classList.remove("slide")
@@ -432,5 +424,8 @@ const navInit = () => {
   })
 }
 
+menuBtn.addEventListener("contextmenu", () => {
+  return false
+})
 window.addEventListener("load", navInit)
 window.addEventListener("resize", checkWindowSize)

@@ -1,33 +1,48 @@
 <div class="grid">
   <div id="filters">
-    <button class="gr" value="seven">7</button>
-    <button class="gr" value="eight">8</button>
-    <button class="gr" value="alg">A</button>
-    <button class="gr" value="geo">G</button>
-    <button class="gr" value="p_s">PS</button>
-    <button class="gr" value="alg2">A2</button>
-    <button class="gr" value="pc">PC</button>
-    <button class="gr" value="calc">C</button>
-    <button class="gr" value="calc2">C2</button>
+    <button class="gr" value="seven" aria-label="7th Grade" title="7th Grade">
+      7
+    </button>
+    <button class="gr" value="eight" aria-label="8th Grade" title="8th Grade">
+      8
+    </button>
+    <button class="gr" value="alg" aria-label="Algebra" title="Algebra">
+      A
+    </button>
+    <button class="gr" value="geo" aria-label="Geometry" title="Geometry">
+      G
+    </button>
+    <button
+      class="gr"
+      value="p_s"
+      aria-label="Probability & Statistics"
+      title="Probability & Statistics"
+    >
+      PS
+    </button>
+    <button class="gr" value="alg2" aria-label="Algebra 2" title="Algebra 2">
+      A2
+    </button>
+    <button class="gr" value="pc" aria-label="Precalculus" title="Precalculus">
+      PC
+    </button>
+    <button class="gr" value="calc" aria-label="Calculus" title="Calculus">
+      C
+    </button>
+    <button class="gr" value="calc2" aria-label="Calculus 2" title="Calculus 2">
+      C2
+    </button>
   </div>
   <div id="chptr_select">
-    <div class="select-selected">All Chapters</div>
+    <div class="select-selected">All chapters</div>
     <div class="select-items hide">
-      <div data-value="all">All Chapters</div>
-    </div>
-    <div
-      style="
-        position: absolute;
-        top: calc(100% + 10px);
-        display: grid;
-        place-content: center;
-        height: 100px;
-        width: 100%;
-        background-color: teal;
-        color: white;
-      "
-    >
-      All the activities go here
+      <div data-value="all">All chapters</div>
     </div>
   </div>
+  <section id="resources">
+    <div id="first" class="col invis"></div>
+    <div id="second" class="col hide"></div>
+    <div id="third" class="col hide"></div>
+    <div id="buffer" class="hide"></div>
+  </section>
 </div>
