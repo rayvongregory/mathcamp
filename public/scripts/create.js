@@ -16,8 +16,8 @@ const pickChapterSectionItem = document.getElementById("pick_chapter_section")
 const feedback = document.getElementById("feedback")
 const container = document.querySelector(".container")
 let subject = "no_choice",
-  chapter = "no_choice",
-  section = "no_choice",
+  chapter = "0",
+  section = "0",
   inputValues = [],
   chapters = {
     seven: {},
@@ -274,19 +274,20 @@ const chapterPicked = (e) => {
     return
   }
   const { target } = e
+  console.log(target.value)
   if (
-    target.value === "no_choice" &&
+    target.value === "0" &&
     !sectionSelect.parentElement.classList.contains("hide")
   ) {
     sectionSelect.parentElement.classList.add("hide")
-    chapter = "no_choice"
-    sectionSelect.value = "no_choice"
+    chapter = "0"
+    sectionSelect.value = "0"
     removeOptions(sectionSelect)
     if (pickChapterSectionItem.classList.contains("satisfied")) {
       checkList(pickChapterSectionItem, "uncheck")
     }
     checkReqs()
-  } else if (target.value !== "no_choice") {
+  } else if (target.value !== "0") {
     if (chapter !== target.value) {
       chapter = target.value
       removeOptions(sectionSelect)
