@@ -25,7 +25,7 @@
     box-shadow: var(--boxShadow);
     border: none;
     border-radius: 3px;
-    font-size: 1.125rem;
+    font-size: 1rem;
     background-color: white;
     color: black;
 }
@@ -109,7 +109,7 @@
     color: black;
     pointer-events: all;
     user-select: none;
-    font-size: 1.125rem;
+    font-size: 1rem;
 }
 
 .select-selected {
@@ -154,13 +154,14 @@
 
 .chapter-head {
     padding: 0.25rem 0.5rem 0.25rem 0.75rem;
-    font-size: 1.05rem;
+    font-size: 1rem;
     background-color: var(--deepTeal);
     color: white;
 }
 
 .chapter-body {
     padding: 1rem;
+    font-size: 0.8rem;
 }
 
 .col {
@@ -190,9 +191,12 @@
         width: min-content;
         margin: auto;
     }
-
+    
     .gr {
         width: 45px;
+        font-size: 1.125rem;
+        grid-row: 1;
+        grid-column: unset;
     }
 
     #resources {
@@ -204,10 +208,14 @@
         flex-direction: row;
     }
 
-    .gr {
-        grid-row: 1;
-        grid-column: unset;
-    }
+    
+.select-items div,.select-selected {
+    font-size: 1.125rem;
+}
+
+.chapter-head {
+    font-size: 1.05rem;
+}
     
 }
 

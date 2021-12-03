@@ -5,6 +5,7 @@ const nav = body.querySelector("nav")
 const buttons = document.querySelector(".buttons")
 const navSearch = document.getElementById("nav-search-btn")
 const navSearchContainer = document.querySelector(".nav___search-container")
+const searchInput = navSearchContainer.querySelector("input")
 const aside = body.querySelector("aside")
 const asideLinks = document.getElementById("links")
 const stickyDiv = document.getElementById("sticky-div")
@@ -66,8 +67,8 @@ const getDisplayName = async () => {
       }
     } catch (error) {
       console.log(error)
-      localStorage.removeItem("token")
-      location.reload()
+      // localStorage.removeItem("token")
+      // location.reload()
     }
   } else {
     nameWrapH3.innerText = "Guest"
@@ -176,24 +177,33 @@ menuBtn.addEventListener("pointerup", () => {
 })
 
 navSearch.addEventListener("pointerup", () => {
+  let i = navSearch.querySelector("i")
   document.activeElement.blur()
   if (lastWindowSize === "medium") {
     navSearchContainer.classList.toggle("hide")
-    if (navSearch.innerHTML === '<i class="fas fa-times"></i>') {
-      navSearch.innerHTML = '<i class="fas fa-search"></i>'
+    if (i.classList.contains("fa-times")) {
+      i.classList.replace("fa-times", "fa-search")
     } else {
-      navSearch.innerHTML = '<i class="fas fa-times"></i>'
+      i.classList.replace("fa-search", "fa-times")
+      if (searchInput.value !== "") {
+        searchInput.value = ""
+      }
     }
   } else if (lastWindowSize === "small") {
     if (navSearchContainer.classList.contains("no-transitions")) {
       navSearchContainer.classList.remove("no-transitions")
     }
-    if (navSearch.innerHTML === '<i class="fas fa-times"></i>Search') {
-      navSearch.innerHTML = '<i class="fas fa-search"></i>Search'
-      navSearchContainer.style.bottom = "15px"
+    if (i.classList.contains("fa-times")) {
+      i.classList.replace("fa-times", "fa-search")
+      navSearchContainer.classList.add("down")
+      setTimeout(() => {
+        if (searchInput.value !== "") {
+          searchInput.value = ""
+        }
+      }, 250)
     } else {
-      navSearch.innerHTML = '<i class="fas fa-times"></i>Search'
-      navSearchContainer.style.bottom = ""
+      i.classList.replace("fa-search", "fa-times")
+      navSearchContainer.classList.remove("down")
     }
   }
 })
@@ -232,8 +242,8 @@ const checkWindowSize = () => {
       if (navSearchContainer.classList.contains("hide")) {
         navSearchContainer.classList.remove("hide")
       }
-      if (navSearchContainer.style.bottom) {
-        navSearchContainer.removeAttribute("style")
+      if (navSearchContainer.classList.contains("down")) {
+        navSearchContainer.classList.remove("down")
       }
       if (aside.classList.contains("slide")) {
         aside.classList.remove("slide")
@@ -263,9 +273,9 @@ const checkWindowSize = () => {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
       }
-      if (!navSearchContainer.style.bottom) {
+      if (!navSearchContainer.classList.contains("down")) {
         navSearchContainer.classList.add("no-transitions")
-        navSearchContainer.style.bottom = "15px"
+        navSearchContainer.classList.add("down")
       }
       if (aside.classList.contains("slide")) {
         aside.classList.remove("slide")
@@ -283,8 +293,8 @@ const checkWindowSize = () => {
       if (!navSearchContainer.classList.contains("hide")) {
         navSearchContainer.classList.add("hide")
       }
-      if (navSearchContainer.style) {
-        navSearchContainer.removeAttribute("style")
+      if (navSearchContainer.classList.contains("down")) {
+        navSearchContainer.classList.remove("down")
       }
       if (aside.classList.contains("slide")) {
         aside.classList.remove("slide")
@@ -302,8 +312,8 @@ const checkWindowSize = () => {
       if (navSearchContainer.classList.contains("hide")) {
         navSearchContainer.classList.remove("hide")
       }
-      if (navSearchContainer.style) {
-        navSearchContainer.removeAttribute("style")
+      if (navSearchContainer.classList.contains("down")) {
+        navSearchContainer.classList.remove("down")
       }
       if (asideLinks.classList.contains("hide")) {
         asideLinks.classList.remove("hide")
@@ -322,14 +332,13 @@ const checkWindowSize = () => {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
       }
-
       break
     case "large":
       if (navSearchContainer.classList.contains("hide")) {
         navSearchContainer.classList.remove("hide")
       }
-      if (navSearchContainer.style) {
-        navSearchContainer.removeAttribute("style")
+      if (navSearchContainer.classList.contains("down")) {
+        navSearchContainer.classList.remove("down")
       }
       if (!asideLinks.classList.contains("hide")) {
         asideLinks.classList.add("hide")
@@ -390,6 +399,11 @@ const navInit = () => {
     speed = 0.5
     particleMod = 15
   }
+  if (path === "/") {
+    particleMod = 3
+    // speed = 0.25
+  }
+
   Particles.init({
     selector: ".background",
     maxParticles: 25 + particleMod,

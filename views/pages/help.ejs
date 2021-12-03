@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html class="invis" lang="en">
   <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head'); %> <%- include('../partials/help_tinymce');
+    %>
+    <link rel="stylesheet" href="/styles/secondary.css" />
+    <link rel="stylesheet" href="/styles/help.css" />
   </head>
   <body>
     <%- include('../partials/aside'); %> <%- include('../partials/nav'); %> <%-
     include('../partials/banner'); %>
     <div class="msg"><%=msg%></div>
+    <%- include('../partials/message_board'); %>
     <footer><%- include('../partials/footer'); %></footer>
     <%- include('../partials/universal_scripts'); %>
+    <script src="/scripts/message_board.js"></script>
   </body>
 </html>

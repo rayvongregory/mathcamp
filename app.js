@@ -12,6 +12,7 @@ const tokenRouter = require("./routes/token")
 const createRouter = require("./routes/create")
 const draftRouter = require("./routes/draft")
 const chaptersRouter = require("./routes/chapters")
+const rndSubjRouter = require("./routes/rnd_subj")
 
 const express = require("express")
 const app = express()
@@ -29,6 +30,7 @@ app.use("/api/v1/token", tokenRouter)
 app.use("/api/v1/auth", authRouter) //register, login, logout
 app.use("/api/v1/users", usersRouter) // admin only (if you ever decide to flesh this is)
 app.use("/api/v1/chapters", chaptersRouter)
+app.use("/api/v1/rndsubj", rndSubjRouter)
 app.use("/create", createRouter)
 app.use("/drafts", draftRouter)
 
@@ -48,7 +50,7 @@ app.use("/delete", (req, res, next) => {
 
 app.use("/help", (req, res, next) => {
   res.render("pages/help", {
-    msg: "Try signing up for a group-tutoring session.",
+    msg: "Need help? Ask your questions here.",
     title: "Help",
     bannerTitle: "Help",
   })

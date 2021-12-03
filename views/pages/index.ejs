@@ -1,21 +1,15 @@
 <!DOCTYPE html>
 <html class="invis" lang="en">
   <head>
-    <%- include('../partials/head'); %> <%-
-    include('../partials/index_tinymce'); %>
+    <%- include('../partials/head'); %>
+    <link rel="stylesheet" href="/styles/secondary.css" />
     <link rel="stylesheet" href="/styles/index.css" />
   </head>
   <body>
-    <%- include('../partials/aside'); %> <%- include('../partials/nav'); %>
-    <header class="primary">
-      <h1>Math Camp</h1>
-      <canvas class="background"></canvas>
-    </header>
-
-    <div class="msg">We only do math here.</div>
-    <%- include('../partials/message_board'); %>
+    <%- include('../partials/aside'); %> <%- include('../partials/nav'); %> <%-
+    include('../partials/home_content'); %>
     <footer><%- include('../partials/footer'); %></footer>
     <%- include('../partials/universal_scripts'); %>
-    <script src="/scripts/message_board.js"></script>
+    <script src="/scripts/home.js"></script>
   </body>
 </html>

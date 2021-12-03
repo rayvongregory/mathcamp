@@ -1,0 +1,100 @@
+.message_board {
+    display: flex;
+    gap: 10px;
+    width: 100vw;
+    max-width: 1200px;
+    padding: 1rem;
+    margin: auto;
+}
+
+.add_post-wrapper {
+    margin: auto;
+    width: 95%;
+    max-width: 400px;
+}
+
+.add_post {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    margin-bottom: 1rem;
+    border: var(--border);
+    border-radius: 2em;
+    box-shadow: var(--boxShadow);
+    background-color: white;
+    font-size: 0.8rem;
+}
+
+.add_post img {
+    width: 15px;
+    height: 15px;
+    margin-right: 0.5rem;
+    border-radius: 50%;
+}
+
+.add_post label {
+    white-space: nowrap;
+}
+
+.add_post input {
+    width: 100%;
+    padding: 0 5px;
+    margin-left: 0.5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.add_post input::placeholder {
+    font-size: 0.8rem;
+}
+
+.add_post input:focus, .add_post input:active {
+    outline: none;
+}
+
+.messages {
+    border: var(--border);
+    box-shadow: var(--boxShadow);
+    border-radius: 3px;
+    padding: 20px 0;
+    background-color: var(--neutralLight);
+}
+
+.tox-tinymce {
+    border-radius: 10px !important;
+}
+
+.tox-statusbar__resize-handle {
+    visibility: hidden !important;
+}
+
+.messages___header {
+    border-bottom: 1px solid var(--neutralMid);
+}
+.message_board h4 {
+    padding-bottom: 10px;
+}
+
+@media (min-width: 576px) { 
+    .add_post-wrapper {
+        max-width: 768px;
+    }
+
+    .add_post {
+        padding: 7px 7px 7px 9px;
+    }
+
+    .add_post, .add_post input::placeholder {
+        font-size: 0.95rem;
+    }
+
+    .add_post img {
+        width: 20px;
+        height: 20px;
+        margin-right: 0.75rem;
+    }
+
+    .add_post input {
+        padding: 3px 5px 3px 8px;
+    }
+}
