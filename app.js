@@ -3,6 +3,8 @@ require("ejs")
 const connectDB = require("./db/connect")
 const refreshTokens = require("./db/redis-cache")
 const lessonsRouter = require("./routes/lessons")
+const learnRouter = require("./routes/resource")
+const practiceRouter = require("./routes/resource")
 const exercisesRouter = require("./routes/exercise")
 const draftsRouter = require("./routes/drafts")
 const helpRouter = require("./routes/help")
@@ -12,7 +14,7 @@ const tokenRouter = require("./routes/token")
 const createRouter = require("./routes/create")
 const draftRouter = require("./routes/draft")
 const chaptersRouter = require("./routes/chapters")
-const rndSubjRouter = require("./routes/rnd_subj")
+const snippetsRouter = require("./routes/snippets")
 
 const express = require("express")
 const app = express()
@@ -30,20 +32,16 @@ app.use("/api/v1/token", tokenRouter)
 app.use("/api/v1/auth", authRouter) //register, login, logout
 app.use("/api/v1/users", usersRouter) // admin only (if you ever decide to flesh this is)
 app.use("/api/v1/chapters", chaptersRouter)
-app.use("/api/v1/rndsubj", rndSubjRouter)
+app.use("/api/v1/snippets", snippetsRouter)
 app.use("/create", createRouter)
 app.use("/drafts", draftRouter)
+app.use("/learn", learnRouter)
+app.use("/practice", practiceRouter)
+app.use("/codemirror", express.static(__dirname + "/node_modules/codemirror"))
 
 app.use("/account", (req, res, next) => {
   res.render("pages/auth", {
     title: "Account",
-    bannerTitle: "Account",
-  })
-})
-
-app.use("/delete", (req, res, next) => {
-  res.render("pages/auth", {
-    title: "Delete",
     bannerTitle: "Account",
   })
 })
@@ -55,26 +53,14 @@ app.use("/help", (req, res, next) => {
     bannerTitle: "Help",
   })
 })
-app.use("/learn", (req, res, next) => {
-  res.render("pages/learn", {
-    msg: "Browse our articles and video lessons.",
-    title: "Learn",
-    bannerTitle: "Learn",
-  })
-})
+
 app.use("/login", (req, res, next) => {
   res.render("pages/auth", {
     title: "Login",
     bannerTitle: "Login",
   })
 })
-app.use("/practice", (req, res, next) => {
-  res.render("pages/practice", {
-    msg: "Engage in our adaptive learning exercises.",
-    title: "Practice",
-    bannerTitle: "Practice",
-  })
-})
+
 app.use("/register", (req, res, next) => {
   res.render("pages/auth", {
     title: "Register",

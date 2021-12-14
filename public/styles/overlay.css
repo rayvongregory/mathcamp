@@ -26,7 +26,7 @@
 }
 
 .overlay___header h3.not_met {
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
 }
 
 .overlay___header h3.satisfied {
@@ -98,7 +98,7 @@
 }
 
 .choices .choice.selected_n {
-    border-color: var(--deepOrange);
+    border-color: var(--deepRed);
 }
 
 .choices .choice.selected_s span {
@@ -107,7 +107,7 @@
 }
 
 .choices .choice.selected_n span {
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
     color: white;
 }
 
@@ -156,7 +156,7 @@
 }
 
 .overlay___body button.not_met {
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
 }
 
 .overlay___body button.not_met:hover,

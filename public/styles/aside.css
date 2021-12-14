@@ -18,6 +18,8 @@ aside {
     color: var(--neutralLight);
     background-color: var(--transparent);
     transition: left 0.3s ease-out;
+    pointer-events: all;
+
 }
 
 aside h3 {
@@ -27,11 +29,13 @@ aside h3 {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    pointer-events: none;
 }
 
 aside #links {
     list-style: none;
     grid-column: 2;
+    pointer-events: all;
 }
 
 aside a, #logout {
@@ -48,7 +52,7 @@ aside a, #logout {
 
 aside a:hover, #logout:hover,
 aside a:focus, #logout:focus {
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
     padding-left: 30px;
 }
 
@@ -73,12 +77,14 @@ aside a:active, #logout:active {
     height: 1.125rem;
     clip-path: circle(50%);
     display: none;
+    pointer-events: none;
 }
 
 #name-wrapper i {
     display: none;
     font-size: 1.125rem;
     color: black;
+    pointer-events: none;
 }
 
 .slide {
@@ -113,6 +119,8 @@ aside a:active, #logout:active {
     top: 60px;
     height: fit-content;
     height: -moz-fit-content;
+    pointer-events: none;
+
 }
 
 .menu-btn {
@@ -284,11 +292,15 @@ aside a:active, #logout:active {
         background-color: white;
         border-radius: 15px;
         color: black;
-        cursor: pointer;
         user-select: none;
     }
 
-    #name-wrapper:hover {
+    aside:hover {
+        cursor: pointer;
+
+    }
+
+    aside:hover #name-wrapper {
         box-shadow: var(--boxShadow);
         border-color: rgba(0, 0, 0, 0.05);
     }

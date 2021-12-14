@@ -19,9 +19,8 @@
       <button class="no-click" id="publish">Publish</button>
       <button id="draft">Save Draft</button>
     </div>
-    <footer><%- include('../partials/footer'); %></footer>
-    <%- include('../partials/universal_scripts'); %> <% if(type === "lesson") {
-    %>
+    <%- include('../partials/footer'); %> <%-
+    include('../partials/universal_scripts'); %> <% if(type === "lesson") { %>
     <script type="module" src="/scripts/create_lesson.js"></script>
     <% } else { %>
     <script type="module" src="/scripts/create_exercise.js"></script>

@@ -6,9 +6,7 @@
     <link rel="stylesheet" href="/styles/create_exercise.css" />
     <link rel="stylesheet" href="/styles/overlay.css" />
     <link rel="stylesheet" href="/styles/create.css" />
-    <% if(type === "lesson") { %> <%-
-    include('../partials/tinymce_lesson_scripts') %> <% } else { %> <%-
-    include('../partials/tinymce_exercise_scripts') %> <% } %>
+    <%- include('../partials/tinymce_exercise_scripts') %>
   </head>
   <body>
     <%- include('../partials/overlay'); %> <%- include('../partials/aside'); %>
@@ -29,8 +27,8 @@
         include('../partials/publish_exercise_requirements'); %>
       </div>
     </div>
-    <footer><%- include('../partials/footer'); %></footer>
     <%- include('../partials/universal_scripts'); %>
+
     <script src="/scripts/question_section.js"></script>
     <script src="/scripts/answer_section.js"></script>
     <script src="/scripts/choices_section.js"></script>

@@ -4,11 +4,10 @@
     <%- include('../partials/head'); %>
     <link rel="stylesheet" href="/styles/secondary.css" />
     <link rel="stylesheet" href="/styles/create.css" />
+    <link rel="stylesheet" href="/codemirror/lib/codemirror.css" />
     <link rel="stylesheet" href="/styles/create_lesson.css" />
-
-    <% if(type === "lesson") { %> <%-
-    include('../partials/tinymce_lesson_scripts') %> <% } else { %> <%-
-    include('../partials/tinymce_exercise_scripts') %> <% } %>
+    <script src="/codemirror/lib/codemirror.js"></script>
+    <script src="/codemirror/mode/javascript/javascript.js"></script>
   </head>
   <body>
     <%- include('../partials/aside'); %> <%- include('../partials/nav'); %> <%-
@@ -19,12 +18,11 @@
     <div class="create-wrapper">
       <%- include('../partials/resource_title_tags'); %>
       <div class="three-one-grid">
-        <textarea id="mytextarea"></textarea>
-        <%- include('../partials/publish_lesson_requirements'); %>
+        <%- include('../partials/lesson_editor'); %> <%-
+        include('../partials/publish_lesson_requirements'); %> <%-
+        include('../partials/snippets'); %>
       </div>
-      <div class="buttons-wrapper"></div>
     </div>
-    <footer><%- include('../partials/footer'); %></footer>
     <%- include('../partials/universal_scripts'); %>
     <script src="/scripts/create.js"></script>
     <script src="/scripts/create_lesson.js"></script>

@@ -389,11 +389,17 @@ const isEqual = (obj1, obj2) => {
   return true
 }
 
+const setAria = (btn, val) => {
+  btn.setAttribute("aria-label", val)
+  btn.setAttribute("title", val)
+}
+
 const getRole = async () => {
+  let t = localStorage.getItem("token")
   try {
     const {
       data: { role },
-    } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
+    } = await axios.get(`/api/v1/token/${t.split(" ")[1]}`)
     if (role !== "admin") {
       window.location.href = "/"
     }
@@ -403,9 +409,9 @@ const getRole = async () => {
   }
 }
 
-if (!token) {
-  window.location.href = "/"
-}
+// if (!token) {
+//   window.location.href = "/"
+// }
 
 titleInput.addEventListener("keyup", titleAdded)
 tagsInput.addEventListener("keyup", addTag)

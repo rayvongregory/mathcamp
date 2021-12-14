@@ -1,0 +1,4 @@
+<section class="flex">
+	<div>Some div</div>
+	<div>Some other div</div>
+</section>

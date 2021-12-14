@@ -1,0 +1,338 @@
+
+
+
+#lesson_section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.CodeMirror {
+    border: var(--tinymceBorder);
+    padding: 0.5rem;
+}
+
+.options {
+    display: flex;
+    background-color: white;
+    border: var(--tinymceBorder);
+    border-bottom: none;
+    /* overflow-x: auto; */
+    /* overflow-y: hidden; */
+    overflow-x: clip;
+}
+
+.options button {
+    height: 35px;
+    flex-shrink: 0;
+    border: 1px solid;
+    outline: none;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.options button.square {
+    border-radius: 3px;
+    width: 35px;
+}
+
+.options button.thin {
+    position: relative;
+    width: 20px;
+}
+
+.options button.med {
+    width: 55px;
+}
+
+.options button.long {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 11pt;
+    width: 130px;
+    padding: 10px;
+    border-radius: 3px;
+    pointer-events: all;
+}
+
+.options button.long::after,
+.options button.thin::after {
+    content: '';
+    position: absolute;
+    border: 6px solid;
+    border-color: var(--neutralDark) transparent transparent transparent;
+    pointer-events: none;
+}
+
+.options button.long::after {
+    top: 15px;
+    right: 11px;
+}
+
+.options button.thin::after {
+    top: 14px;
+    right: 4px;
+}
+
+.options button:hover,
+.options button:focus {
+    background-color: var(--tinymceGray);
+    cursor: pointer;
+}
+
+.options button:active {
+    background-color: var(--tinymceGrayActive);
+}
+
+.options button i {
+    font-size: 1.125rem;
+    pointer-events: none;
+}
+
+.options button .hr {
+    position: relative;
+    pointer-events: none;
+}
+
+.options button .hr::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 7.5px;
+    width: 20px;
+    height: 3px;
+    border-radius: 1px;
+    background-color: black;
+}
+
+.options .group {
+    position: relative;
+    display: flex;
+    width: fit-content;
+    height: 100%;
+    padding: 0.25rem;
+    background-color: white;
+}
+
+.options .group:not(:last-of-type) {
+    border-right: var(--tinymceBorder);
+}
+
+#font-family_select, 
+#font-size_select {
+    position: relative;
+    pointer-events: none;
+}
+
+#font-family_select button p {
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.group button,
+#font-size_select ul {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.dropdown {
+    position: absolute;
+    left: 5px;
+    width: 140px;
+    max-height: 231px;
+    border: var(--tinymceBorder);
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: var(--boxShadow);
+    list-style: none;
+    pointer-events: all;
+    z-index: 1;
+    overflow-y: scroll;
+}
+
+.dropdown.above {
+    top: -292px;
+}
+
+.dropdown.below {
+    top: 40px;
+}
+
+.combo_btn .dropdown.grid.below {
+    top: 35px;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    width: max-content;
+}
+
+.dropdown li {
+    padding: 0.5rem;
+    font-size: 10pt;
+}
+
+.dropdown li:hover,
+.dropdown li:focus {
+    background-color: var(--tinymceGray);
+    cursor: pointer;
+}
+
+.dropdown li:active {
+    background-color: var(--tinymceGray);
+}
+
+.combo_btn {
+    position: relative;
+    display: flex;
+    border-radius: 3px;
+    height: 35px;
+    width: 55px;
+    border: 1px solid transparent;
+}
+
+.combo_btn button.square {
+    border-radius: 0;
+}
+
+.combo_btn .thin {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.combo_btn:hover {
+    border-color: var(--tinymceGray);
+}
+
+.combo_btn ul {
+    overflow-y: auto;
+}
+
+.combo_btn ul li {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.1s ease-in-out;
+}
+
+.combo_btn ul li:hover,
+.combo_btn ul li:focus {
+    transform-origin: center;
+    transform: scale(0.8);
+}
+
+.align_left i, 
+.align_center i, 
+.align_right  i{
+    transform: scale(1, -1);
+}
+
+.more.active,
+.more.active:hover,
+.more.active:focus {
+    background-color: var(--tinymceGrayActive);
+}
+
+.more_options {
+    display: grid;
+    width: fit-content;
+    max-height: unset;
+    left: unset;
+    right: 5px;
+    overflow-y: unset;
+    background-color: var(--neutralLight);
+}
+
+.more_options.dropdown .group:not(:last-of-type) {
+    border-right: none;
+    /* border-bottom: var(--tinymceBorder); */
+}
+
+.more_options.dropdown .group.bt {
+    border-top: var(--tinymceBorder);
+}
+
+.more_options.dropdown .group.br {
+    border-right: var(--tinymceBorder);
+}
+
+.more_options.dropdown .group.bb {
+    border-bottom: var(--tinymceBorder);
+}
+
+.editor_wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+div[contenteditable] {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 200px;
+    padding: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    border: var(--tinymceBorder);
+    background-color: white;
+    outline: none;
+    line-height: 1.5;
+    resize: none;
+}
+
+div[contenteditable] * {
+    width: fit-content;
+}
+
+.math_editor {
+    position: absolute;
+    bottom: -100%;
+    display: flex;
+    width: 100%;
+    height: 150px;
+    padding: 0.5rem;
+    background-color: var(--tinymceGray);
+    transition: bottom 0.2s ease-in-out;
+}
+
+.math_editor___toolbar {
+    width: 100%;
+    height: 75px;
+    display: grid;
+    background-color: var(--neutralLight);
+}
+
+.math_editor.slide-up {
+    bottom: 0;
+}
+
+.word_count {
+    display: flex;
+    justify-content: end;
+    gap: 5px;
+    padding-right: 0.5rem;
+    border: var(--tinymceBorder);
+    border-top: none;
+    background-color: white;
+    color: var(--neutralDark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    overflow: hidden;
+}
+
+.tox-statusbar__wordcount {
+    pointer-events: none !important;
+}
+
+.need-more {
+    color: darkred !important;
+}
+
+.limit-met {
+    color: var(--deepTeal) !important;
+}
+
+.tox-tinymce:not(.tox-fullscreen) {
+    height: 100% !important;
+}

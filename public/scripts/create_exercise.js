@@ -71,11 +71,6 @@ const showNotUniqueMsg = (p) => {
   }, 2000)
 }
 
-const setAria = (btn, val) => {
-  btn.setAttribute("aria-label", val)
-  btn.setAttribute("title", val)
-}
-
 const removeNonsense = (codeBlock) => {
   let breaks = codeBlock.querySelectorAll("br")
   let ps = codeBlock.querySelectorAll("p")
@@ -208,7 +203,7 @@ const saveExercise = async (status) => {
       return
     }
     try {
-      await axios.patch(`/api/v1/exercises/${resourceId}`, {
+      await axios.patch(`/api/v1/exercises/id/${resourceId}`, {
         title: titleInput.value.trim(),
         tags: inputValues,
         subject,

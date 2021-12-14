@@ -5,7 +5,7 @@ nav {
     display: flex;
     width: 100%;
     background-color: var(--neutralLight);
-    color: var(--deepOrange);
+    color: var(--deepRed);
 }
 
 .buttons {
@@ -88,7 +88,7 @@ nav i {
     padding-left: 1rem;
     width: 100%;
     margin: auto;
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
     color: white;
 }
 
@@ -97,7 +97,7 @@ nav i {
 }
 
 #submit-search {
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
     border: none;
     border-left: 1.5px solid var(--neutralLight);
     border-bottom-right-radius: 2em;
@@ -273,14 +273,14 @@ nav i {
         content: '';
         position: absolute;
         width: 100%;
-        bottom: 8px;
+        bottom: 7px;
         left: 0;
         height: 3px;
-        background-color: var(--deepOrange);
+        background-color: var(--deepRed);
     }
 
     .buttons a:active::after {
-        filter: brightness(1.2);
+        background-color: var(--brightOrange);
     }
 }
 

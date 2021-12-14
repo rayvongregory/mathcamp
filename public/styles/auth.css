@@ -179,7 +179,7 @@ pointer-events: none;
 
 .flexwrap button:hover,  
 .flexwrap button:focus {
-    color: var(--deepOrange);
+    color: var(--deepRed);
     outline: none;
 }
 
@@ -199,7 +199,7 @@ pointer-events: none;
     margin: 10px 0;
     border-radius: 20px;
     border: none;
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
     color: white;
     font-size: 1.125rem;
 }
@@ -252,7 +252,7 @@ pointer-events: none;
 
 .fdc button.center-h:hover,
 .fdc button.center-h:focus {
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
 }
 
 .fdc button.center-h:active {
@@ -295,7 +295,7 @@ pointer-events: none;
 
 .save_discard_buttons button:active, 
 .save_discard_buttons button:focus {
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
     outline: none;
 }
 
@@ -432,7 +432,7 @@ pointer-events: none;
 }
 
 #db:hover, #db:focus {
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
     color: white;
     outline: none;
 }
@@ -453,7 +453,7 @@ pointer-events: none;
 #proceed:focus, 
 #back:focus, 
 #confirm:focus {
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
     outline: none;
 }
 

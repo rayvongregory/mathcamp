@@ -11,6 +11,16 @@
     column-gap: 10px;
 }
 
+.textarea-wrapper {
+    font-size: 1.125rem;
+    position: relative;
+    grid-column: 1/span 1;
+}
+
+.textarea-wrapper ~ .textarea-wrapper {
+    margin-top: 10px;
+}
+
 .extra-options {
     position: absolute;
     right: 5px;
@@ -355,7 +365,7 @@
 #question_choices button:focus, 
 #correct_answer_section button:focus, 
 #question_section button:focus  {
-    color: var(--deepOrange);
+    color: var(--deepRed);
     cursor: pointer;
 }
 

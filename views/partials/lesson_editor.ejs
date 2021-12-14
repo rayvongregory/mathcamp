@@ -1,0 +1,36 @@
+<div class="editor">
+  <div id="shield"></div>
+  <div id="dragbar"></div>
+  <div class="tabs">
+    <button id="edit-html" class="tab selected">HTML</button>
+    <button id="edit-css" class="tab">CSS</button>
+    <button id="edit-js" class="tab">JS</button>
+  </div>
+  <button id="update-code" class="tab">Update</button>
+  <div class="outer">
+    <div class="code-wrapper">
+      <div id="html" class="code"></div>
+      <div id="css" class="code"></div>
+      <div id="js" class="code"></div>
+    </div>
+    <iframe id="preview" style="width: 50%">
+      <script>
+        MathJax = {
+          tex: {
+            inlineMath: [
+              ["$", "$"],
+              ["\\(", "\\)"],
+            ],
+          },
+          svg: {
+            fontCache: "global",
+          },
+        }
+      </script>
+      <script
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+        id="MathJax-script"
+      ></script>
+    </iframe>
+  </div>
+</div>

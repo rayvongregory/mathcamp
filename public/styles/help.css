@@ -3,12 +3,13 @@
     gap: 10px;
     width: 100vw;
     max-width: 1200px;
+    min-height: calc(100vh - 200px);
     padding: 1rem;
     margin: auto;
 }
 
 .add_post-wrapper {
-    margin: auto;
+    margin: 0 auto;
     width: 95%;
     max-width: 400px;
 }

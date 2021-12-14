@@ -2,6 +2,16 @@ const Exercise = require("../models/Exercise")
 const { StatusCodes } = require("http-status-codes")
 
 const getAllExercises = async (req, res) => {
+  const { gr } = req.params
+  const publishedExercises = await Exercise.find(
+    // { status: "published", subject: gr },
+    { subject: gr },
+    "id title subject chapter section"
+  )
+  res.status(StatusCodes.OK).json({ publishedExercises })
+}
+
+const getFilteredExercises = async (req, res) => {
   console.log(req.body)
   res.send("hopefully getting all practice")
 }
@@ -77,6 +87,7 @@ const deleteExercise = async (req, res) => {
 }
 module.exports = {
   getAllExercises,
+  getFilteredExercises,
   getExercise,
   postExercise,
   updateExercise,

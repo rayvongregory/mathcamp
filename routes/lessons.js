@@ -13,9 +13,8 @@ const authenticationMiddleware = require("../middleware/auth")
 // router.route("/").get(getAllLessons).post(authenticationMiddleware, postLesson)
 router.route("/").post(postLesson)
 router.route("/:gr").get(getAllLessons)
-router.route("/:gr/:chapter").get(getFilteredLessons)
 
-router.route("/:id").get(getLesson).patch(updateLesson).delete(deleteLesson)
+router.route("/id/:id").get(getLesson).patch(updateLesson).delete(deleteLesson)
 // .patch(authenticationMiddleware, updateLesson)
 // .delete(authenticationMiddleware, deleteLesson)
 

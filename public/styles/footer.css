@@ -1,6 +1,7 @@
 footer {
-    position: relative;
-    bottom: 95px;
+    /* position: relative; */
+    /* bottom: 95px; */
+    margin-bottom: 95px;
     width: 100%;
     padding: 1em;
     background-color: var(--deepTeal);
@@ -13,7 +14,7 @@ footer a {
 
 @media (min-width: 320px) {
     footer {
-        bottom: 55px;
+        margin-bottom: 55px;
     }
 }
 
@@ -23,7 +24,8 @@ footer a {
         display: block;
         background-color: var(--deepTeal);
         color: var(--neutralLight);
-        bottom: 0;
+        margin-bottom: 0px;
+
     }
 }
 

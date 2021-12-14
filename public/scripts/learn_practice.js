@@ -6,6 +6,7 @@ const firstCol = document.getElementById("first")
 const secondCol = document.getElementById("second")
 const thirdCol = document.getElementById("third")
 const bufferCol = document.getElementById("buffer")
+
 let selectSelected = document.querySelector(".select-selected"),
   selectItems = document.querySelector(".select-items"),
   height = 0,
@@ -273,9 +274,9 @@ const addChapters = (val) => {
     let head = document.createElement("div")
     head.setAttribute("class", "chapter-head")
     head.innerText = `${number}. ${name}`
-    let body = document.createElement("div")
+    let body = document.createElement("ul")
     body.setAttribute("class", "chapter-body")
-    body.innerText = "YO YO YO"
+    // body.innerText = "YO YO YO"
     chapter.appendChild(head)
     chapter.appendChild(body)
     firstCol.appendChild(chapter) //just to put them somewhere, this col is invis
@@ -299,12 +300,49 @@ const toggleAllSelect = (e) => {
   }
 }
 
+//create
+const addResources = (list) => {
+  console.log(list)
+  for (let resource of list) {
+    let chapterBody = document
+      .querySelector(`[data-chapter="${resource.chapter}"]`)
+      .querySelector(".chapter-body")
+    let li = document.createElement("li")
+    let a = document.createElement("a")
+    a.setAttribute("href", `/${path.split("/")[1]}/${resource._id}`)
+    a.innerText = resource.title
+    li.appendChild(a)
+    chapterBody.appendChild(li)
+  }
+}
+
+//read
+const getAllResources = async () => {
+  let type
+  if (path === "/learn") {
+    type = "lessons"
+  } else {
+    type = "exercises"
+  }
+  try {
+    const { data } = await axios.get(`/api/v1/${type}/${selected_gr}`)
+    if (type === "lessons") {
+      addResources(data.publishedLessons)
+    } else {
+      addResources(data.publishedExercises)
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 const init = () => {
   getChapters()
 }
 
 grFilters.forEach((gr) => {
   gr.addEventListener("click", addChapterFilter)
+  gr.addEventListener("click", getAllResources)
 })
 
 document.addEventListener("click", toggleAllSelect)

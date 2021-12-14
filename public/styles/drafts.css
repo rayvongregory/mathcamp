@@ -19,7 +19,7 @@
 
 #nothing-here a:hover,
 #nothing-here a:focus {
-    color: var(--deepOrange)
+    color: var(--deepRed)
 }
 
 
@@ -127,7 +127,7 @@
 
 @keyframes color-in-out {
     0%, 50% {
-        color: var(--deepOrange);
+        color: var(--deepRed);
     }
     25%, 75% {
         color: var(--tinymceGrayActive);
@@ -155,7 +155,7 @@
 
 #drafts___section li .front button:hover, 
 #drafts___section li .front button:focus {
-    color: var(--deepOrange);
+    color: var(--deepRed);
     cursor: pointer;
 }
 
@@ -165,7 +165,7 @@
 
 #drafts___section li .back button:hover, 
 #drafts___section li .back button:focus {
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
     cursor: pointer;
 }
 

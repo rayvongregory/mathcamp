@@ -28,7 +28,7 @@ const logoutBtn = document.getElementById("logout")
 let root = document.documentElement.style
 let role = "user"
 let menuOpen = false
-let token = localStorage.getItem("token")
+const token = localStorage.getItem("token")
 let justLoaded = true
 let breakpoints = { tiny: 320, small: 576, medium: 768, big: 992, large: 1200 }
 let lastWindowSize = 1,
@@ -80,7 +80,7 @@ const getDisplayName = async () => {
   })
 }
 
-nameWrap.addEventListener("pointerup", () => {
+aside.addEventListener("pointerup", () => {
   if (lastWindowSize === "large") {
     if (asideLinks.classList.contains("slide-down")) {
       asideLinks.classList.toggle("slide-down")
@@ -172,6 +172,20 @@ menuBtn.addEventListener("pointerup", () => {
         menuBtn.style.pointerEvents = ""
       }, 745)
       menuOpen = false
+    }
+  }
+})
+
+document.addEventListener("pointerup", (e) => {
+  const { target } = e
+  if (target !== aside && target !== asideLinks) {
+    if (lastWindowSize !== "large" && target !== menuBtn && menuOpen) {
+      menuBtn.dispatchEvent(new Event("pointerup"))
+    } else if (
+      lastWindowSize === "large" &&
+      !asideLinks.classList.contains("hide")
+    ) {
+      aside.dispatchEvent(new Event("pointerup"))
     }
   }
 })
@@ -438,8 +452,5 @@ const navInit = () => {
   })
 }
 
-menuBtn.addEventListener("contextmenu", () => {
-  return false
-})
 window.addEventListener("load", navInit)
 window.addEventListener("resize", checkWindowSize)

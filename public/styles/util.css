@@ -18,14 +18,14 @@
 :root {
     --neutralLight: #f4f7f5;
     --neutralMid: #a9a9aa;
-    --neutralDark: #6e7476;
+    --neutralDark: #494a4b;
     --tinymceGray: #dee0e2;
     --tinymceGrayActive: #c8cbcf;
     --tinymceBorder: 1px solid #ccc;
     --navGreen: #2c666e;
     --deepTeal: #005b60;
     --brightTeal: #01a5ad;
-    --deepOrange: #bf492a;
+    --deepRed: #ba372a;
     --brightOrange: #e55832;
     --boxShadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.15);
     --darkerBoxShadow: 0 2px 2px 0 rgba(0, 0, 0, 0.5);
@@ -57,8 +57,9 @@ body {
     text-align: center;
     font-size: 0.85rem;
     font-weight: 500;
-    background-color: var(--deepOrange);
+    background-color: var(--deepRed);
     color: white;
+    user-select: none;
 }
 
 @media (min-width: 320px) { 
