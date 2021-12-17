@@ -19,10 +19,23 @@ const lessonSchema = new Schema(
       type: String,
       required: [true, "Please pick a section for this lesson"],
     },
-    text: {
+    html: {
       type: String,
       default: "",
     },
+    css: {
+      type: String,
+      default: "",
+    },
+    js: {
+      type: String,
+      default: "",
+    },
+    images: [
+      {
+        type: String,
+      },
+    ],
     tags: {
       type: Array,
     },

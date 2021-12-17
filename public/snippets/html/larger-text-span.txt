@@ -1,0 +1,3 @@
+	<span class="larger">
+		\[3^2\]
+	</span>

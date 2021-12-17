@@ -92,9 +92,8 @@
 .to_publish_add_question {
     position: sticky;
     top: 0;
-    margin-top: 24px;
+    margin-top: 22px;
     height: fit-content;
-    height: -moz-fit-content;
 }
 
 #add_delete_q_buttons {

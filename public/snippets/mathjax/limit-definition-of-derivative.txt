@@ -1,0 +1,1 @@
+\[{{dy}\over{dx}}= \lim_{h\rightarrow0}{{f(x+h)-f(x)}\over{h}}\]

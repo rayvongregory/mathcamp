@@ -2,8 +2,7 @@ const path = require("path")
 const fs = require("fs")
 const { StatusCodes } = require("http-status-codes")
 
-const getSnippet = async (req, res) => {
-  console.log(req.params)
+const getSnippet = (req, res) => {
   const { lang, name } = req.params
   const snip = path.join(
     __dirname,

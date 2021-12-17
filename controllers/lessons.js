@@ -5,15 +5,10 @@ const getAllLessons = async (req, res) => {
   const { gr } = req.params
   const publishedLessons = await Lesson.find(
     // { status: "published", subject: gr },
-    { subject: gr },
-    "id title subject chapter section"
+    { subject: gr }
+    // "id title subject chapter section"
   )
   res.status(StatusCodes.OK).json({ publishedLessons })
-}
-
-const getFilteredLessons = async (req, res) => {
-  console.log(req.params)
-  res.status(StatusCodes.OK).json({ msg: "Getting filtered lessons" })
 }
 
 const getLesson = async (req, res) => {
@@ -24,11 +19,10 @@ const getLesson = async (req, res) => {
       .status(StatusCodes.NOT_FOUND)
       .json({ msg: `Lesson with id ${id} does not exist.` })
   }
-
-  const { title, tags, text, subject, chapter, section } = lesson
+  const { title, subject, chapter, section, tags, html, css, js } = lesson
   res
     .status(StatusCodes.OK)
-    .json({ title, tags, text, subject, chapter, section })
+    .json({ title, subject, chapter, section, tags, html, css, js })
 }
 
 //! only admin can create, update. or delete
@@ -56,7 +50,6 @@ const updateLesson = async (req, res) => {
       .status(StatusCodes.BAD_REQUEST)
       .json({ msg: `Lesson with id ${id} does not exist.` })
   }
-
   const { title } = req.body
   lesson = await Lesson.findOne({ title })
   if (lesson && !(lesson.id === id)) {
@@ -84,7 +77,6 @@ const deleteLesson = async (req, res) => {
 }
 module.exports = {
   getAllLessons,
-  getFilteredLessons,
   getLesson,
   postLesson,
   updateLesson,

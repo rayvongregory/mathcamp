@@ -127,7 +127,7 @@ const getInfo = async (id) => {
         problems: p,
         usedPIDs: upids,
       },
-    } = await axios.get(`/api/v1/exercises/${id}`)
+    } = await axios.get(`/api/v1/exercises/id/${id}`)
     titleInput.value = title
     checkList(createTitleItem, "check")
     addTags(tags)
@@ -275,16 +275,14 @@ const draftExercise = () => {
   saveExercise("draft")
 }
 
-const init = () => {
-  getRole()
-  getChapters()
+const init = async () => {
+  await getRole()
+  await getChapters()
   defineTextAreas()
   listenForChangesToPublishExerciseList()
   if (path.split("/")[3]) {
     resourceId = path.split("/")[3]
-    setTimeout(() => {
-      getInfo(resourceId)
-    }, 500)
+    await getInfo(resourceId)
   }
 }
 

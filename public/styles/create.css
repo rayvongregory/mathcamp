@@ -134,7 +134,7 @@ footer {
     border: none;
     background-color: var(--deepTeal);
     color: white;
-    font-size: 1rem;
+    font-size: 0.85rem;
 }
 
 #tags button span {

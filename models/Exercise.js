@@ -1,3 +1,11 @@
+//! Find a way to incorporate custom images and not URLs
+//     images: [
+//{
+//  type: String,
+// },
+//],
+//
+
 const mongoose = require("mongoose")
 const { Schema } = mongoose
 

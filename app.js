@@ -4,8 +4,8 @@ const connectDB = require("./db/connect")
 const refreshTokens = require("./db/redis-cache")
 const lessonsRouter = require("./routes/lessons")
 const learnRouter = require("./routes/resource")
-const practiceRouter = require("./routes/resource")
-const exercisesRouter = require("./routes/exercise")
+const practiceRouter = require("./routes/resource") //! do something with this
+const exercisesRouter = require("./routes/exercise") //! and this
 const draftsRouter = require("./routes/drafts")
 const helpRouter = require("./routes/help")
 const authRouter = require("./routes/auth")
@@ -15,14 +15,15 @@ const createRouter = require("./routes/create")
 const draftRouter = require("./routes/draft")
 const chaptersRouter = require("./routes/chapters")
 const snippetsRouter = require("./routes/snippets")
-
 const express = require("express")
+const expressFileUpload = require("express-fileupload")
 const app = express()
 
-app.set("view engine", "ejs")
 app.use(express.static(__dirname + "/public"))
-app.use(express.json({ limit: "200mb" }))
 app.use(express.urlencoded({ limit: "200mb", extended: false }))
+app.use(express.json({ limit: "200mb" }))
+app.use(expressFileUpload())
+app.set("view engine", "ejs")
 
 app.use("/api/v1/lessons", lessonsRouter) //protect this route
 app.use("/api/v1/exercises", exercisesRouter) //protect this route

@@ -1,0 +1,127 @@
+*, *::before, *::after { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+	margin: 0;
+}
+
+:root { 
+    --neutralLight: #f4f7f5; 
+    --neutralMid: #a9a9aa; 
+    --neutralDark: #494a4b; 
+    --tinymceGray: #dee0e2; 
+    --tinymceGrayActive: #c8cbcf;
+    --tinymceBorder: 1px solid #ccc; 
+    --navGreen: #2c666e; 
+    --deepTeal: #005b60; 
+    --brightTeal: #01a5ad; 
+    --deepRed: #ba372a; 
+    --brightOrange: #e55832; 
+    --highlight: #f1c40f;
+    --boxShadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.15);
+    --darkerBoxShadow: 0 2px 2px 0 rgba(0, 0, 0, 0.5); 
+    --border: 1px solid #d9d9d9; 
+}
+
+.title {
+	position: relative;
+	margin-bottom: 2rem;
+	width: fit-content;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--neutralDark);
+}
+
+.title::after {
+	content: "";
+	position: absolute;
+	bottom: -20px;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	background-color: var(--neutralMid);
+}
+
+.title h3 {
+    margin-bottom: 8px;
+    font-size: 28pt;
+	line-height: 1.75ch;
+}
+
+.text {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	margin-top: 20px;	
+}
+
+.text h4 {
+	margin-bottom: 10px;
+	width: fit-content;
+	font-size: 16pt;
+	font-weight: 600;	
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--neutralDark);
+}
+
+.text > p {
+	margin-left: 0rem;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 12pt;
+	color: var(--neutralDark);
+}
+
+.flex {
+    width: 100%; 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: "Segoe UI";
+} 
+
+.flex > * { 
+    width: 100%; 
+    padding: 0.5rem;
+} 
+
+.flex > :first-child {
+    background-color: var(--deepTeal);
+    color: white;
+}
+
+.flex > :last-child {
+    background-color: var(--deepRed);
+    color: white;
+}
+
+.example {
+	display: flex;
+	gap: 15px;
+	flex-direction: column;
+	margin: auto;
+	width: 80%;
+	max-width: 576px;
+	padding: 1rem;
+	background-color: lemonchiffon;
+	border: 1px solid var(--deepRed);
+	border-radius: 5px;
+	color: black;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.example ul {
+    margin-left: 1rem;
+	list-style-type: square;
+}
+
+@media (min-width: 576px) {
+      .title h3 {
+        font-size: 32pt;
+    }
+
+    .flex { 
+        flex-direction: row;
+    } 
+}

@@ -1,0 +1,1 @@
+\[\log{xy}=\log{x}+\log {y}\]

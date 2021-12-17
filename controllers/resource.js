@@ -1,3 +1,6 @@
+const { StatusCodes } = require("http-status-codes")
+const path = require("path")
+
 const getResource = (req, res) => {
   const { baseUrl } = req
   let title, bannerTitle

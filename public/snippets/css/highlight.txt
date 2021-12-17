@@ -1,0 +1,4 @@
+.highlight {
+    background-color: var(--highlight);
+    padding: 0 3px;
+}

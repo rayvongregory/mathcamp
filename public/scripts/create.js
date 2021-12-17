@@ -274,12 +274,11 @@ const chapterPicked = (e) => {
     return
   }
   const { target } = e
-  console.log(target.value)
   if (
     target.value === "0" &&
-    !sectionSelect.parentElement.classList.contains("hide")
+    !sectionSelect.parentElement.parentElement.classList.contains("hide")
   ) {
-    sectionSelect.parentElement.classList.add("hide")
+    sectionSelect.parentElement.parentElement.classList.add("hide")
     chapter = "0"
     sectionSelect.value = "0"
     removeOptions(sectionSelect)
@@ -293,14 +292,13 @@ const chapterPicked = (e) => {
       removeOptions(sectionSelect)
       addSections()
     }
-    if (sectionSelect.parentElement.classList.contains("hide")) {
-      sectionSelect.parentElement.classList.remove("hide")
+    if (sectionSelect.parentElement.parentElement.classList.contains("hide")) {
+      sectionSelect.parentElement.parentElement.classList.remove("hide")
     }
   }
 }
 
 const addSections = () => {
-  console.log(subject, chapter)
   let sections = chapters[subject][Number(chapter) - 1].sections
   for (let s in sections) {
     let option = document.createElement("option")
@@ -351,7 +349,7 @@ const resetChapterSection = () => {
     section = "no_choice"
     removeOptions(sectionSelect)
   }
-  sectionSelect.parentElement.classList.add("hide")
+  sectionSelect.parentElement.parentElement.classList.add("hide")
 
   if (pickChapterSectionItem.classList.contains("satisfied")) {
     checkList(pickChapterSectionItem, "uncheck")
