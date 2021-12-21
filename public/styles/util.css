@@ -37,7 +37,6 @@ html, button, input, select {
 }
 
 body {
-    background-color: var(--neutralLight);
     overflow-x: hidden;
 }
 

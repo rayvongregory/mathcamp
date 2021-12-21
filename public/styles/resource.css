@@ -1,5 +1,13 @@
 #resource {
-    padding: 2rem;
+    padding: 1rem;
     max-width: 992px;
     margin: auto;
+}
+
+
+@media (min-width: 576px) {
+    #resource {
+        padding: 2rem;
+    }
+    
 }

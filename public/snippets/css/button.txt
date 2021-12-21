@@ -1,0 +1,19 @@
+button {
+	margin: auto;
+	padding: 10px 15px;
+	background-color: var(--deepRed);
+	color: white;
+	border: none;
+	border-radius: 20px;
+	box-shadow: var(--boxShadow);
+}
+
+button:hover,
+button:focus {
+    cursor: pointer;
+}
+
+button:active,
+button.selected {
+	background-color: var(--brightOrange);
+}

@@ -1,17 +1,12 @@
 const filters = document.getElementById("filters")
 const grFilters = filters.querySelectorAll(".gr")
-const chapterSelectDiv = document.getElementById("chptr_select")
 const resources = document.getElementById("resources")
 const firstCol = document.getElementById("first")
 const secondCol = document.getElementById("second")
 const thirdCol = document.getElementById("third")
 const bufferCol = document.getElementById("buffer")
-
-let selectSelected = document.querySelector(".select-selected"),
-  selectItems = document.querySelector(".select-items"),
-  height = 0,
+let height = 0,
   num_cols = 0,
-  filtered = false,
   chapters = {
     seven: {},
     eight: {},
@@ -27,10 +22,6 @@ let selectSelected = document.querySelector(".select-selected"),
   selected_chapter = "all"
 
 const getChapters = async () => {
-  selectSelected.addEventListener("click", toggleAllSelect)
-  document
-    .querySelector('[data-value="all"]')
-    .addEventListener("click", applyChapterFilter)
   try {
     const {
       data: { _seven, _eight, _alg, _geo, _p_s, _alg2, _pc, _calc, _calc2 },
@@ -57,23 +48,13 @@ const addChapterFilter = async (e) => {
     addChapters(target.value)
   }
   if (selected && selected !== target) {
-    let children = Array.from(selectItems.children)
     selected.classList.remove("selected")
-    for (let i = 1; i < children.length; i++) {
-      children[i].remove()
-    }
     selected_gr = target.value
-    if (selectSelected.innerText !== "All chapters") {
-      selectSelected.innerText = "All chapters"
-      selected_chapter = "all"
-    }
     addChapters(target.value)
   }
   target.classList.add("selected")
-  if (!chapterSelectDiv.classList.contains("reveal")) {
-    chapterSelectDiv.classList.add("reveal")
+  if (!resources.classList.contains("reveal")) {
     resources.classList.add("reveal")
-    chapterSelectDiv.parentElement.classList.add("reveal")
   }
 }
 
@@ -95,7 +76,6 @@ const applyChapterFilter = (e) => {
     if (!bufferCol.classList.contains("hide")) {
       bufferCol.setAttribute("class", "hide")
     }
-    filtered = false
     num_cols = 3
   } else {
     for (let col of [firstCol, secondCol, thirdCol]) {
@@ -117,12 +97,9 @@ const applyChapterFilter = (e) => {
       }
     }
     num_cols = 1
-    filtered = true
   }
   setColumns()
-  selectSelected.innerText = target.innerText
   selected_chapter = target.dataset.value
-  selectSelected.dispatchEvent(new Event("click"))
 }
 
 const determineColumns = () => {
@@ -155,12 +132,6 @@ const setColumns = () => {
     firstCol.classList.remove("invis")
   }
   if (lastWindowSize === "tiny" || lastWindowSize === "small") {
-    if (filtered) {
-      if (!bufferCol.classList.contains("hide")) {
-        bufferCol.setAttribute("class", "hide")
-      }
-      return
-    }
     if (num_cols !== 1) {
       num_cols = 1
       if (!secondCol.classList.contains("hide")) {
@@ -176,12 +147,6 @@ const setColumns = () => {
       }
     }
   } else if (lastWindowSize === "medium" || lastWindowSize === "big") {
-    if (filtered) {
-      if (!bufferCol.classList.contains("one-col")) {
-        bufferCol.setAttribute("class", "one-col")
-      }
-      return
-    }
     if (num_cols !== 2) {
       num_cols = 2
       if (secondCol.classList.contains("hide")) {
@@ -205,12 +170,6 @@ const setColumns = () => {
       }
     }
   } else {
-    if (filtered) {
-      if (!bufferCol.classList.contains("two-col")) {
-        bufferCol.setAttribute("class", "two-col")
-      }
-      return
-    }
     if (num_cols !== 3) {
       num_cols = 3
       if (secondCol.classList.contains("hide")) {
@@ -267,7 +226,6 @@ const addChapters = (val) => {
     chapter.innerText = `Chapter ${number}: ${name}`
     chapter.setAttribute("data-value", `${number}`)
     chapter.addEventListener("click", applyChapterFilter)
-    selectItems.appendChild(chapter)
     chapter = document.createElement("div")
     chapter.setAttribute("class", "chapter")
     chapter.setAttribute("data-chapter", number)
@@ -285,24 +243,9 @@ const addChapters = (val) => {
   determineColumns()
 }
 
-const toggleAllSelect = (e) => {
-  const { target } = e
-  e.stopPropagation()
-  if (target === selectSelected) {
-    selectItems.classList.toggle("hide")
-    selectSelected.classList.toggle("select-arrow-active")
-  } else if (!target !== selectSelected) {
-    if (!selectItems.classList.contains("hide")) {
-      selectItems.classList.add("hide")
-      selectSelected.classList.remove("select-arrow-active")
-      console.log(selected_gr, selected_chapter)
-    }
-  }
-}
-
 //create
 const addResources = (list) => {
-  console.log(list)
+  //adds the links
   for (let resource of list) {
     let chapterBody = document
       .querySelector(`[data-chapter="${resource.chapter}"]`)
@@ -318,12 +261,7 @@ const addResources = (list) => {
 
 //read
 const getAllResources = async () => {
-  let type
-  if (path === "/learn") {
-    type = "lessons"
-  } else {
-    type = "exercises"
-  }
+  let type = path === "/learn" ? "lessons" : "exercises"
   try {
     const { data } = await axios.get(`/api/v1/${type}/${selected_gr}`)
     if (type === "lessons") {
@@ -338,13 +276,11 @@ const getAllResources = async () => {
 
 const init = () => {
   getChapters()
+  grFilters.forEach((gr) => {
+    gr.addEventListener("click", addChapterFilter)
+    gr.addEventListener("click", getAllResources)
+  })
 }
 
-grFilters.forEach((gr) => {
-  gr.addEventListener("click", addChapterFilter)
-  gr.addEventListener("click", getAllResources)
-})
-
-document.addEventListener("click", toggleAllSelect)
 window.addEventListener("load", init)
 window.addEventListener("resize", setColumns)

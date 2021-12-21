@@ -1,3 +1,4 @@
+let resourceId
 const editor = document.querySelector(".editor")
 const outer = document.querySelector(".outer")
 const codeWrapper = document.querySelector(".code-wrapper")
@@ -347,13 +348,33 @@ addSnipBtns.forEach((btn) => {
 
 getImgTagBtn.addEventListener("pointerup", (e) => {
   const { target } = e
-  const img = target.previousElementSibling.outerHTML
-  navigator.clipboard.writeText(img)
+  const img = document.createElement("img")
+  img.setAttribute("src", imgPrev.getAttribute("src"))
+  img.setAttribute("alt", imgPrev.getAttribute("alt"))
+  navigator.clipboard.writeText(img.outerHTML)
   target.setAttribute("data-text", "Copied!")
   setTimeout(() => {
     target.setAttribute("data-text", "Click to copy")
     document.activeElement.blur()
   }, 1000)
+})
+
+let downedKeys = []
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Control" && downedKeys.length === 0) {
+    downedKeys.push("Control")
+  }
+  if (e.key === "s" && downedKeys.includes("Control")) {
+    e.preventDefault()
+    e.stopPropagation()
+    updateBtn.dispatchEvent(new Event("pointerup"))
+    if (!sameText()) draftBtn.dispatchEvent(new Event("pointerup"))
+  }
+})
+
+document.addEventListener("keyup", (e) => {
+  if (e.key === "Control") downedKeys = []
 })
 
 window.addEventListener("load", init)

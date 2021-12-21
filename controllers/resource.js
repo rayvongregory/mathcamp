@@ -6,8 +6,10 @@ const getResource = (req, res) => {
   let title, bannerTitle
   if (baseUrl === "/learn") {
     title = "Learn"
+    bannerTitle = "Learn"
   } else {
     title = "Practice"
+    bannerTitle = "Practice"
   }
   res.render("pages/single_resource", {
     title,

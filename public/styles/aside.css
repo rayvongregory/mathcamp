@@ -148,6 +148,7 @@ aside a:active, #logout:active {
     border-radius: 5px;
     box-shadow: var(--darkerBoxShadow);
     transition: var(--transition);
+    pointer-events: none;
 }
 
 .menu-btn.open .menu-btn_burgir {

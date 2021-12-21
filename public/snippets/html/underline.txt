@@ -1,1 +1,1 @@
-<span class="underline"> [  ] </span>
+<span class="underline"></span>

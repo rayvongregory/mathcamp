@@ -7,7 +7,10 @@ const getAllLessons = async (req, res) => {
     // { status: "published", subject: gr },
     { subject: gr }
     // "id title subject chapter section"
-  )
+  ).sort({
+    "chapter": 1,
+    "section": 1,
+  })
   res.status(StatusCodes.OK).json({ publishedLessons })
 }
 
