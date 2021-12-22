@@ -1,5 +1,4 @@
-const filters = document.getElementById("filters")
-const grFilters = filters.querySelectorAll(".gr")
+const grLvls = document.querySelectorAll(".gr")
 const resources = document.getElementById("resources")
 const firstCol = document.getElementById("first")
 const secondCol = document.getElementById("second")
@@ -42,7 +41,7 @@ const getChapters = async () => {
 
 const addChapterFilter = async (e) => {
   const { target } = e
-  let selected = filters.querySelector(".gr.selected")
+  let selected = document.querySelector(".gr.selected")
   if (!selected) {
     selected_gr = target.value
     addChapters(target.value)
@@ -220,23 +219,27 @@ const addChapters = (val) => {
   }
   let list = chapters[val]
   for (let c = 0; c < list.length; c++) {
+    let { number, name } = list[c].title
     let chapter = document.createElement("div")
-    let number = list[c].title.number
-    let name = list[c].title.name
-    chapter.innerText = `Chapter ${number}: ${name}`
-    chapter.setAttribute("data-value", `${number}`)
-    chapter.addEventListener("click", applyChapterFilter)
-    chapter = document.createElement("div")
+    let chapterNumber = document.createElement("div")
+    let stickDiv = document.createElement("div")
+    let chapterInfo = document.createElement("div")
+    let chapterTitle = document.createElement("div")
+    let chapterLinks = document.createElement("ul")
     chapter.setAttribute("class", "chapter")
     chapter.setAttribute("data-chapter", number)
-    let head = document.createElement("div")
-    head.setAttribute("class", "chapter-head")
-    head.innerText = `${number}. ${name}`
-    let body = document.createElement("ul")
-    body.setAttribute("class", "chapter-body")
-    // body.innerText = "YO YO YO"
-    chapter.appendChild(head)
-    chapter.appendChild(body)
+    chapterNumber.setAttribute("class", "chapter_number")
+    stickDiv.setAttribute("class", "stick")
+    chapterInfo.setAttribute("class", "chapter_info")
+    chapterTitle.setAttribute("class", "chapter_title")
+    chapterLinks.setAttribute("class", "chapter_links")
+    stickDiv.textContent = number
+    chapterTitle.textContent = name
+    chapterNumber.appendChild(stickDiv)
+    chapterInfo.appendChild(chapterNumber)
+    chapterInfo.appendChild(chapterLinks)
+    chapter.appendChild(chapterTitle)
+    chapter.appendChild(chapterInfo)
     firstCol.appendChild(chapter) //just to put them somewhere, this col is invis
     height += chapter.offsetHeight
   }
@@ -249,7 +252,7 @@ const addResources = (list) => {
   for (let resource of list) {
     let chapterBody = document
       .querySelector(`[data-chapter="${resource.chapter}"]`)
-      .querySelector(".chapter-body")
+      .querySelector(".chapter_links")
     let li = document.createElement("li")
     let a = document.createElement("a")
     a.setAttribute("href", `/${path.split("/")[1]}/${resource._id}`)
@@ -276,7 +279,7 @@ const getAllResources = async () => {
 
 const init = () => {
   getChapters()
-  grFilters.forEach((gr) => {
+  grLvls.forEach((gr) => {
     gr.addEventListener("click", addChapterFilter)
     gr.addEventListener("click", getAllResources)
   })

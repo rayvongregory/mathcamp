@@ -236,6 +236,10 @@
     opacity: 1;
 }
 
+#htmlsnippets > *:nth-child(2) {
+    margin-top: 1rem;
+}
+
 .to_publish_reqs {
     margin-top: 30px;
 }

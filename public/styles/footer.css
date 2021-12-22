@@ -1,10 +1,11 @@
 footer {
-    /* position: relative; */
-    /* bottom: 95px; */
     margin-bottom: 95px;
     width: 100%;
     padding: 1em;
     background-color: var(--deepTeal);
+    color: var(--neutralLight);
+    font-size: 0.8rem;
+    text-align: right;
 }
 
 footer a {

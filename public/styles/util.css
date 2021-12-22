@@ -5,8 +5,7 @@
 * Browsers: last 4 version
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,500;1,500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100;400&display=swap');
 
 *, *::before, *::after {
     margin: 0;
@@ -38,6 +37,7 @@ html, button, input, select {
 
 body {
     overflow-x: hidden;
+    background-color: var(--neutralLight);
 }
 
 .hide {
