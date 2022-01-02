@@ -9,13 +9,19 @@ const handleLogin = async () => {
   let { email, password } = formData
   email = email.toLowerCase()
   try {
-    const { data } = await axios.post(`/api/v1/auth${path}`, {
+    const {
+      data: { msg, accessToken, confirmed },
+    } = await axios.post(`/api/v1/auth${path}`, {
       email,
       password,
     })
-    authorized(data.msg)
-    localStorage.setItem("token", data.accessToken)
-    backHome()
+    if (confirmed) {
+      authorized(msg)
+      localStorage.setItem("token", accessToken)
+      backHome()
+    } else {
+      unauthorized(msg)
+    }
   } catch (error) {
     console.error(error)
     unauthorized("Invalid credentials. Please try again.")

@@ -1,4 +1,4 @@
-button {
+.text button {
 	margin: auto;
 	padding: 10px 15px;
 	background-color: var(--deepRed);
@@ -8,12 +8,12 @@ button {
 	box-shadow: var(--boxShadow);
 }
 
-button:hover,
-button:focus {
+.text button:hover,
+.text button:focus {
     cursor: pointer;
 }
 
-button:active,
-button.selected {
+.text button:active,
+.text button.selected {
 	background-color: var(--brightOrange);
 }

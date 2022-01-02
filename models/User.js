@@ -28,21 +28,13 @@ const userSchema = new Schema(
     avatar: {
       type: String,
     },
-    // contactEmail: {
-    //   type: String,
-    //   match: [
-    //     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    //     "This email address is not valid",
-    //   ],
-    //   default: this.email,
-    // },
     password: {
       type: String,
       // match: [
       //   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
       //   "Password must contain at least 8 characters, at least one uppercase letter, at least one lowercase letter, at least one digit, and at least one special character",
       // ],
-      required: [true, "Please provide a password."],
+      required: [true, "Please provide a valid password."],
     },
     role: {
       type: String,
@@ -52,6 +44,10 @@ const userSchema = new Schema(
     displayName: {
       type: String,
       required: [true, "Please provide a display name for this user"],
+    },
+    confirmed: {
+      type: Boolean,
+      default: false,
     },
     lastLogin: {
       type: Date,
@@ -77,10 +73,6 @@ userSchema.methods.getAvatar = function () {
     true
   )
 }
-
-// userSchema.methods.createContactEmail = function () {
-//   this.contactEmail = this.email
-// }
 
 userSchema.methods.hashPassword = async function () {
   this.password = await bcrypt.hash(this.password, 10)
@@ -116,6 +108,18 @@ userSchema.methods.generateAccessToken = function () {
         expiresIn: "15m",
       }
     )
+  )
+}
+
+userSchema.methods.generateTempToken = async function () {
+  return jwt.sign(
+    {
+      id: this._id,
+    },
+    process.env.JWT_ACCESS_SECRET,
+    {
+      expiresIn: "15d",
+    }
   )
 }
 

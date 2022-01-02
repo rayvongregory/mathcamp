@@ -31,15 +31,17 @@ app.use("/api/v1/drafts", draftsRouter) //protect this route
 app.use("/api/v1/help", helpRouter)
 app.use("/api/v1/token", tokenRouter)
 app.use("/api/v1/auth", authRouter) //register, login, logout
-app.use("/api/v1/users", usersRouter) // admin only (if you ever decide to flesh this is)
+app.use("/api/v1/users", usersRouter) // admin only (if you ever decide to flesh this out)
 app.use("/api/v1/chapters", chaptersRouter)
 app.use("/api/v1/snippets", snippetsRouter)
 app.use("/create", createRouter)
 app.use("/drafts", draftRouter)
 app.use("/learn", learnRouter)
 app.use("/practice", practiceRouter)
+app.use("/mathjax", express.static(__dirname + "/node_modules/mathjax"))
+app.use("/mathtype", express.static(__dirname + "/node_modules/@wiris"))
 app.use("/codemirror", express.static(__dirname + "/node_modules/codemirror"))
-
+app.use("/particlesjs", express.static(__dirname + "/node_modules/particlesjs"))
 app.use("/account", (req, res, next) => {
   res.render("pages/auth", {
     title: "Account",
@@ -62,12 +64,34 @@ app.use("/login", (req, res, next) => {
   })
 })
 
+app.use("/register/:id", (req, res, next) => {
+  res.render("pages/verify_account", {
+    title: "Welcome",
+    bannerTitle: "Welcome",
+  })
+})
+
 app.use("/register", (req, res, next) => {
   res.render("pages/auth", {
     title: "Register",
     bannerTitle: "Register",
   })
 })
+
+app.use("/verify", (req, res, next) => {
+  res.render("pages/verify_account", {
+    title: "Verify",
+    bannerTitle: "Verify",
+  })
+})
+
+app.use("/verified", (req, res, next) => {
+  res.render("pages/verify_account", {
+    title: "Verified",
+    bannerTitle: "Verified",
+  })
+})
+
 app.use("/", (req, res, next) => {
   res.render("pages/index", { title: "Home" })
 })

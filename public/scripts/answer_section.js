@@ -1,6 +1,6 @@
 // I think this is done... 11/8/2021 @ 4:38PM
 //cache
-const extraOptions_1 = extraOptions[1]
+const toolbars_1 = toolbars[1]
 const addAnsBtn = document.getElementById("answer_add")
 const discardAnsBtn = document.getElementById("answer_discard")
 const createCorrectAns = document.getElementById("create_correct_answer")
@@ -28,19 +28,16 @@ const createAnsItem = () => {
 //create
 const addAns = (e) => {
   document.activeElement.blur()
-  switch (
-    uniqueChoice(correctAnswerTextArea) ||
-    correctAnswerTextArea.innerHTML === choices.answer
-  ) {
+  switch (uniqueChoice(aTA) || aTA.innerHTML === choices.answer) {
     case false:
       showNotUniqueMsg(labelPs[1])
       break
     case true:
-      removeNonsense(correctAnswerTextArea)
-      choices.answer = correctAnswerTextArea.innerHTML
+      removeEmptyDivs(aTA)
+      choices.answer = aTA.innerHTML
       checkList(createCorrectAns, "check")
       checkReqs()
-      hideOrShowThisTextArea("correctAnswerTextArea", "hide")
+      hideOrShowThisTextArea("aTA", "hide")
       let correctAnswerItem = correctAnswerSection.querySelector("li")
       if (!correctAnswerItem) {
         createAnsItem()
@@ -70,15 +67,15 @@ const editAns = (e) => {
     li.classList.remove("editing")
     p.innerText = "Answer"
     setAria(target, "Edit answer")
-    hideOrShowThisTextArea("correctAnswerTextArea", "hide")
+    hideOrShowThisTextArea("aTA", "hide")
   } else {
     li.classList.add("editing")
     p.innerText = "Answer (editing)"
-    correctAnswerTextArea.innerHTML = choices.answer
+    aTA.innerHTML = choices.answer
     setAria(target, "Cancel edit")
     setAria(addAnsBtn, "Save answer")
     setAria(discardAnsBtn, "Discard changes")
-    hideOrShowThisTextArea("correctAnswerTextArea", "show")
+    hideOrShowThisTextArea("aTA", "show")
   }
 }
 
@@ -86,14 +83,14 @@ const editAns = (e) => {
 const discardAns = (e) => {
   document.activeElement.blur()
   let { target } = e
-  correctAnswerTextArea.innerHTML = "<p></p>"
+  aTA.replaceChildren()
   let correctAnswerItem = correctAnswerSection.querySelector("li")
   if (correctAnswerItem) {
     let edit = correctAnswerItem.querySelector("button")
     setAria(edit, "Edit answer")
     setAria(target, "Discard")
     setAria(target.previousElementSibling, "Add answer to question")
-    hideOrShowThisTextArea("correctAnswerTextArea", "hide")
+    hideOrShowThisTextArea("aTA", "hide")
     correctAnswerItem.classList.remove("editing")
     let p = correctAnswerItem.querySelector("p")
     p.innerText = "Answer"
@@ -109,8 +106,8 @@ const deleteAns = () => {
   }
   checkList(createCorrectAns, "uncheck")
   checkReqs()
-  hideOrShowThisTextArea("correctAnswerTextArea", "show")
-  correctAnswerTextArea.innerHTML = "<p></p>"
+  hideOrShowThisTextArea("aTA", "show")
+  aTA.replaceChildren()
   correctAnswerSection.classList.add("hide")
   setAria(addAnsBtn, "Add answer")
   setAria(discardAnsBtn, "Discard")

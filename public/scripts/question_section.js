@@ -1,13 +1,13 @@
 // I think this is done... 11/8/2021 @ 4:38PM
-const extraOptions = document.querySelectorAll(".extra-options")
-const extraOptions_0 = extraOptions[0]
+const toolbars = document.querySelectorAll(".toolbar")
+const toolbars_0 = toolbars[0]
 const difficultySelect = document.getElementById("choose_difficulty")
 const addQBtn = document.getElementById("q_add")
 const discardQBtn = document.getElementById("q_discard")
 const poseQItem = document.getElementById("question")
 const questionSection = document.getElementById("question_section")
 const selectDiffItem = document.getElementById("difficulty")
-let question = "<p></p>"
+let question = ""
 let qDiff = "no_choice"
 
 //util
@@ -91,16 +91,19 @@ const createQItem = () => {
 
 const addQ = () => {
   document.activeElement.blur()
-  switch (uniqueQ(questionTextArea)) {
+  switch (uniqueQ(qTA)) {
     case false:
       showNotUniqueMsg(labelPs[0])
       break
     case true:
-      removeNonsense(questionTextArea)
-      question = questionTextArea.innerHTML
+      removeEmptyDivs(qTA)
+      if (qTA.childElementCount === 0) {
+        qTA.innerHTML = `<div>${qTA.textContent}</div>`
+      }
+      question = qTA.innerHTML
       checkList(poseQItem, "check")
       checkReqs()
-      hideOrShowThisTextArea("questionTextArea", "hide")
+      hideOrShowThisTextArea("qTA", "hide")
       let questionItem = questionSection.querySelector("li")
       if (!questionItem) {
         createQItem()
@@ -145,16 +148,16 @@ const editQ = (e) => {
       setDiff(qDiff)
     }
     setAria(target, "Edit question")
-    hideOrShowThisTextArea("questionTextArea", "hide")
+    hideOrShowThisTextArea("qTA", "hide")
   } else {
     li.classList.add("editing")
     p.innerText = "Question (editing)"
     setAria(target, "Cancel edit")
-    questionTextArea.innerHTML = question
+    qTA.innerHTML = question
     setDiff(qDiff)
     setAria(addQBtn, "Save question")
     setAria(discardQBtn, "Discard changes")
-    hideOrShowThisTextArea("questionTextArea", "show")
+    hideOrShowThisTextArea("qTA", "show")
   }
 }
 
@@ -162,7 +165,7 @@ const editQ = (e) => {
 const discardQ = (e) => {
   document.activeElement.blur()
   let { target } = e
-  questionTextArea.innerHTML = "<p></p>"
+  qTA.replaceChildren()
   setDiff(qDiff)
   let li = questionSection.querySelector("li")
   if (li) {
@@ -170,12 +173,12 @@ const discardQ = (e) => {
     setAria(target, "Discard")
     setAria(edit, "Edit question")
     setAria(target.previousElementSibling, "Add question")
-    hideOrShowThisTextArea("questionTextArea", "hide")
+    hideOrShowThisTextArea("qTA", "hide")
     li.classList.remove("editing")
     let p = li.querySelector("p")
     p.innerText = "Question"
   } else {
-    question = "<p></p>"
+    question = ""
     difficultySelect.value = "no_choice"
   }
 }
@@ -184,13 +187,13 @@ const deleteQ = () => {
   document.activeElement.blur()
   let li = questionSection.querySelector("li")
   if (li) li.remove()
-  question = "<p></p>"
-  questionTextArea.innerHTML = "<p></p>"
+  question = ""
+  qTA.replaceChildren()
   setAria(addQBtn, "Add question")
   setAria(discardQBtn, "Discard")
   checkList(poseQItem, "uncheck")
   checkReqs()
-  hideOrShowThisTextArea("questionTextArea", "show")
+  hideOrShowThisTextArea("qTA", "show")
   questionSection.classList.add("hide")
   qDiff = "no_choice"
   setDiff(qDiff)

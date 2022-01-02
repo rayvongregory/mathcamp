@@ -242,7 +242,6 @@ nav i {
 
     .buttons a {
         width: fit-content;
-        width: -moz-fit-content;
         padding: unset;
         font-size: 1.375em;
     }
@@ -289,7 +288,6 @@ nav i {
         position: unset;
         margin-right: 3.5rem;
         top: 0;
-        width: -moz-fit-content;
         width: fit-content;
     }
 

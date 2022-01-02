@@ -20,19 +20,20 @@ const handleRegistration = async () => {
     return unauthorized("Passwords do not match.")
   }
 
-  response.innerText = "Registering..."
+  response.innerText = "Setting up your account..."
   const name = `${fname} ${lname}`
   const displayName = `${fname} ${lname[0]}.`
   try {
-    const { data } = await axios.post(`/api/v1/auth${path}`, {
+    const {
+      data: { name: n },
+    } = await axios.post(`/api/v1/auth${path}`, {
       name,
       displayName,
       email,
       password,
     })
-    authorized(data.msg)
-    localStorage.setItem("token", data.accessToken)
-    backHome()
+    localStorage.setItem("name", n)
+    window.location.href = "/verify"
   } catch (error) {
     console.error(error)
     unauthorized("There is already an account associated with this email.")

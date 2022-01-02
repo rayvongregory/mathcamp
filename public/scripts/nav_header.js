@@ -415,7 +415,6 @@ const navInit = () => {
   }
   if (path === "/") {
     particleMod = 3
-    // speed = 0.25
   }
 
   Particles.init({

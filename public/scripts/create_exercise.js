@@ -1,17 +1,11 @@
 //this is for the onload, draft, publish, and any util functions
 // that apply to multiple sections
 const publishExerciseReqs = document.querySelector(".to_publish_reqs:not(.q)")
-const labelPs = Array.from(
-  document.querySelectorAll(".label-wrapper p")
-).splice(3)
-let questionTextAreaDiv,
-  questionTextArea,
-  correctAnswerTextAreaDiv,
-  correctAnswerTextArea,
-  choicesTextAreaDiv,
-  choicesTextArea,
-  resourceId,
-  i
+const labelPs = document.querySelectorAll(".label-wrapper p")
+const qTA = document.getElementById("q")
+const aTA = document.getElementById("a")
+const cTA = document.getElementById("c")
+let resourceId, i
 
 let lastSave = {
   title: "",
@@ -35,29 +29,25 @@ let currentExercise = {
 //util
 const hideOrShowThisTextArea = (textarea, action) => {
   switch (`${textarea} ${action}`) {
-    case "questionTextArea hide":
-      questionTextArea.innerHTML = "<p></p>"
-      questionSection.classList.remove("hide")
-      questionSection.classList.remove("pop-top")
-      questionTextAreaDiv.classList.add("hide")
-      extraOptions_0.classList.add("hide")
+    case "qTA hide":
+      qTA.classList.add("hide")
+      questionSection.classList.remove("hide", "pop-top")
+      toolbars_0.classList.add("hide")
       break
-    case "questionTextArea show":
+    case "qTA show":
+      qTA.classList.remove("hide")
       questionSection.classList.add("pop-top")
-      questionTextAreaDiv.classList.remove("hide")
-      extraOptions_0.classList.remove("hide")
+      toolbars_0.classList.remove("hide")
       break
-    case "correctAnswerTextArea hide":
-      correctAnswerTextArea.innerHTML = "<p></p>"
-      correctAnswerSection.classList.remove("hide")
-      correctAnswerSection.classList.remove("pop-top")
-      correctAnswerTextAreaDiv.classList.add("hide")
-      extraOptions_1.classList.add("hide")
+    case "aTA hide":
+      aTA.classList.add("hide")
+      correctAnswerSection.classList.remove("hide", "pop-top")
+      toolbars_1.classList.add("hide")
       break
-    case "correctAnswerTextArea show":
+    case "aTA show":
+      aTA.classList.remove("hide")
       correctAnswerSection.classList.add("pop-top")
-      correctAnswerTextAreaDiv.classList.remove("hide")
-      extraOptions_1.classList.remove("hide")
+      toolbars_1.classList.remove("hide")
       break
     default:
       break
@@ -71,17 +61,38 @@ const showNotUniqueMsg = (p) => {
   }, 2000)
 }
 
-const removeNonsense = (codeBlock) => {
-  let breaks = codeBlock.querySelectorAll("br")
-  let ps = codeBlock.querySelectorAll("p")
-  breaks.forEach((br) => {
-    br.remove()
-  })
-  ps.forEach((p) => {
-    if (p.innerText.trim() === "" && !p.querySelector("img")) {
-      p.remove()
+const removeEmptyDivs = (codeBlock) => {
+  let breaks = codeBlock.querySelectorAll("div > br")
+  breaks.forEach((b) => {
+    const { parentElement } = b
+    if (parentElement.childElementCount === parentElement.childNodes.length) {
+      parentElement.remove()
+    } else {
+      b.remove()
     }
   })
+}
+const listenForEnterKey = () => {
+  const callback = (mutations) => {
+    mutations.forEach((mutation) => {
+      const { target } = mutation
+      if (
+        target.classList.contains("img-wrapper") &&
+        !target.querySelector("img")
+      ) {
+        target.removeAttribute("class")
+      }
+    })
+  }
+  const observer = new MutationObserver(callback)
+  const config = {
+    childList: true,
+    subtree: true,
+    attributes: true,
+  }
+  observer.observe(qTA, config)
+  observer.observe(aTA, config)
+  observer.observe(cTA, config)
 }
 
 const listenForChangesToPublishExerciseList = () => {
@@ -181,18 +192,83 @@ const sameProblemSet = (e = null) => {
   }
 }
 
-const defineTextAreas = () => {
-  questionTextAreaDiv = document.querySelectorAll('[role="application"]')[0]
-  correctAnswerTextAreaDiv = document.querySelectorAll(
-    '[role="application"]'
-  )[1]
-  choicesTextAreaDiv = document.querySelectorAll('[role="application"]')[2]
-  questionTextArea = tinymce.DOM.win[0].document.body
-  correctAnswerTextArea = tinymce.DOM.win[1].document.body
-  choicesTextArea = tinymce.DOM.win[2].document.body
-  questionTextArea.innerHTML = "<p></p>"
-  correctAnswerTextArea.innerHTML = "<p></p>"
-  choicesTextArea.innerHTML = "<p></p>"
+const handleFileSelect = (e) => {
+  if (getImgTagBtn.classList.contains("invis")) {
+    getImgTagBtn.classList.remove("invis")
+    imgPrev.classList.remove("invis")
+  }
+  const { target } = e
+  let reader = new FileReader()
+  reader.onload = (e) => {
+    let src = e.target.result.toString("base64")
+    imgPrev.setAttribute("src", src)
+    imgPrev.setAttribute("alt", target.files[0].name)
+  }
+  reader.readAsDataURL(target.files[0])
+}
+
+getImgTagBtn.addEventListener("pointerup", async (e) => {
+  const { target } = e
+  localStorage.setItem(
+    "img",
+    JSON.stringify({
+      src: imgPrev.getAttribute("src"),
+      alt: imgPrev.getAttribute("alt"),
+    })
+  )
+  target.setAttribute("data-text", "Copied!")
+  setTimeout(() => {
+    target.setAttribute("data-text", "Click to copy")
+    document.activeElement.blur()
+  }, 1000)
+})
+
+const paste = (e) => {
+  const { target } = e
+  let img = localStorage.getItem("img")
+  if (img) {
+    e.preventDefault()
+    img = JSON.parse(img)
+    const { src, alt } = img
+    let imgTag = document.createElement("img")
+    let div = document.createElement("div")
+    div.setAttribute("class", "img-wrapper")
+    imgTag.setAttribute("src", src)
+    imgTag.setAttribute("alt", alt)
+    div.appendChild(imgTag)
+    if (!target.id) {
+      target.parentElement.replaceChild(div, target)
+    } else {
+      target.insertAdjacentElement("afterbegin", div)
+    }
+    localStorage.removeItem("img")
+  }
+}
+
+const addMathType = () => {
+  const qp = {},
+    ap = {},
+    cp = {}
+  qp.target = qTA
+  ap.target = aTA
+  cp.target = cTA
+  qp.toolbar = document.getElementById("toolbar-q")
+  ap.toolbar = document.getElementById("toolbar-a")
+  cp.toolbar = document.getElementById("toolbar-c")
+  const qmt = new WirisPlugin.GenericIntegration(qp)
+  const amt = new WirisPlugin.GenericIntegration(ap)
+  const cmt = new WirisPlugin.GenericIntegration(cp)
+  qmt.init()
+  amt.init()
+  cmt.init()
+  document.getElementById("chemistryIcon").remove()
+  document.getElementById("chemistryIcon").remove()
+  document.getElementById("chemistryIcon").remove()
+  Array.from(document.getElementsByClassName("mathtype")).forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.activeElement.blur()
+    })
+  })
 }
 
 const saveExercise = async (status) => {
@@ -278,7 +354,13 @@ const draftExercise = () => {
 const init = async () => {
   await getRole()
   await getChapters()
-  defineTextAreas()
+  addMathType()
+  let tas = [qTA, aTA, cTA]
+  tas.forEach((ta) => {
+    ta.addEventListener("paste", paste)
+  })
+  listenForEnterKey()
+  imgInput.addEventListener("change", handleFileSelect)
   listenForChangesToPublishExerciseList()
   if (path.split("/")[3]) {
     resourceId = path.split("/")[3]

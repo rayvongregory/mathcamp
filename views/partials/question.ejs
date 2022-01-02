@@ -3,21 +3,24 @@
     <label id="top" for="create_question">Question</label>
     <p class="not_met hide">This question is not unique.</p>
   </div>
-  <div class="extra-options">
-    <select name="difficulty" id="choose_difficulty">
-      <option value="no_choice">Choose a difficulty</option>
-      <option value="easy">Easy</option>
-      <option value="standard">Standard</option>
-      <option value="hard">Hard</option>
-      <option value="advanced">Advanced</option>
-    </select>
-    <button id="q_add" aria-label="Add question" title="Add question">
-      <i class="fas fa-plus-circle"></i>
-    </button>
-    <button id="q_discard" aria-label="Discard" title="Discard">
-      <i class="fas fa-trash"></i>
-    </button>
+  <div class="toolbar">
+    <button id="toolbar-q" class="mathtype"></button>
+    <div class="extra-options">
+      <select name="difficulty" id="choose_difficulty">
+        <option value="no_choice">Choose a difficulty</option>
+        <option value="easy">Easy</option>
+        <option value="standard">Standard</option>
+        <option value="hard">Hard</option>
+        <option value="advanced">Advanced</option>
+      </select>
+      <button id="q_add" aria-label="Add question" title="Add question">
+        <i class="fas fa-plus-circle"></i>
+      </button>
+      <button id="q_discard" aria-label="Discard" title="Discard">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
   </div>
-  <textarea id="create_question"></textarea>
-  <ul id="question_section" class="hide pop-top"></ul>
+  <div id="q" class="textarea" contenteditable="true"></div>
+  <div id="question_section" class="hide pop-top"></div>
 </div>

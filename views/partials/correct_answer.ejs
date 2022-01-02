@@ -3,18 +3,21 @@
     <label for="create_correct_answer pop-top">Answer</label>
     <p class="not_met hide">This choice is not unique.</p>
   </div>
-  <div class="extra-options">
-    <button
-      id="answer_add"
-      aria-label="Add answer to question"
-      title="Add answer to question"
-    >
-      <i class="fas fa-plus-circle"></i>
-    </button>
-    <button id="answer_discard" aria-label="Discard" title="Discard">
-      <i class="fas fa-trash"></i>
-    </button>
+  <div class="toolbar">
+    <button id="toolbar-a" class="mathtype"></button>
+    <div class="extra-options">
+      <button
+        id="answer_add"
+        aria-label="Add answer to question"
+        title="Add answer to question"
+      >
+        <i class="fas fa-plus-circle"></i>
+      </button>
+      <button id="answer_discard" aria-label="Discard" title="Discard">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
   </div>
-  <textarea id="correct_answer_textarea"></textarea>
-  <ul id="correct_answer_section" class="hide"></ul>
+  <div id="a" class="textarea" contenteditable="true"></div>
+  <div id="correct_answer_section" class="hide"></div>
 </div>

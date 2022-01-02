@@ -16,10 +16,6 @@ const updateBtn = document.getElementById("update-code")
 const addSnipBtns = document.querySelectorAll(
   "button[data-text]:not(#get_img_tag)"
 )
-const addImgBtn = document.getElementById("add_img")
-const imgInput = addImgBtn.querySelector("input")
-const imgPrev = document.getElementById("img_prev")
-const getImgTagBtn = document.getElementById("get_img_tag")
 const dragbar = document.getElementById("dragbar")
 const shield = document.getElementById("shield")
 let dragging = false
@@ -257,9 +253,7 @@ const init = async () => {
     iframe.setAttribute("style", `width: ${width};`)
     iframe.setAttribute("id", "preview")
     outer.insertAdjacentElement("beforeend", iframe)
-    let h =
-      '<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"' +
-      'id="MathJax-script"></script>'
+    let h = '<script src="/mathjax/es5/tex-chtml.js"' + "></script>"
     h += htmlCode.getValue()
     let c = `<style> body {padding: 1rem;} ${cssCode.getValue()} </style>`
     let j = "<scr" + "ipt>" + jsCode.getValue() + "</scr" + "ipt>"
@@ -346,7 +340,7 @@ addSnipBtns.forEach((btn) => {
   })
 })
 
-getImgTagBtn.addEventListener("pointerup", (e) => {
+getImgTagBtn.addEventListener("pointerup", async (e) => {
   const { target } = e
   const img = document.createElement("img")
   img.setAttribute("src", imgPrev.getAttribute("src"))

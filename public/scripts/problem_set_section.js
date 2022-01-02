@@ -24,7 +24,7 @@ const publishQuestionReqs = document.querySelector(".to_publish_reqs.q")
 const overlay = document.querySelector(".overlay")
 const overlayCloseBtn = overlay.querySelector(".close")
 let overlayHeader = overlay.querySelector("h3")
-let overlayQ = overlay.querySelector(".overlay___body p")
+let overlayQ = overlay.querySelector(".overlay___q")
 let overlayChoices = overlay.querySelector(".choices")
 let overlayBtn = overlay.querySelector("button")
 let usedPIDs = []
@@ -231,9 +231,9 @@ const editThisOne = (problemItem, diff, pid) => {
   }
   let p = problemItem.querySelector("p")
   p.innerText = `Problem ID: ${pid} (editing)`
-  if (question !== "<p></p>") {
+  if (question !== "") {
     checkList(poseQItem, "check")
-    hideOrShowThisTextArea("questionTextArea", "hide")
+    hideOrShowThisTextArea("qTA", "hide")
     createQItem()
   }
   if (qDiff !== "no_choice") {
@@ -242,7 +242,7 @@ const editThisOne = (problemItem, diff, pid) => {
   }
   if (choices.answer) {
     checkList(createCorrectAns, "check")
-    hideOrShowThisTextArea("correctAnswerTextArea", "hide")
+    hideOrShowThisTextArea("aTA", "hide")
     createAnsItem()
   }
   for (let choice in choices) {
@@ -457,7 +457,6 @@ const prevProblem = (e) => {
       overlayBtn.classList.replace("satisfied", "not_met")
     }
   }
-  q = q.substring(3, q.length - 4)
   if (!q) {
     q = "[no question]"
   }

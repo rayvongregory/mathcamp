@@ -208,14 +208,20 @@ const addChapters = (val) => {
   if (!firstCol.classList.contains("invis")) {
     firstCol.classList.add("invis")
   }
+  if (!thirdCol.classList.contains("hide")) {
+    thirdCol.classList.add("hide")
+  }
+  if (!secondCol.classList.contains("hide")) {
+    secondCol.classList.add("hide")
+  }
+  if (!bufferCol.classList.contains("hide")) {
+    bufferCol.setAttribute("class", "hide")
+  }
   if (height !== 0) {
     height = 0
   }
   if (num_cols !== 0) {
     num_cols = 0
-  }
-  if (!bufferCol.classList.contains("hide")) {
-    bufferCol.setAttribute("class", "hide")
   }
   let list = chapters[val]
   for (let c = 0; c < list.length; c++) {

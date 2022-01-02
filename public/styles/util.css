@@ -80,3 +80,6 @@ body {
 @media (min-width: 1200px) { }
 
 
+canvas {
+    display: block;
+}

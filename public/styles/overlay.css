@@ -143,7 +143,6 @@
 
 .overlay___body button:not(.choice) {
     width: fit-content;
-    width: -moz-fit-content;
     align-self: center;
     padding: 0.5rem;
     margin-top: 2rem;
@@ -178,4 +177,8 @@
 .overlay___body button.not_met:active,
 .overlay___body button.satisfied:active {
     transform: scale(0.95);
+}
+
+.overlay___q {
+    height: 300px;
 }

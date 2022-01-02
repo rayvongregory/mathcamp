@@ -118,7 +118,6 @@ aside a:active, #logout:active {
     position: sticky;
     top: 60px;
     height: fit-content;
-    height: -moz-fit-content;
     pointer-events: none;
 
 }

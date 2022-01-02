@@ -3,7 +3,7 @@
 const addChoiceBtn = document.getElementById("choice_add")
 const discardChoiceBtn = document.getElementById("choice_discard")
 const choicesSection = document.getElementById("question_choices")
-const extraOptions_2 = extraOptions[2]
+const toolbars_2 = toolbars[2]
 const fiveChoices = document.getElementById("five_choices")
 let choices = {}
 
@@ -34,7 +34,7 @@ const addToTextArea = (target, cid, edit) => {
   target.classList.add("editing")
   let p = target.querySelector("p")
   p.innerText = `Choice ID: ${cid} (editing)`
-  choicesTextArea.innerHTML = choices[`cid${cid}`]
+  cTA.innerHTML = choices[`cid${cid}`]
   addChoiceBtn.dataset.cid = cid
   setAria(edit, "Cancel edit")
   setAria(addChoiceBtn, "Save changes")
@@ -50,8 +50,8 @@ const createChoiceItem = (id = null) => {
         id = id.padStart(3, "0")
       }
     } while (choices[`cid${id}`] !== undefined)
-    removeNonsense(choicesTextArea)
-    choices[`cid${id}`] = choicesTextArea.innerHTML
+    removeEmptyDivs(cTA)
+    choices[`cid${id}`] = cTA.innerHTML
   }
   let choiceItem = document.createElement("li")
   let p = document.createElement("p")
@@ -79,10 +79,10 @@ const addChoice = (e) => {
   document.activeElement.blur()
   // try finding a choice (or answer) with the same innerHTML. if found, don't add
   let { cid } = e.target.dataset
-  removeNonsense(choicesTextArea)
+  removeEmptyDivs(cTA)
   switch (
-    uniqueChoice(choicesTextArea) ||
-    (cid !== undefined && choicesTextArea.innerHTML === choices[`cid${cid}`])
+    uniqueChoice(cTA) ||
+    (cid !== undefined && cTA.innerHTML === choices[`cid${cid}`])
   ) {
     case false:
       showNotUniqueMsg(labelPs[2])
@@ -92,20 +92,20 @@ const addChoice = (e) => {
       if (choiceItem) {
         let p = choiceItem.querySelector("p")
         let editBtn = choiceItem.querySelector("button")
-        removeNonsense(choicesTextArea)
-        choices[`cid${cid}`] = choicesTextArea.innerHTML
+        removeEmptyDivs(cTA)
+        choices[`cid${cid}`] = cTA.innerHTML
         choiceItem.classList.remove("editing")
         p.innerText = `Choice ID: ${cid}`
         setAria(editBtn, "Edit choice")
         setAria(addChoiceBtn, "Add choice")
         setAria(discardChoiceBtn, "Discard")
         delete e.target.dataset.cid
-        choicesTextArea.innerHTML = "<p></p>"
+        cTA.replaceChildren()
         // don't need to create a choice item, just need to update the obj using id
       } else {
         // create a choice item and its id
         createChoiceItem()
-        choicesTextArea.innerHTML = "<p></p>"
+        cTA.replaceChildren()
       }
       break
     default:
@@ -146,7 +146,7 @@ const editChoice = (e) => {
 //delete
 const discardChoice = () => {
   document.activeElement.blur()
-  choicesTextArea.innerHTML = "<p></p>"
+  cTA.replaceChildren()
   let { cid } = addChoiceBtn.dataset
   if (cid) {
     setAria(addChoiceBtn, "Add choice to question")
@@ -168,7 +168,7 @@ const deleteChoice = (e) => {
     delete addChoiceBtn.dataset.cid
     setAria(addChoiceBtn, "Add choice to question")
     setAria(discardChoiceBtn, "Discard")
-    choicesTextArea.innerHTML = "<p></p>"
+    cTA.replaceChildren()
   }
   item.remove()
   delete choices[`cid${cid}`]
@@ -189,7 +189,7 @@ const deleteChoices = () => {
   }
   if (addChoiceBtn.dataset.cid) delete addChoiceBtn.dataset.cid
   choicesSection.classList.add("hide")
-  choicesTextArea.innerHTML = "<p></p>"
+  cTA.replaceChildren()
 }
 
 addChoiceBtn.addEventListener("pointerup", addChoice)

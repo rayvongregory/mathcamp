@@ -3,18 +3,21 @@
     <label for="create_choices">Choices</label>
     <p class="not_met hide">This choice is not unique.</p>
   </div>
-  <div class="extra-options">
-    <button
-      id="choice_add"
-      aria-label="Add choice to question"
-      title="Add choice to question"
-    >
-      <i class="fas fa-plus-circle"></i>
-    </button>
-    <button id="choice_discard" aria-label="Discard" title="Discard">
-      <i class="fas fa-trash"></i>
-    </button>
+  <div class="toolbar">
+    <button id="toolbar-c" class="mathtype"></button>
+    <div class="extra-options">
+      <button
+        id="choice_add"
+        aria-label="Add choice to question"
+        title="Add choice to question"
+      >
+        <i class="fas fa-plus-circle"></i>
+      </button>
+      <button id="choice_discard" aria-label="Discard" title="Discard">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
   </div>
-  <textarea id="create_choices"></textarea>
-  <ul id="question_choices" class="pop-top hide"></ul>
+  <div id="c" class="textarea" contenteditable="true"></div>
+  <div id="question_choices" class="pop-top hide"></div>
 </div>
