@@ -36,6 +36,7 @@ let problems = {
   no_choice: {},
 }
 //util
+
 const toggleList = (e) => {
   document.activeElement.blur()
   const { target } = e
@@ -117,6 +118,19 @@ const createProblemItem = (diff, id = null, satisfied = null) => {
     usedPIDs.push(id)
   }
   let problemItem = document.createElement("li")
+  let piFront = document.createElement("div")
+  let piBack = document.createElement("div")
+  let backBtn = document.createElement("button")
+  let input = document.createElement("input")
+  let confBtn = document.createElement("button")
+  piFront.setAttribute("class", "piFront")
+  piBack.setAttribute("class", "piBack")
+  backBtn.setAttribute("name", "back")
+  input.setAttribute("placeholder", 'Type "yes"')
+  confBtn.setAttribute("name", "confirm")
+  backBtn.innerHTML = '<i class="fas fa-chevron-right"></i>'
+  setAria(backBtn, "Cancel")
+  confBtn.innerText = "Confirm"
   let icon = document.createElement("span")
   if (satisfied === null) {
     if (checkQuestionReqs()) {
@@ -138,7 +152,7 @@ const createProblemItem = (diff, id = null, satisfied = null) => {
   problemItem.dataset.pid = id
   problemItem.dataset.diff = diff
   problemItem.dataset.satisfied = satisfied
-  p.innerText = `Problem ID: ${id}`
+  p.innerText = `PID: ${id}`
   let prev = document.createElement("button")
   setAria(prev, "Preview problem")
   prev.innerHTML = '<i class="fas fa-eye"></i>'
@@ -149,13 +163,21 @@ const createProblemItem = (diff, id = null, satisfied = null) => {
   edit.addEventListener("pointerup", editProblem)
   let del = document.createElement("button")
   setAria(del, "Delete problem")
+  del.setAttribute("name", "del")
   del.innerHTML = '<i class="fas fa-trash"></i>'
   del.addEventListener("pointerup", delProblem)
-  problemItem.appendChild(icon)
-  problemItem.appendChild(p)
-  problemItem.appendChild(prev)
-  problemItem.appendChild(edit)
-  problemItem.appendChild(del)
+  backBtn.addEventListener("pointerup", delProblem)
+  confBtn.addEventListener("pointerup", delProblem)
+  piFront.appendChild(icon)
+  piFront.appendChild(p)
+  piFront.appendChild(prev)
+  piFront.appendChild(edit)
+  piFront.appendChild(del)
+  piBack.appendChild(backBtn)
+  piBack.appendChild(input)
+  piBack.appendChild(confBtn)
+  problemItem.appendChild(piFront)
+  problemItem.appendChild(piBack)
   appendThisToThat(problemItem, diff)
   checkAllMeet()
 }
@@ -230,7 +252,7 @@ const editThisOne = (problemItem, diff, pid) => {
     problemItem.classList.replace("satisfied", "editing")
   }
   let p = problemItem.querySelector("p")
-  p.innerText = `Problem ID: ${pid} (editing)`
+  p.innerText = `PID: ${pid} (editing)`
   if (question !== "") {
     checkList(poseQItem, "check")
     hideOrShowThisTextArea("qTA", "hide")
@@ -277,7 +299,7 @@ const editCancel = (problemItem) => {
       break
   }
   let p = problemItem.querySelector("p")
-  p.innerText = `Problem ID: ${pid}`
+  p.innerText = `PID: ${pid}`
   let editBtn = problemItem.querySelectorAll("button")[1]
   setAria(editBtn, "Edit problem")
   reset__AllBtns()
@@ -436,15 +458,12 @@ const addAll = (e) => {
 const prevProblem = (e) => {
   // this looks gross, write more helper functions
   const { target } = e
-  const problemItem = target.parentElement
+  const problemItem = target.parentElement.parentElement
   const { pid, diff, satisfied } = problemItem.dataset
-  let p = problemItem.querySelector("p").innerText
+  let p = `PID: ${pid}`
   let q = problems[diff][`pid${pid}`].question
   let cs = { ...problems[diff][`pid${pid}`].choices }
 
-  if (p.endsWith("(editing)")) {
-    p = p.substring(0, p.length - 10)
-  }
   overlayHeader.innerText = p
   if (satisfied === "true") {
     if (overlayHeader.classList.contains("not_met")) {
@@ -481,7 +500,8 @@ const closeOverlay = () => {
 //update
 const editProblem = (e) => {
   document.activeElement.blur()
-  let problemItem = e.target.parentElement
+  const { target } = e
+  let problemItem = target.parentElement.parentElement
   let editingItem = problemSet.querySelector("li.editing")
   const { pid, diff } = problemItem.dataset
   if (!editingItem) {
@@ -549,20 +569,45 @@ const deleteProblemItem = (problemItem) => {
 }
 
 const delProblem = (e) => {
+  document.activeElement.blur()
   const { target } = e
-  const problemItem = target.parentElement
-  const { pid, diff } = problemItem.dataset
-  if (problemItem.classList.contains("editing")) {
-    discardAll()
-    reset__AllBtns()
+  const { name } = target
+  const problemItem = target.parentElement.parentElement
+  const back = problemItem.lastChild
+
+  switch (name) {
+    case "del":
+      back.classList.add("grow")
+      break
+    case "back":
+      back.classList.remove("grow")
+      break
+    case "confirm":
+      const input = back.querySelector("input")
+      if (input.value === "yes") {
+        const { pid, diff } = problemItem.dataset
+        if (problemItem.classList.contains("editing")) {
+          discardAll()
+          reset__AllBtns()
+        }
+        delete problems[diff][`pid${pid}`] // delete it
+        usedPIDs.splice(usedPIDs.indexOf(pid), 1)
+        deleteProblemItem(problemItem)
+        if (diff !== "no_choice") {
+          checkForTen(diff)
+        }
+        checkAllMeet()
+      } else {
+        input.classList.add("flash")
+        setTimeout(() => {
+          input.classList.remove("flash")
+        }, 600)
+        // do the animation
+      }
+      break
+    default:
+      break
   }
-  delete problems[diff][`pid${pid}`] // delete it
-  usedPIDs.splice(usedPIDs.indexOf(pid), 1)
-  deleteProblemItem(problemItem)
-  if (diff !== "no_choice") {
-    checkForTen(diff)
-  }
-  checkAllMeet()
 }
 
 addAllBtn.addEventListener("pointerup", addAll)

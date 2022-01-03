@@ -185,7 +185,7 @@
 
 #d_a2 {
     display: grid;
-    grid-template-columns: 25px 100px 75px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 4fr) minmax(0, 3fr);
     grid-template-rows: 32px auto; 
 }
 
@@ -286,12 +286,12 @@
     border: var(--tinymceBorder);
 }
 
-
 #problem_set section ul {
     padding-top: 1rem;
     height: auto;
     transition: height 100ms ease-in-out;
     overflow: hidden;
+    list-style: none;
 }
 
 #correct_answer_section, 
@@ -329,16 +329,89 @@
     text-decoration: none;
 }
 
-#problem_set li, 
+.piFront, 
 #question_choices li, 
 #correct_answer_section li, 
 #question_section li {
     display: flex;
     align-items: center;
-    border: var(--border);
     color: var(--deepTeal);
-    box-shadow: var(--boxShadow);
     pointer-events: none;
+}
+
+#question_choices li, 
+#correct_answer_section li, 
+#question_section li {
+    border: var(--border);
+}
+
+#problem_set li {
+    display: flex;
+    align-items: center;
+    border: var(--border);
+    border-radius: 3px;
+    margin-top: 10px;
+    padding-right: 4px;
+    width: 100%;
+    max-width: 700px;
+    height: 40px;
+    pointer-events: none;
+    overflow: hidden;
+    scroll-behavior: smooth;
+}
+
+#problem_set li:last-of-type {
+    margin-bottom: 5px;
+}
+
+.piFront,
+.piBack {
+    display: flex;
+   
+}
+
+.piFront {
+    width: 100%;
+}
+
+.piFront p {
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+.piBack {
+    width: 100%;
+    max-width: 0;
+    overflow: hidden;
+    pointer-events: all;
+    transition: max-width 0.3s ease-out;
+}
+
+.piBack.grow {
+    max-width: 260px;
+}
+
+.piBack > * {
+    height: 30px;
+}
+
+.piBack button {
+    border: none;
+}
+
+.piBack input {
+    border: 1px solid #e9e9ed;
+    padding-left: 5px;
+    width: calc(100% - 90px);
+    outline: none;
+}
+
+.piBack button:first-of-type {
+    width: 30px;
+}
+
+.piBack button:last-of-type {
+    width: 60px;
 }
 
 #question_choices li, 
@@ -348,28 +421,28 @@
     gap: 1rem;
 }
 
-#problem_set li {
-    padding: 5px 10px;
+.piFront {
+    padding: 5px 5px 5px 10px;
 }
 
-#problem_set li span {
+.piFront span {
     margin-right: 0.75rem;
 }
 
 
-#problem_set li + li {
+.piFront + li {
     margin-top: 10px;
 }
 
 #question_choices li > :first-child,
-#problem_set li > :nth-child(2), 
+.piFront > :nth-child(2), 
 #correct_answer_section li > :nth-child(1), 
 #question_section li > :nth-child(1) {
     margin-right: auto;
 }
 
 #question_choices li > button, 
-#problem_set li > button, 
+.piFront > button, 
 #correct_answer_section li > button, 
 #question_section li > button {
     border: none;
@@ -379,15 +452,15 @@
     pointer-events: all;
 }
 
-#problem_set li > button {
+.piFront > button {
     width: 34px;
     height: 34px;
     border-radius: 3px;
 }
 
-
 #question_choices li > button i, 
-#problem_set li > button i, 
+.piFront > button i, 
+.piBack > button i,
 #correct_answer_section li > button i, 
 #question_section li > button i {
     pointer-events: none;
@@ -459,7 +532,7 @@
     background-color: var(--tinymceGrayActive);
 }
 
-#problem_set li.editing, 
+.piFront.editing, 
 #question_choices li.editing, 
 #correct_answer_section li.editing, 
 #question_section li.editing {
@@ -467,25 +540,25 @@
     color: white;
 }
 
-#problem_set li.editing button, 
+.piFront.editing button, 
 #question_choices li.editing button, 
 #correct_answer_section li.editing button, 
 #question_section li.editing button {
     color: white;
 }
 
-#problem_set li.editing button:hover, 
+.piFront.editing button:hover, 
 #question_choices li.editing button:hover, 
 #correct_answer_section li.editing button:hover, 
 #question_section li.editing button:hover,
-#problem_set li.editing button:focus, 
+.piFront.editing button:focus, 
 #question_choices li.editing button:focus, 
 #correct_answer_section li.editing button:focus, 
 #question_section li.editing button:focus {
     color: var(--tinymceGray);
 }
 
-#problem_set li.editing button:active, 
+.piFront.editing button:active, 
 #question_choices li.editing button:active, 
 #correct_answer_section li.editing button:active, 
 #question_section li.editing button:active {
@@ -498,19 +571,58 @@
     border-top: none;
 }
 
-#problem_set li.satisfied, #problem_set li.satisfied button {
+#problem_set li.satisfied .piFront p, 
+#problem_set li.satisfied .piFront span,
+#problem_set li.satisfied .piFront button i {
     color: var(--deepTeal);
 }
 
-#problem_set li.not_met, #problem_set li.not_met button {
+#problem_set li.satisfied .piBack button {
+    background-color: var(--deepTeal);
+    color: white;
+}
+
+#problem_set li.not_met .piFront p, 
+#problem_set li.not_met .piFront span,
+#problem_set li.not_met .piFront button i {
     color: darkred;
 }
 
-#problem_set li.not_met button:hover,
-#problem_set li.not_met button:focus {
+#problem_set li.not_met .piBack button {
+    background-color: darkred;
+    color: white;
+}
+
+#problem_set li.not_met .piFront button:hover,
+#problem_set li.not_met .piFront button:focus {
     background-color: var(--tinymceGray);
 }
 
-#problem_set li.not_met button:active {
+#problem_set li.not_met .piFront button:active {
     background-color: var(--tinymceGrayActive);
+}
+
+#problem_set li.not_met .piBack button:hover,
+#problem_set li.not_met .ppiBack button:focus {
+    background-color: var(--tinymceGray);
+}
+
+#problem_set li input.flash {
+    animation: color-in-out 600ms ease-in-out;
+}
+
+#problem_set li input.flash::placeholder {
+    opacity: 1;
+}
+
+@keyframes color-in-out {
+    0%, 50% {
+        color: var(--deepRed);
+    }
+    25%, 75% {
+        color: var(--tinymceGrayActive);
+    }
+    100% {
+        color: #767676;
+    }
 }

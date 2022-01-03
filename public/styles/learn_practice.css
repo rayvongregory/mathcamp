@@ -66,10 +66,9 @@
 }
 
 #resources {
-    max-width: 400px;
     min-height: calc(100vh - 200px);
-    margin:auto;
-    padding: 0.0 0.75rem 0.75rem;
+    margin: auto;
+    padding: 0 2rem 1rem;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -161,9 +160,7 @@
 
 @media (min-width: 576px) {
     #resources {
-        max-width: 750px;
-        margin: auto;
-        padding: 0 1.5rem 4rem;
+        padding: 0 3rem 4rem;
         gap: 1.5rem;
     }
 
@@ -174,7 +171,7 @@
 
 @media (min-width: 992px) {
     #resources {
-        max-width: 1110px;
+        max-width: 1200px;
     }
 
     #resources.reveal {
