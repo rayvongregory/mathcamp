@@ -90,6 +90,7 @@ const addTo = (location, values, type) => {
     backBtn.innerText = "Back"
     backBtn.setAttribute("name", "back")
     delInput.setAttribute("placeholder", 'Type "yes" to confirm')
+    delInput.addEventListener("keypress", del)
     delBtn.innerText = "Delete"
     delBtn.setAttribute("name", "delete")
     item.dataset.id = value._id
@@ -117,6 +118,16 @@ const addTo = (location, values, type) => {
   }
 }
 
+const del = (e) => {
+  const { key } = e
+  if (key === "Enter") {
+    const {
+      target: { nextElementSibling },
+    } = e
+    nextElementSibling.click()
+  }
+}
+
 const addH3 = (string) => {
   draftsLessons.classList.add("hide")
   draftsExercises.classList.add("hide")
@@ -134,6 +145,9 @@ const deleteDraft = async (e) => {
         block: "nearest",
         inline: "nearest",
       })
+      setTimeout(() => {
+        parentElement.nextElementSibling.querySelector("input").focus()
+      }, 200)
       break
     case "back":
       parentElement.previousElementSibling.scrollIntoView({
@@ -152,7 +166,7 @@ const deleteDraft = async (e) => {
         const { previousElementSibling } = parentElement
         const { id, type } = parentElement.parentElement.dataset
         try {
-          await axios.delete(`/api/v1/${type}s/${id}`)
+          await axios.delete(`/api/v1/${type}s/id/${id}`)
           let p = previousElementSibling.querySelector("p")
           p.classList.add("not_met")
           p.innerText = "Resource has been successfully deleted."
@@ -166,7 +180,7 @@ const deleteDraft = async (e) => {
           setTimeout(() => {
             parentElement.parentElement.remove()
             setGrid()
-          }, 2000)
+          }, 1500)
         } catch (err) {
           console.log(err)
         }

@@ -6,6 +6,7 @@ const buttons = document.querySelector(".buttons")
 const navSearch = document.getElementById("nav-search-btn")
 const navSearchContainer = document.querySelector(".nav___search-container")
 const searchInput = navSearchContainer.querySelector("input")
+const submitSearchBtn = document.getElementById("submit-search")
 const aside = body.querySelector("aside")
 const asideLinks = document.getElementById("links")
 const stickyDiv = document.getElementById("sticky-div")
@@ -406,6 +407,52 @@ const checkWindowSize = () => {
   currentWindowSize = ""
 }
 
+const removeInvalidCharacters2 = (string) => {
+  let bool = true
+  while (bool) {
+    let firstLetterCode = string.charCodeAt(0)
+    let lastLetterCode = string.charCodeAt(string.length - 1)
+    if (
+      firstLetterCode < 97 ||
+      firstLetterCode > 122 ||
+      lastLetterCode < 97 ||
+      lastLetterCode > 122
+    ) {
+      if (firstLetterCode < 97 || firstLetterCode > 122) {
+        string = string.substring(1, string.length)
+      }
+      if (lastLetterCode < 97 || lastLetterCode > 122) {
+        string = string.substring(0, string.length - 1)
+      }
+    } else {
+      bool = false
+    }
+  }
+
+  for (let index in string) {
+    let code = string.charCodeAt(index)
+    if ((code < 97 || code > 122) && code !== 32) {
+      string = string.replace(string[index], "")
+    }
+  }
+  string = string.replaceAll(" ", "+")
+  return string
+}
+
+const submitSearch = (e) => {
+  const { target } = e
+  const { key } = e
+  if (key === "Enter" || target === submitSearchBtn) {
+    let { value } = searchInput
+    value = removeInvalidCharacters2(value)
+    if (!value) {
+      window.location.href = "/search"
+    } else {
+      window.location.href = `/search?q=${value.replaceAll(" ", "+")}`
+    }
+  }
+}
+
 const navInit = () => {
   checkWindowSize()
   getDisplayName()
@@ -453,3 +500,5 @@ const navInit = () => {
 
 window.addEventListener("load", navInit)
 window.addEventListener("resize", checkWindowSize)
+submitSearchBtn.addEventListener("pointerup", submitSearch)
+searchInput.addEventListener("keypress", submitSearch)

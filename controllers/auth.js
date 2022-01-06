@@ -1,6 +1,6 @@
 require("dotenv")
 const User = require("../models/User")
-const ObjectId = require("mongoose").Types.ObjectId
+const { ObjectId } = require("mongoose").Types
 const { StatusCodes } = require("http-status-codes")
 const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")

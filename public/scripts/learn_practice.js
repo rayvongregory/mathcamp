@@ -1,9 +1,9 @@
+const loadSpinner = document.querySelector(".load-wrapp")
 const grLvls = document.querySelectorAll(".gr")
 const resources = document.getElementById("resources")
 const firstCol = document.getElementById("first")
 const secondCol = document.getElementById("second")
 const thirdCol = document.getElementById("third")
-const bufferCol = document.getElementById("buffer")
 let height = 0,
   num_cols = 0,
   chapters = {
@@ -39,7 +39,7 @@ const getChapters = async () => {
   }
 }
 
-const addChapterFilter = async (e) => {
+const selectGrade = (e) => {
   const { target } = e
   let selected = document.querySelector(".gr.selected")
   if (!selected) {
@@ -52,53 +52,6 @@ const addChapterFilter = async (e) => {
     addChapters(target.value)
   }
   target.classList.add("selected")
-  if (!resources.classList.contains("reveal")) {
-    resources.classList.add("reveal")
-  }
-}
-
-const applyChapterFilter = (e) => {
-  const { target } = e
-  const { value } = target.dataset
-  let chapter = resources.querySelector(`[data-chapter="${value}"]`)
-  if (!chapter) {
-    for (let col of [firstCol, secondCol, thirdCol]) {
-      if (col.classList.contains("hide")) {
-        col.classList.remove("hide")
-      }
-      for (let c of col.querySelectorAll("[data-chapter]")) {
-        if (c.classList.contains("hide")) {
-          c.classList.remove("hide")
-        }
-      }
-    }
-    if (!bufferCol.classList.contains("hide")) {
-      bufferCol.setAttribute("class", "hide")
-    }
-    num_cols = 3
-  } else {
-    for (let col of [firstCol, secondCol, thirdCol]) {
-      if (col !== chapter.parentElement) {
-        if (!col.classList.contains("hide")) {
-          col.classList.add("hide")
-        }
-      } else {
-        if (col.classList.contains("hide")) {
-          col.classList.remove("hide")
-        }
-        for (let c of col.querySelectorAll("[data-chapter]")) {
-          if (c !== chapter) {
-            c.classList.add("hide")
-          } else if (c === chapter && c.classList.contains("hide")) {
-            c.classList.remove("hide")
-          }
-        }
-      }
-    }
-    num_cols = 1
-  }
-  setColumns()
-  selected_chapter = target.dataset.value
 }
 
 const determineColumns = () => {
@@ -107,21 +60,36 @@ const determineColumns = () => {
   const thirdSize = height / 3
   let sections = firstCol.querySelectorAll("[data-chapter]")
   for (let section of sections) {
-    runningHeight += section.offsetHeight
-    if (runningHeight <= halfSize) {
+    if (runningHeight < halfSize) {
       section.setAttribute("data-two-col", "1")
-    } else if (runningHeight > halfSize) {
+    } else if (runningHeight >= halfSize) {
       section.setAttribute("data-two-col", "2")
     }
-    if (runningHeight <= thirdSize) {
+    if (runningHeight < thirdSize) {
       section.setAttribute("data-three-col", "1")
-    } else if (runningHeight > thirdSize && runningHeight <= 2 * thirdSize) {
+    } else if (runningHeight >= thirdSize && runningHeight < 2 * thirdSize) {
       section.setAttribute("data-three-col", "2")
-    } else if (runningHeight > 2 * thirdSize) {
+    } else if (runningHeight >= 2 * thirdSize) {
       section.setAttribute("data-three-col", "3")
     }
+    runningHeight += section.offsetHeight
   }
-  setColumns()
+}
+
+const fixMiddleColumn = () => {
+  const { childNodes } = secondCol
+  for (let child = 1; child < childNodes.length; child++) {
+    if (
+      Number(childNodes[child].getAttribute("data-chapter")) <
+      Number(childNodes[child - 1].getAttribute("data-chapter"))
+    ) {
+      childNodes[child - 1].insertAdjacentElement(
+        "beforebegin",
+        childNodes[child]
+      )
+      child = 0
+    }
+  }
 }
 
 const setColumns = () => {
@@ -130,7 +98,11 @@ const setColumns = () => {
   if (firstCol.classList.contains("invis")) {
     firstCol.classList.remove("invis")
   }
-  if (lastWindowSize === "tiny" || lastWindowSize === "small") {
+  if (
+    lastWindowSize === "tiny" ||
+    lastWindowSize === "small" ||
+    lastWindowSize === "medium"
+  ) {
     if (num_cols !== 1) {
       num_cols = 1
       if (!secondCol.classList.contains("hide")) {
@@ -145,7 +117,7 @@ const setColumns = () => {
         }
       }
     }
-  } else if (lastWindowSize === "medium" || lastWindowSize === "big") {
+  } else if (lastWindowSize === "big") {
     if (num_cols !== 2) {
       num_cols = 2
       if (secondCol.classList.contains("hide")) {
@@ -195,11 +167,12 @@ const setColumns = () => {
           thirdCol.appendChild(chapter)
         }
       }
+      fixMiddleColumn()
     }
   }
 }
 
-const addChapters = (val) => {
+const addChapters = async (val) => {
   for (let col of [firstCol, secondCol, thirdCol]) {
     if (col.childElementCount !== 0) {
       col.replaceChildren()
@@ -213,9 +186,6 @@ const addChapters = (val) => {
   }
   if (!secondCol.classList.contains("hide")) {
     secondCol.classList.add("hide")
-  }
-  if (!bufferCol.classList.contains("hide")) {
-    bufferCol.setAttribute("class", "hide")
   }
   if (height !== 0) {
     height = 0
@@ -249,7 +219,6 @@ const addChapters = (val) => {
     firstCol.appendChild(chapter) //just to put them somewhere, this col is invis
     height += chapter.offsetHeight
   }
-  determineColumns()
 }
 
 //create
@@ -272,11 +241,13 @@ const addResources = (list) => {
 const getAllResources = async () => {
   let type = path === "/learn" ? "lessons" : "exercises"
   try {
-    const { data } = await axios.get(`/api/v1/${type}/${selected_gr}`)
+    const {
+      data: { publishedLessons, publishedExercises },
+    } = await axios.get(`/api/v1/${type}/${selected_gr}`)
     if (type === "lessons") {
-      addResources(data.publishedLessons)
+      addResources(publishedLessons)
     } else {
-      addResources(data.publishedExercises)
+      addResources(publishedExercises)
     }
   } catch (e) {
     console.log(e)
@@ -286,8 +257,20 @@ const getAllResources = async () => {
 const init = () => {
   getChapters()
   grLvls.forEach((gr) => {
-    gr.addEventListener("click", addChapterFilter)
-    gr.addEventListener("click", getAllResources)
+    gr.addEventListener("click", async (e) => {
+      if (resources.classList.contains("reveal")) {
+        resources.classList.remove("reveal")
+      }
+      loadSpinner.classList.remove("hide")
+      selectGrade(e)
+      await getAllResources()
+      determineColumns()
+      setColumns()
+      loadSpinner.classList.add("hide")
+      if (!resources.classList.contains("reveal")) {
+        resources.classList.add("reveal")
+      }
+    })
   })
 }
 

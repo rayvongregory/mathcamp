@@ -49,10 +49,6 @@ nav {
     background-color: rgb(14, 72, 80);
 }
 
-nav i {
-    pointer-events: none;
-}
-
 .nav___search-container {
     position: fixed;
     bottom: 55px;

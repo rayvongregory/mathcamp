@@ -84,7 +84,6 @@ aside a:active, #logout:active {
     display: none;
     font-size: 1.125rem;
     color: black;
-    pointer-events: none;
 }
 
 .slide {

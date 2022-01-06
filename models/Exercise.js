@@ -43,6 +43,14 @@ const exerciseSchema = new Schema(
       type: Array,
       required: [true, "Please provide a list of all problem IDs"],
     },
+    type: {
+      type: String,
+      default: "exercise",
+    },
+    hits: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

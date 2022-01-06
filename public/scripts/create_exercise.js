@@ -352,7 +352,7 @@ const draftExercise = () => {
 }
 
 const init = async () => {
-  await getRole()
+  getRole()
   await getChapters()
   addMathType()
   let tas = [qTA, aTA, cTA]

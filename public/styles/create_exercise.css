@@ -101,10 +101,6 @@
     outline: none;
 }
 
-.extra-options button i {
-    pointer-events: none;
-} 
-
 .exercise_requirements {
     grid-row: 1/span 3;
     grid-column: 2;
@@ -229,7 +225,6 @@
 #add_all i, 
 #d_a1 i {
     font-size: 1.5rem;
-    pointer-events: none;
 }
 
 #discard_btn_back, 
@@ -241,10 +236,6 @@
 #discard_btn_back,
 #discard_all {
     border: none;
-}
-
-#discard_btn_back i {
-    pointer-events: none;
 }
 
 #discard_confirm {
@@ -262,7 +253,6 @@
     margin-top: 5px;
     font-size: 0.85rem;
     white-space: nowrap;
-    pointer-events: none;
     user-select: none;
     pointer-events: none;
 }
@@ -458,14 +448,6 @@
     border-radius: 3px;
 }
 
-#question_choices li > button i, 
-.piFront > button i, 
-.piBack > button i,
-#correct_answer_section li > button i, 
-#question_section li > button i {
-    pointer-events: none;
-}
-
 #question_choices button:hover, 
 #correct_answer_section button:hover, 
 #question_section button:hover,
@@ -515,10 +497,6 @@
     border-radius: 50%;
     border: none;
     background: white;
-}
-
-#problem_set .header button i {
-    pointer-events: none;
 }
 
 #problem_set .header button:hover,

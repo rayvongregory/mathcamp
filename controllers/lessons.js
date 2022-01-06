@@ -5,8 +5,8 @@ const getAllLessons = async (req, res) => {
   const { gr } = req.params
   const publishedLessons = await Lesson.find(
     // { status: "published", subject: gr },
-    { subject: gr }
-    // "id title subject chapter section"
+    { subject: gr },
+    "id title subject chapter section"
   ).sort({
     "chapter": 1,
     "section": 1,

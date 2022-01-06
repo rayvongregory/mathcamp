@@ -1,0 +1,124 @@
+.results {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: calc(100vh - 170px);
+    padding: 1rem;
+}
+
+#search {
+    position: relative;
+    width: 100%;
+    max-width: 576px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#search input {
+    width: 100%;
+    max-width: 576px;
+    height: 40px;
+    padding-left: 15px;
+    font-size: 20px;
+    border: 1.5px solid #d9d9d9;
+    border-radius: 25px;
+    outline: none;
+}
+
+#search button {
+    position: absolute;
+    right: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--deepRed);
+    color: white;
+    cursor: pointer;
+    pointer-events: none;
+}
+
+#search button.ready {
+    background-color: var(--deepTeal);
+    pointer-events: all;
+}
+#search button:hover,
+#search button.ready:focus,
+#search button:active {
+    background-color: var(--brightTeal);
+}
+
+#search button i {
+    font-size: 14px;
+}
+
+.results-header {
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.results-body {
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    max-width: 576px;
+    margin: 0 auto 2rem;
+    list-style: none;
+}
+
+.results-body li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 10px;
+    border: var(--border);
+    border-radius: 10px;
+    background-color: white;
+
+}
+
+.results-body div {
+    padding: 5px 10px;
+    width: fit-content;
+    border-radius: 15px;
+    font-size: 14px;
+    color: white;
+}
+
+.results-body li[data-type="learn"] div {
+    background-color: var(--deepTeal);
+}
+
+.results-body li[data-type="practice"] div {
+    background-color: var(--deepRed);
+}
+
+.results-body li a {
+    display: block;
+    width: fit-content;
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: var(--neutralDark);
+    text-decoration: none;
+}
+
+@media (min-width:576px) {
+    #search input {
+        height: 50px;
+        padding-left: 20px;
+    }
+
+    #search button {
+        width: 30px;
+        height: 30px;
+        right: 11px;
+    }
+
+    #search button i {
+        font-size: 16px;
+    }
+}

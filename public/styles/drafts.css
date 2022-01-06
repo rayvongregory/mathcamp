@@ -22,7 +22,6 @@
     color: var(--deepRed)
 }
 
-
 #drafts___section {
     position: relative;
     display: grid;
@@ -31,10 +30,11 @@
     padding: 2rem 1rem 5rem;
     margin: auto;
     width: fit-content;
+    min-height: calc(100vh - 200px);
 }
 
 #drafts___section.unset-grid {
-    grid-template-columns: unset;
+    display: block;
 }
 
 #drafts___lessons, 
@@ -61,7 +61,7 @@
     overflow: hidden;
     scroll-behavior: smooth;
     opacity: 1;
-    transition: opacity 2s ease-out;
+    transition: opacity 1.5s ease-in;
 }
 
 #drafts___section li.fade_out,
@@ -83,7 +83,6 @@
 #drafts___section li .front {
     padding: 10px 20px 10px 10px;
 }
-
 
 #drafts___section li .front > :first-child {
     margin-right: auto;
@@ -170,10 +169,6 @@
 
 #drafts___section li .back button:active {
     background-color: var(--brightOrange);
-}
-
-#drafts___section button i {
-    pointer-events: none;
 }
 
 .not_met {

@@ -103,6 +103,7 @@ body {
 }
 
 #info {
+    min-height: calc(100vh - 200px);
     display: grid;
     gap: 4rem;
     justify-content: center;

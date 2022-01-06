@@ -40,6 +40,10 @@ body {
     background-color: var(--neutralLight);
 }
 
+i {
+    pointer-events: none;
+}
+
 .hide {
     display: none !important;
 }
@@ -78,8 +82,3 @@ body {
 @media (min-width: 992px) { }
 
 @media (min-width: 1200px) { }
-
-
-canvas {
-    display: block;
-}

@@ -8,6 +8,7 @@ const practiceRouter = require("./routes/resource") //! do something with this
 const exercisesRouter = require("./routes/exercise") //! and this
 const draftsRouter = require("./routes/drafts")
 const helpRouter = require("./routes/help")
+const searchRouter = require("./routes/search")
 const authRouter = require("./routes/auth")
 const usersRouter = require("./routes/users")
 const tokenRouter = require("./routes/token")
@@ -29,6 +30,7 @@ app.use("/api/v1/lessons", lessonsRouter) //protect this route
 app.use("/api/v1/exercises", exercisesRouter) //protect this route
 app.use("/api/v1/drafts", draftsRouter) //protect this route
 app.use("/api/v1/help", helpRouter)
+app.use("/api/v1/search", searchRouter)
 app.use("/api/v1/token", tokenRouter)
 app.use("/api/v1/auth", authRouter) //register, login, logout
 app.use("/api/v1/users", usersRouter) // admin only (if you ever decide to flesh this out)
@@ -54,6 +56,13 @@ app.use("/help", (req, res, next) => {
     msg: "Need help? Ask your questions here.",
     title: "Help",
     bannerTitle: "Help",
+  })
+})
+
+app.use("/search", (req, res, next) => {
+  res.render("pages/search", {
+    title: "Search",
+    bannerTitle: "Search",
   })
 })
 

@@ -73,10 +73,6 @@
     white-space: nowrap;
 }
 
-.infowrap button i {
-    pointer-events: none;
-}
-
 .grid.login .infowrap, 
 .grid.register .infowrap {
     margin-top: 0;
@@ -301,7 +297,6 @@ pointer-events: none;
 
 .save_discard_buttons button i {
     font-size: 2rem;
-    pointer-events: none;
 }
 
 .save_discard_buttons button p {
@@ -362,10 +357,8 @@ pointer-events: none;
     font-size: 1.5rem;
 }
 
-#db p, #back i {
+#db p {
     pointer-events: none;
-    user-select: none;
-    -webkit-user-select: none;
 }
 
 #cancel, #proceed, #back, #confirm {

@@ -31,11 +31,6 @@ const lessonSchema = new Schema(
       type: String,
       default: "",
     },
-    images: [
-      {
-        type: String,
-      },
-    ],
     tags: {
       type: Array,
     },
@@ -43,6 +38,14 @@ const lessonSchema = new Schema(
       type: String,
       enum: ["draft", "published"],
       default: "draft",
+    },
+    type: {
+      type: String,
+      default: "lesson",
+    },
+    hits: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

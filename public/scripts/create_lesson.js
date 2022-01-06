@@ -262,7 +262,7 @@ const init = async () => {
     p.write(h + c + j)
     p.close()
   })
-  await getRole()
+  getRole()
   await getChapters()
   if (path.split("/")[3]) {
     resourceId = path.split("/")[3]
