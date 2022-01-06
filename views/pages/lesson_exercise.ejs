@@ -10,7 +10,10 @@
     include('../partials/banner'); %>
     <div id="resource"></div>
     <%- include('../partials/footer'); %> <%-
-    include('../partials/universal_scripts'); %>
+    include('../partials/universal_scripts'); %> <% if(title === "Learn") { %>
+    <script src="/scripts/lesson.js"></script>
+    <% } else { %>
     <script src="/scripts/exercise.js"></script>
+    <% } %>
   </body>
 </html>

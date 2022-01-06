@@ -4,18 +4,14 @@ const getResource = (req, res) => {
   if (baseUrl === "/learn") {
     title = "Learn"
     bannerTitle = "Learn"
-    res.render("pages/lesson", {
-      title,
-      bannerTitle,
-    })
   } else {
     title = "Practice"
     bannerTitle = "Practice"
-    res.render("pages/exercise", {
-      title,
-      bannerTitle,
-    })
   }
+  res.render("pages/lesson_exercise", {
+    title,
+    bannerTitle,
+  })
 }
 
 const getAllResources = (req, res) => {
