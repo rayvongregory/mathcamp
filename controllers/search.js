@@ -8,9 +8,7 @@ const search = async (req, res) => {
     params: { query },
   } = req
   let results = []
-  // let results = [{ _id: new ObjectId("61bb29c670cea83f8c3643ca") }]
   query = query.split("+")
-  console.log(query)
   for (let q of query) {
     try {
       let regex = new RegExp(q, "i")
@@ -65,7 +63,6 @@ const addNewResources = (list, newResources) => {
 }
 
 const sortByHits = (list) => {
-  console.log(list)
   for (let i = 1; i < list.length; i++) {
     if (list[i].hits < list[i - 1].hits) {
       let item = list[i]

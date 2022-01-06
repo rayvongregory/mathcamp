@@ -1,14 +1,47 @@
 #resource {
+    position: relative;
     padding: 1rem 1rem 4rem;
     min-height: calc(100vh - 200px);
     max-width: 992px;
     margin: auto;
 }
 
+#fixed {
+    position: fixed;
+    top: 80vh;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1rem 1rem 4rem;
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    z-index: 3;
+}
+
+#edit-btn {
+    flex-shrink: 0;
+    border: none;
+    background-color: var(--deepTeal);
+    color: white;
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#edit-btn:hover,
+#edit-btn:focus,
+#edit-btn:active {
+    background-color: var(--deepRed);
+}
 
 @media (min-width: 576px) {
     #resource {
         padding: 2rem 2rem 4rem;
     }
+    
     
 }

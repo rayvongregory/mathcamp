@@ -1,5 +1,31 @@
 const head = document.querySelector("head")
 const resource = document.getElementById("resource")
+const id = path.split("/")[2]
+
+const addEditBtn = () => {
+  const fixedDiv = document.createElement("div")
+  const editBtn = document.createElement("a")
+  fixedDiv.setAttribute("id", "fixed")
+  editBtn.setAttribute("id", "edit-btn")
+  editBtn.setAttribute("href", `/drafts/lesson/${id}`)
+  editBtn.innerHTML = '<i class="fas fa-edit"></i>'
+  fixedDiv.appendChild(editBtn)
+  resource.appendChild(fixedDiv)
+}
+
+const getRole = async () => {
+  let t = localStorage.getItem("token")
+  try {
+    const {
+      data: { role },
+    } = await axios.get(`/api/v1/token/${t.split(" ")[1]}`)
+    if (role === "admin") {
+      addEditBtn()
+    }
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 const getLessonInfo = async () => {
   try {
@@ -15,6 +41,7 @@ const getLessonInfo = async () => {
     head.insertAdjacentElement("beforeend", script_1)
     resource.innerHTML = html
     body.insertAdjacentElement("beforeend", script_2)
+    await getRole()
   } catch (err) {
     console.log(err)
   }

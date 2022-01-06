@@ -411,10 +411,6 @@ const getRole = async () => {
   }
 }
 
-// if (!token) {
-//   window.location.href = "/"
-// }
-
 titleInput.addEventListener("keyup", titleAdded)
 tagsInput.addEventListener("keyup", addTag)
 subjectSelect.addEventListener("pointerup", subjectPicked)
