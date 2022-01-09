@@ -168,6 +168,7 @@ const createProblemItem = (diff, id = null, satisfied = null) => {
   del.addEventListener("pointerup", delProblem)
   backBtn.addEventListener("pointerup", delProblem)
   confBtn.addEventListener("pointerup", delProblem)
+  input.addEventListener("keyup", delProblem)
   piFront.appendChild(icon)
   piFront.appendChild(p)
   piFront.appendChild(prev)
@@ -390,7 +391,7 @@ const pick5 = (cs) => {
 const addToGrid = (cs) => {
   let ltrs = ["A", "B", "C", "D", "E"]
   cs.forEach((c) => {
-    c = c.substring(3, c.length - 4)
+    // c = c.substring(3, c.length - 4)
     let btn = document.createElement("button")
     btn.setAttribute("class", "choice")
     btn.addEventListener("pointerup", selectThis)
@@ -452,6 +453,7 @@ const addAll = (e) => {
     discardAll()
     // we're not updating anything and need to create/append a new dom element
   }
+  allowSave(true)
 }
 
 //read
@@ -507,8 +509,10 @@ const editProblem = (e) => {
   if (!editingItem) {
     editThisOne(problemItem, diff, pid)
   } else if (editingItem.dataset.pid === pid) {
+    allowSave(true)
     editCancel(problemItem)
   } else {
+    allowSave(true)
     editCancel(editingItem)
     editThisOne(problemItem, diff, pid)
   }
@@ -520,6 +524,9 @@ const confirmDiscardAll = (e) => {
     case dA1:
       document.activeElement.blur()
       sideScroll(dA2, dA1)
+      setTimeout(() => {
+        discardConf.focus()
+      }, 200)
       break
     case discardBackBtn:
       sideScroll(dA1, dA2)
@@ -527,9 +534,10 @@ const confirmDiscardAll = (e) => {
     case discardAllBtn:
       document.activeElement.blur()
       if (discardConf.value !== "yes") {
-        dA2p.classList.add("flash")
+        discardConf.classList.add("flash")
         setTimeout(() => {
-          dA2p.classList.remove("flash")
+          discardConf.classList.remove("flash")
+          discardConf.focus()
         }, 600)
         return
       } else {
@@ -539,16 +547,19 @@ const confirmDiscardAll = (e) => {
         sideScroll(dA1, dA2)
       }
     default:
+      if (e.type === "keyup" && e.code === "Enter") {
+        discardAllBtn.dispatchEvent(new Event("pointerup"))
+      }
       break
   }
 }
 
 const discardAll = () => {
   document.activeElement.blur()
-  deleteQ()
+  deleteQItem()
   discardChoice()
   deleteChoices()
-  deleteAns()
+  deleteAnsItem()
 }
 
 const deleteProblemItem = (problemItem) => {
@@ -564,23 +575,24 @@ const deleteProblemItem = (problemItem) => {
       checkReqs()
     }
   }
-
-  // this deletes the dom element and will handle hiding/showing sections
 }
 
 const delProblem = (e) => {
-  document.activeElement.blur()
   const { target } = e
   const { name } = target
-  const problemItem = target.parentElement.parentElement
+  const { parentElement: problemItem } = target.parentElement
   const back = problemItem.lastChild
-
   switch (name) {
     case "del":
+      const i = back.querySelector("input")
       back.classList.add("grow")
+      setTimeout(() => {
+        i.focus()
+      }, 200)
       break
     case "back":
       back.classList.remove("grow")
+      document.activeElement.blur()
       break
     case "confirm":
       const input = back.querySelector("input")
@@ -590,28 +602,35 @@ const delProblem = (e) => {
           discardAll()
           reset__AllBtns()
         }
-        delete problems[diff][`pid${pid}`] // delete it
+        delete problems[diff][`pid${pid}`]
         usedPIDs.splice(usedPIDs.indexOf(pid), 1)
         deleteProblemItem(problemItem)
         if (diff !== "no_choice") {
           checkForTen(diff)
         }
         checkAllMeet()
+        allowSave(true)
       } else {
         input.classList.add("flash")
         setTimeout(() => {
           input.classList.remove("flash")
+          input.focus()
         }, 600)
-        // do the animation
       }
+      document.activeElement.blur()
       break
     default:
+      if (e.type === "keyup" && e.code === "Enter")
+        target.nextElementSibling.dispatchEvent(new Event("pointerup"))
       break
   }
 }
 
 addAllBtn.addEventListener("pointerup", addAll)
-discardAllSlider.addEventListener("pointerup", confirmDiscardAll)
+dA1.addEventListener("pointerup", confirmDiscardAll)
+discardBackBtn.addEventListener("pointerup", confirmDiscardAll)
+discardAllBtn.addEventListener("pointerup", confirmDiscardAll)
+discardConf.addEventListener("keyup", confirmDiscardAll)
 listTogglers.forEach((toggler) =>
   toggler.addEventListener("pointerup", toggleList)
 )

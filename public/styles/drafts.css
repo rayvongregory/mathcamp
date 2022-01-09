@@ -24,8 +24,8 @@
 
 #drafts___section {
     position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 30px;
     padding: 2rem 1rem 5rem;
     margin: auto;
@@ -185,8 +185,7 @@
 
 @media (min-width: 1200px) {
     #drafts___section {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-template-rows: unset;
+        flex-direction: row;
         column-gap: 20px;
     }
 

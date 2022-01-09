@@ -30,11 +30,6 @@ const exerciseSchema = new Schema(
     tags: {
       type: Array,
     },
-    status: {
-      type: String,
-      enum: ["draft", "published"],
-      default: "draft",
-    },
     problems: {
       type: Object,
       required: [true, "Please provide a set of problems"],
@@ -42,6 +37,11 @@ const exerciseSchema = new Schema(
     usedPIDs: {
       type: Array,
       required: [true, "Please provide a list of all problem IDs"],
+    },
+    status: {
+      type: String,
+      enum: ["draft", "published"],
+      default: "draft",
     },
     type: {
       type: String,

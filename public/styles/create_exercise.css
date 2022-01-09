@@ -12,6 +12,7 @@
 }
 
 .textarea-wrapper {
+    max-width: 980px;
     height: fit-content;
     position: relative;
     grid-column: 1/span 1;
@@ -41,7 +42,6 @@
 .textarea {
     display: inline-block;
     width: 100%;
-    max-width: 980px;
     height: 200px;
     padding: 0.5rem;
     resize: none;
@@ -263,7 +263,6 @@
     height: fit-content;
 }
 
-
 #problem_set section {
     display: flex;
     flex-direction: column;
@@ -292,7 +291,6 @@
     background-color: white;
     padding: 10px;
     border: var(--tinymceBorder);
-    /* border-top: none; */
 }
 
 #question_choices {
@@ -303,10 +301,9 @@
     background-color: white;
     padding: 10px;
     border: var(--tinymceBorder);
-    /* border-top: none; */
 }
 
-#question_choices > ul{
+#question_choices > ul {
     width: 100%;
     list-style: none;
     text-decoration: none;
@@ -319,10 +316,7 @@
     text-decoration: none;
 }
 
-.piFront, 
-#question_choices li, 
-#correct_answer_section li, 
-#question_section li {
+.piFront { 
     display: flex;
     align-items: center;
     color: var(--deepTeal);
@@ -331,23 +325,22 @@
 
 #question_choices li, 
 #correct_answer_section li, 
-#question_section li {
-    border: var(--border);
-}
-
+#question_section li,
 #problem_set li {
     display: flex;
     align-items: center;
+    height: 40px;
+    padding-right: 4px;
     border: var(--border);
     border-radius: 3px;
+}
+
+#problem_set li {
     margin-top: 10px;
-    padding-right: 4px;
     width: 100%;
     max-width: 700px;
-    height: 40px;
     pointer-events: none;
     overflow: hidden;
-    scroll-behavior: smooth;
 }
 
 #problem_set li:last-of-type {
@@ -387,6 +380,7 @@
 
 .piBack button {
     border: none;
+    cursor: pointer;
 }
 
 .piBack input {
@@ -404,13 +398,6 @@
     width: 60px;
 }
 
-#question_choices li, 
-#correct_answer_section li, 
-#question_section li {
-    padding: 10px;
-    gap: 1rem;
-}
-
 .piFront {
     padding: 5px 5px 5px 10px;
 }
@@ -419,54 +406,66 @@
     margin-right: 0.75rem;
 }
 
-
 .piFront + li {
     margin-top: 10px;
 }
 
-#question_choices li > :first-child,
-.piFront > :nth-child(2), 
-#correct_answer_section li > :nth-child(1), 
-#question_section li > :nth-child(1) {
+.piFront > p {
     margin-right: auto;
-}
-
-#question_choices li > button, 
-.piFront > button, 
-#correct_answer_section li > button, 
-#question_section li > button {
-    border: none;
-    background-color: transparent;
-    color: var(--deepTeal);
-    font-size: 1rem;
-    pointer-events: all;
 }
 
 .piFront > button {
     width: 34px;
     height: 34px;
+    border: none;
+    background-color: transparent;
+    color: var(--deepTeal);
+    font-size: 1rem;
+    pointer-events: all;
     border-radius: 3px;
-}
-
-#question_choices button:hover, 
-#correct_answer_section button:hover, 
-#question_section button:hover,
-#question_choices button:focus, 
-#correct_answer_section button:focus, 
-#question_section button:focus  {
-    color: var(--deepRed);
     cursor: pointer;
 }
 
-#problem_set button:hover, 
-#problem_set button:focus {
-    cursor: pointer;
+li.satisfied .piFront p, 
+li.satisfied .piFront span,
+li.satisfied .piFront button i {
+    color: var(--deepTeal);
 }
 
-#question_choices button:active, 
-#correct_answer_section button:active, 
-#question_section button:active  {
-    color: var(--brightOrange);
+li.satisfied .piBack button {
+    background-color: var(--deepTeal);
+    color: white;
+}
+
+li.not_met .piFront p, 
+li.not_met .piFront span,
+li.not_met .piFront button i {
+    color: darkred;
+}
+
+li.not_met .piBack button {
+    background-color: darkred;
+    color: white;
+}
+
+.piFront button:hover,
+.piFront button:focus,
+.piBack button:hover,
+.piBack button:focus {
+    background-color: var(--tinymceGray);
+}
+
+.piFront button:active,
+.piBack button:active {
+    background-color: var(--tinymceGrayActive);
+}
+
+input.flash {
+    animation: color-in-out 600ms ease-in-out;
+}
+
+input.flash::placeholder {
+    opacity: 1;
 }
 
 #no_problems_yet {
@@ -497,6 +496,7 @@
     border-radius: 50%;
     border: none;
     background: white;
+    cursor: pointer;
 }
 
 #problem_set .header button:hover,
@@ -510,87 +510,16 @@
     background-color: var(--tinymceGrayActive);
 }
 
-.piFront.editing, 
-#question_choices li.editing, 
-#correct_answer_section li.editing, 
-#question_section li.editing {
-    background-color: var(--deepTeal);
-    color: white;
-}
-
-.piFront.editing button, 
-#question_choices li.editing button, 
-#correct_answer_section li.editing button, 
-#question_section li.editing button {
-    color: white;
-}
-
-.piFront.editing button:hover, 
-#question_choices li.editing button:hover, 
-#correct_answer_section li.editing button:hover, 
-#question_section li.editing button:hover,
-.piFront.editing button:focus, 
-#question_choices li.editing button:focus, 
-#correct_answer_section li.editing button:focus, 
-#question_section li.editing button:focus {
-    color: var(--tinymceGray);
-}
-
-.piFront.editing button:active, 
-#question_choices li.editing button:active, 
-#correct_answer_section li.editing button:active, 
-#question_section li.editing button:active {
-    color: var(--tinymceGrayActive);
-}
-
 #question_section.pop-top, 
 #correct_answer_section.pop-top, 
 #question_choices.pop-top {
     border-top: none;
 }
 
-#problem_set li.satisfied .piFront p, 
-#problem_set li.satisfied .piFront span,
-#problem_set li.satisfied .piFront button i {
-    color: var(--deepTeal);
-}
 
-#problem_set li.satisfied .piBack button {
-    background-color: var(--deepTeal);
-    color: white;
-}
 
-#problem_set li.not_met .piFront p, 
-#problem_set li.not_met .piFront span,
-#problem_set li.not_met .piFront button i {
-    color: darkred;
-}
-
-#problem_set li.not_met .piBack button {
-    background-color: darkred;
-    color: white;
-}
-
-#problem_set li.not_met .piFront button:hover,
-#problem_set li.not_met .piFront button:focus {
-    background-color: var(--tinymceGray);
-}
-
-#problem_set li.not_met .piFront button:active {
-    background-color: var(--tinymceGrayActive);
-}
-
-#problem_set li.not_met .piBack button:hover,
-#problem_set li.not_met .ppiBack button:focus {
-    background-color: var(--tinymceGray);
-}
-
-#problem_set li input.flash {
-    animation: color-in-out 600ms ease-in-out;
-}
-
-#problem_set li input.flash::placeholder {
-    opacity: 1;
+.img-wrapper {
+    margin-bottom: 1rem;
 }
 
 @keyframes color-in-out {

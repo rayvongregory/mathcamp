@@ -19,6 +19,9 @@ const lessonSchema = new Schema(
       type: String,
       required: [true, "Please pick a section for this lesson"],
     },
+    tags: {
+      type: Array,
+    },
     html: {
       type: String,
       default: "",
@@ -30,9 +33,6 @@ const lessonSchema = new Schema(
     js: {
       type: String,
       default: "",
-    },
-    tags: {
-      type: Array,
     },
     status: {
       type: String,

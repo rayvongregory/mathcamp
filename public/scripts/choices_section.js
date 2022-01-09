@@ -33,7 +33,7 @@ const uniqueChoice = (text) => {
 const addToTextArea = (target, cid, edit) => {
   target.classList.add("editing")
   let p = target.querySelector("p")
-  p.innerText = `Choice ID: ${cid} (editing)`
+  p.innerText = `CID: ${cid} (editing)`
   cTA.innerHTML = choices[`cid${cid}`]
   addChoiceBtn.dataset.cid = cid
   setAria(edit, "Cancel edit")
@@ -54,20 +54,42 @@ const createChoiceItem = (id = null) => {
     choices[`cid${id}`] = cTA.innerHTML
   }
   let choiceItem = document.createElement("li")
+  let qiFront = document.createElement("div")
+  let qiBack = document.createElement("div")
+  let backBtn = document.createElement("button")
+  let input = document.createElement("input")
+  let confBtn = document.createElement("button")
+  qiFront.setAttribute("class", "piFront")
+  qiBack.setAttribute("class", "piBack")
+  backBtn.setAttribute("name", "back")
+  input.setAttribute("placeholder", 'Type "yes"')
+  confBtn.setAttribute("name", "confirm")
+  backBtn.innerHTML = '<i class="fas fa-chevron-right"></i>'
+  setAria(backBtn, "Cancel")
+  confBtn.innerText = "Confirm"
   let p = document.createElement("p")
   choiceItem.dataset.cid = id
-  p.innerText = `Choice ID: ${id}`
+  p.innerText = `CID: ${id}`
   let edit = document.createElement("button")
   setAria(edit, "Edit choice")
   edit.innerHTML = '<i class="fas fa-edit"></i>'
   edit.addEventListener("pointerup", editChoice)
   let del = document.createElement("button")
   setAria(del, "Delete choice")
+  del.setAttribute("name", "del")
   del.innerHTML = '<i class="fas fa-trash"></i>'
   del.addEventListener("pointerup", deleteChoice)
-  choiceItem.appendChild(p)
-  choiceItem.appendChild(edit)
-  choiceItem.appendChild(del)
+  backBtn.addEventListener("pointerup", deleteChoice)
+  confBtn.addEventListener("pointerup", deleteChoice)
+  input.addEventListener("keyup", deleteChoice)
+  qiFront.appendChild(p)
+  qiFront.appendChild(edit)
+  qiFront.appendChild(del)
+  qiBack.appendChild(backBtn)
+  qiBack.appendChild(input)
+  qiBack.appendChild(confBtn)
+  choiceItem.appendChild(qiFront)
+  choiceItem.appendChild(qiBack)
   choicesSection.appendChild(choiceItem)
   if (choicesSection.classList.contains("hide")) {
     choicesSection.classList.remove("hide")
@@ -95,7 +117,7 @@ const addChoice = (e) => {
         removeEmptyDivs(cTA)
         choices[`cid${cid}`] = cTA.innerHTML
         choiceItem.classList.remove("editing")
-        p.innerText = `Choice ID: ${cid}`
+        p.innerText = `CID: ${cid}`
         setAria(editBtn, "Edit choice")
         setAria(addChoiceBtn, "Add choice")
         setAria(discardChoiceBtn, "Discard")
@@ -118,7 +140,7 @@ const addChoice = (e) => {
 const editChoice = (e) => {
   document.activeElement.blur()
   let edit = e.target
-  let target = edit.parentElement
+  let { parentElement: target } = edit.parentElement
   let { cid } = target.dataset // this is just the number
   let li = choicesSection.querySelector("li.editing")
   if (!li) {
@@ -129,7 +151,7 @@ const editChoice = (e) => {
     let editBtn = li.querySelector("button")
     setAria(editBtn, "Edit choice")
     let { cid: oldCid } = li.dataset
-    p.innerText = `Choice ID: ${oldCid}`
+    p.innerText = `CID: ${oldCid}`
     addToTextArea(target, cid, edit)
   } else if (li && li === target) {
     li.classList.remove("editing")
@@ -137,7 +159,7 @@ const editChoice = (e) => {
     setAria(addChoiceBtn, "Add choice to question")
     let p = li.querySelector("p")
     let { cid } = li.dataset
-    p.innerText = `Choice ID: ${cid}`
+    p.innerText = `CID: ${cid}`
     delete addChoiceBtn.dataset.cid
     discardChoice()
   }
@@ -156,14 +178,50 @@ const discardChoice = () => {
     let edit = li.querySelector('[aria-label="Cancel edit"]')
     setAria(edit, "Edit choice")
     let p = li.querySelector("p")
-    p.innerText = `Choice ID: ${cid}`
+    p.innerText = `CID: ${cid}`
     delete addChoiceBtn.dataset.cid
   }
 }
 
 const deleteChoice = (e) => {
-  let item = e.target.parentElement
-  let { cid } = item.dataset
+  const { target } = e
+  const { name } = target
+  const { parentElement: li } = target.parentElement
+  const { cid } = li.dataset
+  const back = li.lastChild
+  switch (name) {
+    case "del":
+      const i = back.querySelector("input")
+      back.classList.add("grow")
+      setTimeout(() => {
+        i.focus()
+      }, 200)
+      break
+    case "back":
+      back.classList.remove("grow")
+      document.activeElement.blur()
+      break
+    case "confirm":
+      const input = back.querySelector("input")
+      if (input.value === "yes") {
+        deleteChoiceItem(li, cid)
+      } else {
+        input.classList.add("flash")
+        setTimeout(() => {
+          input.classList.remove("flash")
+          input.focus()
+        }, 600)
+      }
+      document.activeElement.blur()
+      break
+    default:
+      if (e.type === "keyup" && e.code === "Enter")
+        target.nextElementSibling.dispatchEvent(new Event("pointerup"))
+      break
+  }
+}
+
+const deleteChoiceItem = (item, cid) => {
   if (cid === addChoiceBtn.dataset.cid) {
     delete addChoiceBtn.dataset.cid
     setAria(addChoiceBtn, "Add choice to question")

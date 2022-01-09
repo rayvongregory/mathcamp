@@ -9,6 +9,19 @@ const correctAnswerSection = document.getElementById("correct_answer_section")
 //util
 const createAnsItem = () => {
   let correctAnswerItem = document.createElement("li")
+  let qiFront = document.createElement("div")
+  let qiBack = document.createElement("div")
+  let backBtn = document.createElement("button")
+  let input = document.createElement("input")
+  let confBtn = document.createElement("button")
+  qiFront.setAttribute("class", "piFront")
+  qiBack.setAttribute("class", "piBack")
+  backBtn.setAttribute("name", "back")
+  input.setAttribute("placeholder", 'Type "yes"')
+  confBtn.setAttribute("name", "confirm")
+  backBtn.innerHTML = '<i class="fas fa-chevron-right"></i>'
+  setAria(backBtn, "Cancel")
+  confBtn.innerText = "Confirm"
   let p = document.createElement("p")
   p.innerText = "Answer"
   let edit = document.createElement("button")
@@ -17,11 +30,20 @@ const createAnsItem = () => {
   edit.addEventListener("pointerup", editAns)
   let del = document.createElement("button")
   setAria(del, "Delete answer")
+  del.setAttribute("name", "del")
   del.innerHTML = '<i class="fas fa-trash"></i>'
   del.addEventListener("pointerup", deleteAns)
-  correctAnswerItem.appendChild(p)
-  correctAnswerItem.appendChild(edit)
-  correctAnswerItem.appendChild(del)
+  backBtn.addEventListener("pointerup", deleteAns)
+  confBtn.addEventListener("pointerup", deleteAns)
+  input.addEventListener("keyup", deleteAns)
+  qiFront.appendChild(p)
+  qiFront.appendChild(edit)
+  qiFront.appendChild(del)
+  qiBack.appendChild(backBtn)
+  qiBack.appendChild(input)
+  qiBack.appendChild(confBtn)
+  correctAnswerItem.appendChild(qiFront)
+  correctAnswerItem.appendChild(qiBack)
   correctAnswerSection.appendChild(correctAnswerItem)
 }
 
@@ -61,7 +83,7 @@ const addAns = (e) => {
 const editAns = (e) => {
   document.activeElement.blur()
   let { target } = e
-  let li = target.parentElement
+  let { parentElement: li } = target.parentElement
   let p = li.querySelector("p")
   if (li.classList.contains("editing")) {
     li.classList.remove("editing")
@@ -97,8 +119,44 @@ const discardAns = (e) => {
   }
 }
 
-const deleteAns = () => {
-  document.activeElement.blur()
+const deleteAns = (e) => {
+  const { target } = e
+  const { name } = target
+  const { parentElement: li } = target.parentElement
+  const back = li.lastChild
+  switch (name) {
+    case "del":
+      const i = back.querySelector("input")
+      back.classList.add("grow")
+      setTimeout(() => {
+        i.focus()
+      }, 200)
+      break
+    case "back":
+      back.classList.remove("grow")
+      document.activeElement.blur()
+      break
+    case "confirm":
+      const input = back.querySelector("input")
+      if (input.value === "yes") {
+        deleteAnsItem()
+      } else {
+        input.classList.add("flash")
+        setTimeout(() => {
+          input.classList.remove("flash")
+          input.focus()
+        }, 600)
+      }
+      document.activeElement.blur()
+      break
+    default:
+      if (e.type === "keyup" && e.code === "Enter")
+        target.nextElementSibling.dispatchEvent(new Event("pointerup"))
+      break
+  }
+}
+
+const deleteAnsItem = () => {
   let li = correctAnswerSection.querySelector("li")
   if (li) {
     li.remove()

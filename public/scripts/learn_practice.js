@@ -1,3 +1,4 @@
+const gradeBtns = document.querySelector(".scroll-wrap")
 const loadSpinner = document.querySelector(".load-wrapp")
 const grLvls = document.querySelectorAll(".gr")
 const resources = document.getElementById("resources")
@@ -34,6 +35,7 @@ const getChapters = async () => {
     chapters.pc = _pc
     chapters.calc = _calc
     chapters.calc2 = _calc2
+    gradeBtns.classList.add("reveal")
   } catch (error) {
     console.log(error)
   }

@@ -7,25 +7,6 @@ const aTA = document.getElementById("a")
 const cTA = document.getElementById("c")
 let resourceId, i
 
-let lastSave = {
-  title: "",
-  subject: "no_choice",
-  chapter: "no_choice",
-  section: "no_choice",
-  tags: [],
-  problems: { easy: {}, standard: {}, hard: {}, advanced: {}, no_choice: {} },
-  usedPIDs: [],
-}
-let currentExercise = {
-  title: "",
-  subject: "no_choice",
-  chapter: "no_choice",
-  section: "no_choice",
-  tags: [],
-  problems: { easy: {}, standard: {}, hard: {}, advanced: {}, no_choice: {} },
-  usedPIDs: [],
-}
-
 //util
 const hideOrShowThisTextArea = (textarea, action) => {
   switch (`${textarea} ${action}`) {
@@ -72,6 +53,7 @@ const removeEmptyDivs = (codeBlock) => {
     }
   })
 }
+
 const listenForEnterKey = () => {
   const callback = (mutations) => {
     mutations.forEach((mutation) => {
@@ -133,62 +115,31 @@ const getInfo = async (id) => {
         title,
         tags,
         subject,
-        chapter: c,
-        section: s,
+        chapter,
+        section,
         problems: p,
         usedPIDs: upids,
       },
     } = await axios.get(`/api/v1/exercises/id/${id}`)
     titleInput.value = title
-    checkList(createTitleItem, "check")
+    titleInput.dispatchEvent(new Event("input"))
     addTags(tags)
     subjectSelect.value = subject
-    subjectSelect.dispatchEvent(new Event("click"))
-    if (c !== "no_choice") {
-      chapterSelect.value = `${c}`
-      chapterSelect.dispatchEvent(new Event("click"))
+    subjectSelect.dispatchEvent(new Event("input"))
+    if (chapter !== "0") {
+      chapterSelect.value = `${chapter}`
+      chapterSelect.dispatchEvent(new Event("input"))
     }
-    if (s !== "no_choice") {
-      sectionSelect.value = `${s}`
-      sectionSelect.dispatchEvent(new Event("click"))
+    if (section !== "0") {
+      sectionSelect.value = `${section}`
+      sectionSelect.dispatchEvent(new Event("input"))
     }
     problems = p
     usedPIDs = upids
     addAllProblems()
     checkReqs()
-    lastSave = {
-      title,
-      tags: tags.slice(),
-      subject,
-      chapter: c,
-      section: s,
-      problems: { ...p },
-      usedPIDs: upids.slice(),
-    }
-    currentExercise = { ...lastSave }
   } catch (err) {
     console.error(err)
-  }
-}
-
-const sameProblemSet = (e = null) => {
-  currentExercise = {
-    title: titleInput.value.trim(),
-    subject,
-    chapter,
-    section,
-    tags: inputValues,
-    problems,
-    usedPIDs,
-  }
-  if (isEqual(currentExercise, lastSave)) {
-    return true
-  } else {
-    if (e) {
-      e.preventDefault()
-      e.returnValue = ""
-    }
-    return false
   }
 }
 
@@ -246,18 +197,18 @@ const paste = (e) => {
 }
 
 const addMathType = () => {
-  const qp = {},
-    ap = {},
-    cp = {}
-  qp.target = qTA
-  ap.target = aTA
-  cp.target = cTA
-  qp.toolbar = document.getElementById("toolbar-q")
-  ap.toolbar = document.getElementById("toolbar-a")
-  cp.toolbar = document.getElementById("toolbar-c")
-  const qmt = new WirisPlugin.GenericIntegration(qp)
-  const amt = new WirisPlugin.GenericIntegration(ap)
-  const cmt = new WirisPlugin.GenericIntegration(cp)
+  const qmt = new WirisPlugin.GenericIntegration({
+    target: qTA,
+    toolbar: document.getElementById("toolbar-q"),
+  })
+  const amt = new WirisPlugin.GenericIntegration({
+    target: aTA,
+    toolbar: document.getElementById("toolbar-a"),
+  })
+  const cmt = new WirisPlugin.GenericIntegration({
+    target: cTA,
+    toolbar: document.getElementById("toolbar-c"),
+  })
   qmt.init()
   amt.init()
   cmt.init()
@@ -274,20 +225,20 @@ const addMathType = () => {
 const saveExercise = async (status) => {
   document.activeElement.blur()
   if (resourceId) {
-    if (sameProblemSet()) {
+    if (!canSave) {
       giveFeedback("No changes were made since the last save.", "not_met")
       return
     }
     try {
       await axios.patch(`/api/v1/exercises/id/${resourceId}`, {
         title: titleInput.value.trim(),
-        tags: inputValues,
-        subject,
+        tags,
+        subject: subjectSelect.value,
+        chapter: chapterSelect.value,
+        section: sectionSelect.value,
         problems,
-        status,
-        chapter,
-        section,
         usedPIDs,
+        status,
       })
       giveFeedback("Save successful", "satisfied")
     } catch (err) {
@@ -300,7 +251,7 @@ const saveExercise = async (status) => {
         data: { id },
       } = await axios.post("/api/v1/exercises", {
         title: titleInput.value.trim(),
-        tags: inputValues,
+        tags: tags,
         subject,
         chapter,
         section,
@@ -309,7 +260,6 @@ const saveExercise = async (status) => {
         usedPIDs,
       })
       if (status === "draft") {
-        window.removeEventListener("beforeunload", sameProblemSet)
         window.location.href = `/drafts/exercise/${id}`
       } else {
         window.location.href = `/exercises`
@@ -319,6 +269,7 @@ const saveExercise = async (status) => {
       console.error(err)
     }
   }
+  allowSave(false)
 }
 
 const publishExercise = (e) => {
@@ -327,16 +278,16 @@ const publishExercise = (e) => {
     titleInput.value = ""
     return giveFeedback("Create a title to save this exercise.", "not_met")
   }
-  if (inputValues.length === 0) {
+  if (tags.length === 0) {
     return giveFeedback("Add tags to publish this exercise.", "not_met")
   }
-  if (subject === "no_choice") {
+  if (subject === "0") {
     return giveFeedback("Choose a subject to publish this exercise.", "not_met")
   }
-  if (chapter === "no_choice") {
+  if (chapter === "0") {
     return giveFeedback("Pick a chapter to publish this lesson.", "not_met")
   }
-  if (section === "no_choice") {
+  if (section === "0") {
     return giveFeedback("Pick a section to publish this lesson.", "not_met")
   }
   saveExercise("published")
@@ -365,10 +316,22 @@ const init = async () => {
   if (path.split("/")[3]) {
     resourceId = path.split("/")[3]
     await getInfo(resourceId)
+    allowSave(false)
+  }
+}
+
+const unsavedChanges = (e) => {
+  // check if there is any text in any of the textareas that haven't been saved
+  // check if there are any list items under any of the textareas that don't
+  // have a home
+
+  if (canSave) {
+    e.preventDefault()
+    e.returnValue = ""
   }
 }
 
 window.addEventListener("load", init)
-window.addEventListener("beforeunload", sameProblemSet)
+window.addEventListener("beforeunload", unsavedChanges)
 draftBtn.addEventListener("pointerup", draftExercise)
 publishBtn.addEventListener("pointerup", publishExercise)

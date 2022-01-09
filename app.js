@@ -4,8 +4,8 @@ const connectDB = require("./db/connect")
 const refreshTokens = require("./db/redis-cache")
 const lessonsRouter = require("./routes/lessons")
 const learnRouter = require("./routes/resource")
-const practiceRouter = require("./routes/resource") //! do something with this
-const exercisesRouter = require("./routes/exercise") //! and this
+const practiceRouter = require("./routes/resource")
+const exercisesRouter = require("./routes/exercise")
 const draftsRouter = require("./routes/drafts")
 const helpRouter = require("./routes/help")
 const searchRouter = require("./routes/search")
@@ -104,13 +104,6 @@ app.use("/verified", (req, res, next) => {
 app.use("/", (req, res, next) => {
   res.render("pages/index", { title: "Home" })
 })
-
-// app.use("/draft/exercise", (req, res, next) => {
-//   res.sendFile("public/draftpractice.html", { root: __dirname })
-// })
-// app.use("/create/exercise", (req, res, next) => {
-//   res.sendFile("public/createpractice.html", { root: __dirname })
-// })
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {

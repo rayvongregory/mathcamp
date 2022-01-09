@@ -183,6 +183,10 @@
     margin-top: 30px;
 }
 
+.img-wrapper {
+    margin: auto;
+}
+
 .CodeMirror {
     height: 100%;
 }

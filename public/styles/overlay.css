@@ -144,9 +144,9 @@
 .overlay___body button:not(.choice) {
     width: fit-content;
     align-self: center;
-    padding: 0.5rem;
-    margin-top: 2rem;
-    border-radius: 20px;
+    padding: 10px 20px;
+    margin-top: 1rem;
+    border-radius: 25px;
     color: white;
     border: none;
     box-shadow: var(--boxShadow);
@@ -180,5 +180,6 @@
 }
 
 .overlay___q {
-    height: 300px;
+    height: fit-content;
+    text-align: center;
 }

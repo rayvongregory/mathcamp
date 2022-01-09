@@ -1,11 +1,10 @@
-//overlapping util functions
 const publishBtn = document.getElementById("publish")
 const publishReqs = document.querySelectorAll(".to_publish_reqs:not(.q) li")
 const draftBtn = document.getElementById("draft")
 const titleInput = document.getElementById("title")
 const createTitleItem = document.getElementById("create_title")
 const tagsInput = document.getElementById("tags_input")
-const tags = document.getElementById("tags")
+const tagsSection = document.getElementById("tags-section")
 const addTagsItem = document.getElementById("add_tags")
 const subjectSelect = document.getElementById("subject")
 const chapterSelect = document.getElementById("chapter")
@@ -19,10 +18,7 @@ const addImgBtn = document.getElementById("add_img")
 const imgInput = addImgBtn.querySelector("input")
 const imgPrev = document.getElementById("img_prev")
 const getImgTagBtn = document.getElementById("get_img_tag")
-let subject = "no_choice",
-  chapter = "0",
-  section = "0",
-  inputValues = [],
+let tags = [],
   chapters = {
     seven: {},
     eight: {},
@@ -33,7 +29,14 @@ let subject = "no_choice",
     pc: {},
     calc: {},
     calc2: {},
+  },
+  canSave = false
+
+const allowSave = (bool) => {
+  if (canSave !== bool) {
+    canSave = bool
   }
+}
 
 const getChapters = async () => {
   try {
@@ -123,10 +126,11 @@ const removeTag = (e) => {
   let target = e.target
   let value = target.innerText
   value = value.substring(0, value.length - 2)
-  inputValues.splice(inputValues.indexOf(value), 1)
+  tags.splice(tags.indexOf(value), 1)
   target.remove()
-  if (inputValues.length === 0) {
-    tags.classList.add("hide")
+  allowSave(true)
+  if (tags.length === 0) {
+    tagsSection.classList.add("hide")
     checkList(addTagsItem, "uncheck")
     checkReqs()
   }
@@ -137,7 +141,7 @@ const addTag = (e) => {
   if (keys.includes(e.keyCode)) {
     let value = tagsInput.value.trim().toLowerCase()
     value = removeInvalidCharacters(value)
-    if (value.length === 0 || inputValues.includes(value)) {
+    if (value.length === 0 || tags.includes(value)) {
       return (tagsInput.value = "")
     }
     let tag = document.createElement("button")
@@ -148,14 +152,15 @@ const addTag = (e) => {
     tag.appendChild(val)
     tag.appendChild(close)
     tag.addEventListener("pointerup", removeTag)
-    tags.appendChild(tag)
-    inputValues.push(value)
-    if (inputValues.length > 0 && tags.classList.contains("hide")) {
-      tags.classList.remove("hide")
+    tagsSection.appendChild(tag)
+    tags.push(value)
+    if (tags.length > 0 && tagsSection.classList.contains("hide")) {
+      tagsSection.classList.remove("hide")
       checkList(addTagsItem, "check")
       checkReqs()
     }
     tagsInput.value = ""
+    allowSave(true)
   }
 }
 
@@ -170,9 +175,9 @@ const giveFeedback = (msg, status) => {
 }
 
 const addTags = (incomingTags) => {
-  inputValues = incomingTags
-  if (inputValues.length > 0) {
-    tags.classList.remove("hide")
+  tags = incomingTags
+  if (tags.length > 0) {
+    tagsSection.classList.remove("hide")
     checkList(addTagsItem, "check")
     checkReqs()
   }
@@ -185,21 +190,19 @@ const addTags = (incomingTags) => {
     newTag.appendChild(val)
     newTag.appendChild(close)
     newTag.addEventListener("pointerup", removeTag)
-    tags.appendChild(newTag)
+    tagsSection.appendChild(newTag)
   }
 }
 
-const titleAdded = (e) => {
-  const { target } = e
-  target.value = target.value.trimStart()
-  if (
-    target.value.length > 0 &&
-    createTitleItem.classList.contains("not_met")
-  ) {
+const titleChanged = (e) => {
+  allowSave(true)
+  let { value } = e.target
+  value = value.trimStart()
+  if (value.length > 0 && createTitleItem.classList.contains("not_met")) {
     checkList(createTitleItem, "check")
     checkReqs()
   } else if (
-    target.value.length === 0 &&
+    value.length === 0 &&
     createTitleItem.classList.contains("satisfied")
   ) {
     checkList(createTitleItem, "uncheck")
@@ -214,43 +217,40 @@ const removeOptions = (select) => {
   }
 }
 
-const subjectPicked = (e) => {
-  if (
-    e.type === "keyup" &&
-    e.keyCode !== 13 &&
-    e.keyCode !== 32 &&
-    e.keyCode !== 37 &&
-    e.keyCode !== 38 &&
-    e.keyCode !== 39 &&
-    e.keyCode !== 40
-  ) {
-    return
+const subjectChanged = (e) => {
+  const { value } = e.target
+  const { parentElement } = sectionSelect.parentElement
+  allowSave(true)
+  removeOptions(chapterSelect)
+  if (!parentElement.classList.contains("hide")) {
+    parentElement.classList.add("hide")
   }
-  const { target } = e
-  if (subject !== target.value) {
-    subject = target.value
-    removeOptions(chapterSelect)
-    resetChapterSection()
-    if (target.value !== "no_choice") {
-      addChapters(target.value)
+  if (pickChapterSectionItem.classList.contains("satisfied")) {
+    checkList(pickChapterSectionItem, "uncheck")
+  }
+  if (value !== "no_choice") {
+    addChapters(value)
+    if (chooseSubjectItem.classList.contains("not_met")) {
+      checkList(chooseSubjectItem, "check")
+      chapter_sectionDiv.classList.remove("hide")
     }
-  }
-  if (
-    target.value !== "no_choice" &&
-    chooseSubjectItem.classList.contains("not_met")
-  ) {
-    checkList(chooseSubjectItem, "check")
-    chapter_sectionDiv.classList.remove("hide")
   } else if (
-    target.value === "no_choice" &&
+    value === "no_choice" &&
     chooseSubjectItem.classList.contains("satisfied")
   ) {
     checkList(chooseSubjectItem, "uncheck")
+    chapter_sectionDiv.classList.add("hide")
+    if (chapterSelect.value !== "no_choice") {
+      chapterSelect.value = "no_choice"
+      removeOptions(chapterSelect)
+    }
+    if (sectionSelect.value !== "no_choice") {
+      sectionSelect.value = "no_choice"
+      removeOptions(sectionSelect)
+    }
     if (pickChapterSectionItem.classList.contains("satisfied")) {
       checkList(pickChapterSectionItem, "uncheck")
     }
-    chapter_sectionDiv.classList.add("hide")
-    resetChapterSection()
   }
   checkReqs()
 }
@@ -258,52 +258,38 @@ const subjectPicked = (e) => {
 const addChapters = (val) => {
   let list = chapters[val]
   for (let c = 0; c < list.length; c++) {
+    let { number, name } = list[c].title
     let chapter = document.createElement("option")
-    chapter.innerHTML = `Chapter ${list[c].title.number}: ${list[c].title.name}`
-    chapter.setAttribute("value", `${list[c].title.number}`)
+    chapter.innerHTML = `Chapter ${number}: ${name}`
+    chapter.setAttribute("value", `${number}`)
     chapterSelect.appendChild(chapter)
   }
 }
 
-const chapterPicked = (e) => {
-  if (
-    e.type === "keyup" &&
-    e.keyCode !== 13 &&
-    e.keyCode !== 32 &&
-    e.keyCode !== 37 &&
-    e.keyCode !== 38 &&
-    e.keyCode !== 39 &&
-    e.keyCode !== 40
-  ) {
-    return
-  }
-  const { target } = e
-  if (
-    target.value === "0" &&
-    !sectionSelect.parentElement.parentElement.classList.contains("hide")
-  ) {
-    sectionSelect.parentElement.parentElement.classList.add("hide")
-    chapter = "0"
-    sectionSelect.value = "0"
+const chapterChanged = (e) => {
+  const { value } = e.target
+  const { parentElement } = sectionSelect.parentElement
+  allowSave(true)
+  if (value === "0" && !parentElement.classList.contains("hide")) {
+    parentElement.classList.add("hide")
     removeOptions(sectionSelect)
+    sectionSelect.value = value
     if (pickChapterSectionItem.classList.contains("satisfied")) {
       checkList(pickChapterSectionItem, "uncheck")
     }
     checkReqs()
-  } else if (target.value !== "0") {
-    if (chapter !== target.value) {
-      chapter = target.value
-      removeOptions(sectionSelect)
-      addSections()
-    }
-    if (sectionSelect.parentElement.parentElement.classList.contains("hide")) {
-      sectionSelect.parentElement.parentElement.classList.remove("hide")
+  } else if (value !== "0") {
+    removeOptions(sectionSelect)
+    addSections()
+    if (parentElement.classList.contains("hide")) {
+      parentElement.classList.remove("hide")
     }
   }
 }
 
 const addSections = () => {
-  let sections = chapters[subject][Number(chapter) - 1].sections
+  let { sections } =
+    chapters[subjectSelect.value][Number(chapterSelect.value) - 1]
   for (let s in sections) {
     let option = document.createElement("option")
     option.setAttribute("value", s)
@@ -312,83 +298,18 @@ const addSections = () => {
   }
 }
 
-const sectionPicked = (e) => {
-  if (
-    e.type === "keyup" &&
-    e.keyCode !== 13 &&
-    e.keyCode !== 32 &&
-    e.keyCode !== 37 &&
-    e.keyCode !== 38 &&
-    e.keyCode !== 39 &&
-    e.keyCode !== 40
-  ) {
-    return
-  }
-  const { target } = e
-  if (section !== target.value) {
-    section = target.value
-  }
-  if (
-    target.value !== "no_choice" &&
-    pickChapterSectionItem.classList.contains("not_met")
-  ) {
+const sectionChanged = (e) => {
+  const { value } = e.target
+  allowSave(true)
+  if (value !== "0" && pickChapterSectionItem.classList.contains("not_met")) {
     checkList(pickChapterSectionItem, "check")
   } else if (
-    target.value === "no_choice" &&
+    value === "0" &&
     pickChapterSectionItem.classList.contains("satisfied")
   ) {
     checkList(pickChapterSectionItem, "uncheck")
   }
   checkReqs()
-}
-
-const resetChapterSection = () => {
-  if (chapterSelect.value !== "no_choice") {
-    chapterSelect.value = "no_choice"
-    chapter = "no_choice"
-    removeOptions(chapterSelect)
-  }
-  if (sectionSelect.value !== "no_choice") {
-    sectionSelect.value = "no_choice"
-    section = "no_choice"
-    removeOptions(sectionSelect)
-  }
-  sectionSelect.parentElement.parentElement.classList.add("hide")
-
-  if (pickChapterSectionItem.classList.contains("satisfied")) {
-    checkList(pickChapterSectionItem, "uncheck")
-  }
-}
-
-const isEqual = (obj1, obj2) => {
-  for (let key in obj1) {
-    if (key === "tags") {
-      if (obj1.tags.length !== obj2.tags.length) {
-        return false
-      }
-    } else if (key === "usedPIDs") {
-      if (obj1.usedPIDs.length !== obj2.usedPIDs.length) {
-        return false
-      }
-    } else if (key === "problems") {
-      continue
-    } else if (obj1[key] !== obj2[key]) {
-      return false
-    }
-  }
-  for (let index of obj1.tags) {
-    if (obj1.tags[index] !== obj2.tags[index]) {
-      return false
-    }
-  }
-  if (obj1.usedPIDs) {
-    for (let index in obj1.usedPIDs) {
-      if (obj1.usedPIDs[index] !== obj2.usedPIDs[index]) {
-        return false
-      }
-    }
-  }
-  return true
 }
 
 const setAria = (btn, val) => {
@@ -411,14 +332,8 @@ const getRole = async () => {
   }
 }
 
-titleInput.addEventListener("keyup", titleAdded)
+titleInput.addEventListener("input", titleChanged)
 tagsInput.addEventListener("keyup", addTag)
-subjectSelect.addEventListener("pointerup", subjectPicked)
-chapterSelect.addEventListener("pointerup", chapterPicked)
-sectionSelect.addEventListener("pointerup", sectionPicked)
-subjectSelect.addEventListener("click", subjectPicked)
-chapterSelect.addEventListener("click", chapterPicked)
-sectionSelect.addEventListener("click", sectionPicked)
-subjectSelect.addEventListener("keyup", subjectPicked)
-chapterSelect.addEventListener("keyup", chapterPicked)
-sectionSelect.addEventListener("keyup", sectionPicked)
+subjectSelect.addEventListener("input", subjectChanged)
+chapterSelect.addEventListener("input", chapterChanged)
+sectionSelect.addEventListener("input", sectionChanged)

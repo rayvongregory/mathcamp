@@ -1,5 +1,11 @@
 .scroll-wrap {
     position: relative;
+    opacity: 0;
+    transition: opacity 0.15s ease-in 0.1s;
+}
+
+.scroll-wrap.reveal {
+    opacity: 1;
 }
 
 .scroll-wrap::before {

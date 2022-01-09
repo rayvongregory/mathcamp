@@ -1,4 +1,4 @@
-let resourceId
+let resourceId, observer
 const editor = document.querySelector(".editor")
 const outer = document.querySelector(".outer")
 const codeWrapper = document.querySelector(".code-wrapper")
@@ -20,76 +20,24 @@ const dragbar = document.getElementById("dragbar")
 const shield = document.getElementById("shield")
 let dragging = false
 
-let lastSave = {
-  title: "",
-  subject: "no_choice",
-  chapter: "no_choice",
-  section: "no_choice",
-  tags: [],
-  html: "",
-  css: "",
-  js: "",
-}
-let currentDoc = {
-  title: "",
-  subject: "no_choice",
-  chapter: "no_choice",
-  section: "no_choice",
-  tags: [],
-  html: "",
-  css: "",
-  js: "",
-}
-
-const sameText = (e = null) => {
-  currentDoc.title = titleInput.value.trim()
-  currentDoc.subject = subject
-  currentDoc.chapter = chapter
-  currentDoc.section = section
-  currentDoc.tags = inputValues.slice()
-  currentDoc.html = htmlCode.getValue()
-  currentDoc.css = cssCode.getValue()
-  currentDoc.js = jsCode.getValue()
-
-  if (e && !isEqual(currentDoc, lastSave)) {
-    e.preventDefault()
-    e.returnValue = ""
-  } else if (!isEqual(currentDoc, lastSave)) {
-    return false
-  } else {
-    return true
-  }
-}
-
 const saveText = async (status) => {
   document.activeElement.blur()
-  if (sameText() && status === "draft") {
+  if (!canSave && status === "draft") {
     return giveFeedback("No changes were made since the last save.", "not_met")
   }
-  lastSave = {
+  let currentDoc = {
     title: titleInput.value.trim(),
-    subject,
-    chapter,
-    section,
-    tags: inputValues.slice(),
+    subject: subjectSelect.value,
+    chapter: chapterSelect.value,
+    section: sectionSelect.value,
+    tags: tags.slice(),
     html: htmlCode.getValue(),
     css: cssCode.getValue(),
     js: jsCode.getValue(),
   }
-  currentDoc = { ...lastSave }
   if (resourceId) {
     try {
-      await axios.patch(`/api/v1/lessons/id/${resourceId}`, {
-        title: titleInput.value.trim(),
-        subject,
-        status,
-        chapter,
-        section,
-        tags: inputValues,
-        html: htmlCode.getValue(),
-        css: cssCode.getValue(),
-        js: jsCode.getValue(),
-      })
+      await axios.patch(`/api/v1/lessons/id/${resourceId}`, currentDoc)
       if (status === "draft") {
         giveFeedback("Save successful", "satisfied")
       } else {
@@ -103,17 +51,7 @@ const saveText = async (status) => {
     try {
       const {
         data: { id },
-      } = await axios.post(`/api/v1/lessons`, {
-        title: titleInput.value.trim(),
-        subject,
-        status,
-        chapter,
-        section,
-        tags: inputValues,
-        html: htmlCode.getValue(),
-        css: cssCode.getValue(),
-        js: jsCode.getValue(),
-      })
+      } = await axios.post(`/api/v1/lessons`, currentDoc)
       if (status === "draft") {
         window.location.href = `/drafts/lesson/${id}`
       } else {
@@ -124,6 +62,8 @@ const saveText = async (status) => {
       console.log(err)
     }
   }
+  allowSave(false)
+  turnOnObserver()
 }
 
 const publishText = (e) => {
@@ -132,19 +72,19 @@ const publishText = (e) => {
     titleInput.value = ""
     return giveFeedback("Create a title to save this lesson.", "not_met")
   }
-  if (inputValues.length === 0) {
+  if (tags.length === 0) {
     return giveFeedback(
       "Create at least one tag to publish this lesson.",
       "not_met"
     )
   }
-  if (subject === "no_choice") {
+  if (subject === "0") {
     return giveFeedback("Choose a subject to publish this lesson.", "not_met")
   }
-  if (chapter === "no_choice") {
+  if (chapter === "0") {
     return giveFeedback("Pick a chapter to publish this lesson.", "not_met")
   }
-  if (section === "no_choice") {
+  if (section === "0") {
     return giveFeedback("Pick a section to publish this lesson.", "not_met")
   }
   saveText("published")
@@ -165,34 +105,23 @@ const getInfo = async (id) => {
       data: { title, subject, chapter, section, tags, html, css, js },
     } = await axios.get(`/api/v1/lessons/id/${id}`)
     titleInput.value = title
-    titleInput.dispatchEvent(new KeyboardEvent("keyup"))
+    titleInput.dispatchEvent(new Event("input"))
     htmlCode.getDoc().setValue(html)
     cssCode.getDoc().setValue(css)
     jsCode.getDoc().setValue(js)
     subjectSelect.value = subject
-    subjectSelect.dispatchEvent(new Event("pointerup"))
-    if (chapter !== "no_choice") {
+    subjectSelect.dispatchEvent(new Event("input"))
+    if (chapter !== "0") {
       chapterSelect.value = chapter
-      chapterSelect.dispatchEvent(new Event("click"))
+      chapterSelect.dispatchEvent(new Event("input"))
     }
-    if (section !== "no_choice") {
+    if (section !== "0") {
       sectionSelect.value = section
-      sectionSelect.dispatchEvent(new Event("click"))
+      sectionSelect.dispatchEvent(new Event("input"))
     }
-    lastSave = {
-      title,
-      subject,
-      chapter,
-      section,
-      tags: tags.slice(),
-      html,
-      css,
-      js,
-    }
-    currentDoc = { ...lastSave }
     addTags(tags)
   } catch (err) {
-    console.error(err)
+    console.log(err)
   }
 }
 const dragStart = (e) => {
@@ -225,6 +154,17 @@ const dragEnd = (e) => {
   }
 }
 
+const turnOnObserver = () => {
+  observer = new MutationObserver((m) => {
+    allowSave(true)
+    observer.disconnect()
+  })
+  let config = { childList: true, subtree: true }
+  document.querySelectorAll(".CodeMirror").forEach((cm) => {
+    observer.observe(cm, config)
+  })
+}
+
 const init = async () => {
   htmlCode = CodeMirror(htmlEditor, {
     mode: "xml",
@@ -244,6 +184,7 @@ const init = async () => {
     indentWithTabs: true,
     tabSize: 4,
   })
+  turnOnObserver()
   updateBtn.addEventListener("pointerup", () => {
     document.activeElement.blur()
     let iframe = outer.querySelector("iframe")
@@ -268,6 +209,8 @@ const init = async () => {
     resourceId = path.split("/")[3]
     await getInfo(resourceId)
     updateBtn.dispatchEvent(new Event("pointerup"))
+    allowSave(false)
+    turnOnObserver()
   }
   cssEditor.classList.add("hide")
   jsEditor.classList.add("hide")
@@ -363,7 +306,9 @@ document.addEventListener("keydown", (e) => {
     e.preventDefault()
     e.stopPropagation()
     updateBtn.dispatchEvent(new Event("pointerup"))
-    if (!sameText()) draftBtn.dispatchEvent(new Event("pointerup"))
+    if (canSave) {
+      draftBtn.dispatchEvent(new Event("pointerup"))
+    }
   }
 })
 
@@ -371,10 +316,17 @@ document.addEventListener("keyup", (e) => {
   if (e.key === "Control") downedKeys = []
 })
 
+const unsavedChanges = (e) => {
+  if (canSave) {
+    e.preventDefault()
+    e.returnValue = ""
+  }
+}
+
 window.addEventListener("load", init)
 dragbar.addEventListener("pointerdown", dragStart)
 window.addEventListener("pointermove", drag)
 window.addEventListener("pointerup", dragEnd)
-window.addEventListener("beforeunload", sameText)
+window.addEventListener("beforeunload", unsavedChanges)
 draftBtn.addEventListener("pointerup", draftText)
 publishBtn.addEventListener("pointerup", publishText)

@@ -1,4 +1,3 @@
-// I think this is done... 11/8/2021 @ 4:38PM
 const toolbars = document.querySelectorAll(".toolbar")
 const toolbars_0 = toolbars[0]
 const difficultySelect = document.getElementById("choose_difficulty")
@@ -73,6 +72,19 @@ const uniqueQ = (text) => {
 
 const createQItem = () => {
   let questionItem = document.createElement("li")
+  let qiFront = document.createElement("div")
+  let qiBack = document.createElement("div")
+  let backBtn = document.createElement("button")
+  let input = document.createElement("input")
+  let confBtn = document.createElement("button")
+  qiFront.setAttribute("class", "piFront")
+  qiBack.setAttribute("class", "piBack")
+  backBtn.setAttribute("name", "back")
+  input.setAttribute("placeholder", 'Type "yes"')
+  confBtn.setAttribute("name", "confirm")
+  backBtn.innerHTML = '<i class="fas fa-chevron-right"></i>'
+  setAria(backBtn, "Cancel")
+  confBtn.innerText = "Confirm"
   let p = document.createElement("p")
   p.innerText = "Question"
   let edit = document.createElement("button")
@@ -81,11 +93,20 @@ const createQItem = () => {
   edit.addEventListener("pointerup", editQ)
   let del = document.createElement("button")
   setAria(del, "Delete question")
+  del.setAttribute("name", "del")
   del.innerHTML = '<i class="fas fa-trash"></i>'
   del.addEventListener("pointerup", deleteQ)
-  questionItem.appendChild(p)
-  questionItem.appendChild(edit)
-  questionItem.appendChild(del)
+  backBtn.addEventListener("pointerup", deleteQ)
+  confBtn.addEventListener("pointerup", deleteQ)
+  input.addEventListener("keyup", deleteQ)
+  qiFront.appendChild(p)
+  qiFront.appendChild(edit)
+  qiFront.appendChild(del)
+  qiBack.appendChild(backBtn)
+  qiBack.appendChild(input)
+  qiBack.appendChild(confBtn)
+  questionItem.appendChild(qiFront)
+  questionItem.appendChild(qiBack)
   questionSection.appendChild(questionItem)
 }
 
@@ -134,11 +155,12 @@ const checkForDiff = (e) => {
 const editQ = (e) => {
   document.activeElement.blur()
   let { target } = e
-  let li = target.parentElement
+  let { parentElement: li } = target.parentElement
   if (addAllBtn.dataset.refId) {
     addQBtn.dataset.refId = addAllBtn.dataset.refId
     addQBtn.dataset.refDiff = addAllBtn.dataset.refDiff
-    //why copy these refs over if they're already in the other btns?
+    // why copy these refs over if they're already in the other btns?
+    // good question 1/8/2022
   }
   let p = li.querySelector("p")
   if (li.classList.contains("editing")) {
@@ -183,8 +205,44 @@ const discardQ = (e) => {
   }
 }
 
-const deleteQ = () => {
-  document.activeElement.blur()
+const deleteQ = (e) => {
+  const { target } = e
+  const { name } = target
+  const { parentElement: li } = target.parentElement
+  const back = li.lastChild
+  switch (name) {
+    case "del":
+      const i = back.querySelector("input")
+      back.classList.add("grow")
+      setTimeout(() => {
+        i.focus()
+      }, 200)
+      break
+    case "back":
+      back.classList.remove("grow")
+      document.activeElement.blur()
+      break
+    case "confirm":
+      const input = back.querySelector("input")
+      if (input.value === "yes") {
+        deleteQItem()
+      } else {
+        input.classList.add("flash")
+        setTimeout(() => {
+          input.classList.remove("flash")
+          input.focus()
+        }, 600)
+      }
+      document.activeElement.blur()
+      break
+    default:
+      if (e.type === "keyup" && e.code === "Enter")
+        target.nextElementSibling.dispatchEvent(new Event("pointerup"))
+      break
+  }
+}
+
+const deleteQItem = () => {
   let li = questionSection.querySelector("li")
   if (li) li.remove()
   question = ""
