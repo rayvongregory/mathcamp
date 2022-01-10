@@ -46,7 +46,7 @@ const removeEmptyDivs = (codeBlock) => {
   let breaks = codeBlock.querySelectorAll("div > br")
   breaks.forEach((b) => {
     const { parentElement } = b
-    if (parentElement.childElementCount === parentElement.childNodes.length) {
+    if (parentElement.childElementCount === 1) {
       parentElement.remove()
     } else {
       b.remove()
@@ -225,7 +225,7 @@ const addMathType = () => {
 const saveExercise = async (status) => {
   document.activeElement.blur()
   if (resourceId) {
-    if (!canSave) {
+    if (!canSave && status === "draft") {
       giveFeedback("No changes were made since the last save.", "not_met")
       return
     }
@@ -240,7 +240,11 @@ const saveExercise = async (status) => {
         usedPIDs,
         status,
       })
-      giveFeedback("Save successful", "satisfied")
+      if (status === "draft") {
+        giveFeedback("Save successful", "satisfied")
+      } else {
+        giveFeedback("This exercise has been published", "satisfied")
+      }
     } catch (err) {
       giveFeedback("An exercise with that title already exists.", "not_met")
       console.error(err)

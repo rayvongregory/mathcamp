@@ -15,10 +15,10 @@ const hardProblemsSection = document.getElementById("hard_problems")
 const advancedProblemsSection = document.getElementById("advanced_problems")
 const noDiffProblemsSection = document.getElementById("no_difficulty_problems")
 const noProblemsYet = document.getElementById("no_problems_yet")
-const tenEZ = document.getElementById("ten_easy")
-const tenStnd = document.getElementById("ten_standard")
-const tenHard = document.getElementById("ten_hard")
-const tenAdv = document.getElementById("ten_advanced")
+const fiveEZ = document.getElementById("five_easy")
+const fiveStnd = document.getElementById("five_standard")
+const fiveHard = document.getElementById("five_hard")
+const fiveAdv = document.getElementById("five_advanced")
 const allMeetReqs = document.getElementById("all_meet_reqs")
 const publishQuestionReqs = document.querySelector(".to_publish_reqs.q")
 const overlay = document.querySelector(".overlay")
@@ -48,32 +48,32 @@ const toggleList = (e) => {
   }
 }
 
-const checkForTen = (diff) => {
+const checkForFiveQs = (diff) => {
   let item
   switch (diff) {
     case "easy":
-      item = tenEZ
+      item = fiveEZ
       break
     case "standard":
-      item = tenStnd
+      item = fiveStnd
       break
     case "hard":
-      item = tenHard
+      item = fiveHard
       break
     case "advanced":
-      item = tenAdv
+      item = fiveAdv
       break
     default:
       break
   }
 
   if (
-    Object.keys(problems[diff]).length >= 10 &&
+    Object.keys(problems[diff]).length >= 5 &&
     item.classList.contains("not_met")
   ) {
     checkList(item, "check")
   } else if (
-    Object.keys(problems[diff]).length < 10 &&
+    Object.keys(problems[diff]).length < 5 &&
     item.classList.contains("satisfied")
   ) {
     checkList(item, "uncheck")
@@ -199,22 +199,22 @@ const appendThisToThat = (el, diff) => {
     case "easy":
       easyProblemsSection.appendChild(el)
       unhideSection(easyProblemsSection)
-      checkForTen(diff)
+      checkForFiveQs(diff)
       break
     case "standard":
       standardProblemsSection.appendChild(el)
       unhideSection(standardProblemsSection)
-      checkForTen(diff)
+      checkForFiveQs(diff)
       break
     case "hard":
       hardProblemsSection.appendChild(el)
       unhideSection(hardProblemsSection)
-      checkForTen(diff)
+      checkForFiveQs(diff)
       break
     case "advanced":
       advancedProblemsSection.appendChild(el)
       unhideSection(advancedProblemsSection)
-      checkForTen(diff)
+      checkForFiveQs(diff)
       break
     default:
       noDiffProblemsSection.appendChild(el)
@@ -414,19 +414,19 @@ const addAllProblems = () => {
   for (let p in easy) {
     createProblemItem("easy", p.substring(3), easy[p].satisfied)
   }
-  checkForTen("easy")
+  checkForFiveQs("easy")
   for (let p in standard) {
     createProblemItem("standard", p.substring(3), standard[p].satisfied)
   }
-  checkForTen("standard")
+  checkForFiveQs("standard")
   for (let p in hard) {
     createProblemItem("hard", p.substring(3), hard[p].satisfied)
   }
-  checkForTen("hard")
+  checkForFiveQs("hard")
   for (let p in advanced) {
     createProblemItem("advanced", p.substring(3), advanced[p].satisfied)
   }
-  checkForTen("advanced")
+  checkForFiveQs("advanced")
   for (let p in no_choice) {
     createProblemItem("no_choice", p.substring(3), no_choice[p].satisfied)
   }
@@ -606,7 +606,7 @@ const delProblem = (e) => {
         usedPIDs.splice(usedPIDs.indexOf(pid), 1)
         deleteProblemItem(problemItem)
         if (diff !== "no_choice") {
-          checkForTen(diff)
+          checkForFiveQs(diff)
         }
         checkAllMeet()
         allowSave(true)

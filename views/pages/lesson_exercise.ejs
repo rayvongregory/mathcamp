@@ -4,11 +4,17 @@
     <%- include('../partials/head'); %>
     <link rel="stylesheet" href="/styles/secondary.css" />
     <link rel="stylesheet" href="/styles/resource.css" />
+    <% if(title === "Practice") { %>
+    <link rel="stylesheet" href="/styles/practice.css" />
+    <% } %>
   </head>
   <body>
     <%- include('../partials/aside'); %> <%- include('../partials/nav'); %> <%-
     include('../partials/banner'); %>
-    <div id="resource"></div>
+    <div id="resource">
+      <% if(title === "Practice") { %> <%- include('../partials/practice-zone');
+      %> <% } %>
+    </div>
     <%- include('../partials/footer'); %> <%-
     include('../partials/universal_scripts'); %> <% if(title === "Learn") { %>
     <script src="/scripts/lesson.js"></script>

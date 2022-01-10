@@ -114,7 +114,6 @@ const addChoice = (e) => {
       if (choiceItem) {
         let p = choiceItem.querySelector("p")
         let editBtn = choiceItem.querySelector("button")
-        removeEmptyDivs(cTA)
         choices[`cid${cid}`] = cTA.innerHTML
         choiceItem.classList.remove("editing")
         p.innerText = `CID: ${cid}`
