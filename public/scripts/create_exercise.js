@@ -197,21 +197,9 @@ const paste = (e) => {
 }
 
 const addMathType = () => {
-  const qmt = new WirisPlugin.GenericIntegration({
-    target: qTA,
-    toolbar: document.getElementById("toolbar-q"),
-  })
-  const amt = new WirisPlugin.GenericIntegration({
-    target: aTA,
-    toolbar: document.getElementById("toolbar-a"),
-  })
-  const cmt = new WirisPlugin.GenericIntegration({
-    target: cTA,
-    toolbar: document.getElementById("toolbar-c"),
-  })
-  qmt.init()
-  amt.init()
-  cmt.init()
+  window.wrs_int_init(qTA, document.getElementById("toolbar-q"))
+  window.wrs_int_init(aTA, document.getElementById("toolbar-a"))
+  window.wrs_int_init(cTA, document.getElementById("toolbar-c"))
   document.getElementById("chemistryIcon").remove()
   document.getElementById("chemistryIcon").remove()
   document.getElementById("chemistryIcon").remove()

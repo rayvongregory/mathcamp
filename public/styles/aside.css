@@ -144,7 +144,6 @@ aside a:active, #logout:active {
     flex-shrink: 0;
     background-color: white;
     border-radius: 5px;
-    box-shadow: var(--darkerBoxShadow);
     transition: var(--transition);
     pointer-events: none;
 }

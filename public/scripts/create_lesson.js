@@ -18,7 +18,18 @@ const addSnipBtns = document.querySelectorAll(
 )
 const dragbar = document.getElementById("dragbar")
 const shield = document.getElementById("shield")
-let dragging = false
+let dragging = false,
+  subs = {
+    seven: "Grade 7",
+    eight: "Grade 8",
+    alg: "Algebra",
+    geo: "Geometry",
+    p_s: "Probability & Statistics",
+    alg2: "Algebra 2",
+    pc: "Precalculus",
+    calc: "Calculus",
+    calc2: "Calculus 2",
+  }
 
 const saveText = async (status) => {
   document.activeElement.blur()
@@ -195,8 +206,31 @@ const init = async () => {
     iframe.setAttribute("id", "preview")
     outer.insertAdjacentElement("beforeend", iframe)
     let h = '<script src="/mathjax/es5/tex-chtml.js"' + "></script>"
-    h += htmlCode.getValue()
-    let c = `<style> body {padding: 1rem;} ${cssCode.getValue()} </style>`
+    h +=
+      `<section class="title"> <h3>${titleInput.value.trim()}</h3><p>${
+        subs[subjectSelect.value]
+      } &#8226; Chapter ${chapterSelect.value} &#8226; Section ${
+        sectionSelect.value
+      }</p></section>` + htmlCode.getValue()
+    let c = `<style> ${cssCode.getValue()} 
+    body {padding: 1rem;}  .title {
+      position: relative;
+      margin-bottom: 50px;
+      width: fit-content;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        color: var(--neutralDark);
+    } .title::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--neutralMid);
+    } .title h3 {
+      margin-bottom: 8px;
+      font-size: 28pt;
+  } </style>`
     let j = "<scr" + "ipt>" + jsCode.getValue() + "</scr" + "ipt>"
     let p = iframe.contentDocument
     p.open()

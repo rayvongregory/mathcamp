@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Teko:wght@600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Aleo:wght@400;700&display=swap');
 
+:root {
+    --darkerBoxShadow: 0 2px 2px 0 rgba(0, 0, 0, 0.5);
+} 
+
 html {
     scroll-behavior: smooth;
 }

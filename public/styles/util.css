@@ -27,7 +27,6 @@
     --deepRed: #ba372a;
     --brightOrange: #e55832;
     --boxShadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.15);
-    --darkerBoxShadow: 0 2px 2px 0 rgba(0, 0, 0, 0.5);
     --border: 1px solid #d9d9d9;
 }
 
@@ -71,11 +70,7 @@ i {
     }
 }
 
-@media (min-width: 576px) {
-    .msg {
-        font-size: 1.125rem;
-    }
-}
+@media (min-width: 576px) { }
 
 @media (min-width: 768px)  { }
 

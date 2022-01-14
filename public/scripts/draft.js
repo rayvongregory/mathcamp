@@ -147,7 +147,7 @@ const deleteDraft = async (e) => {
       })
       setTimeout(() => {
         parentElement.nextElementSibling.querySelector("input").focus()
-      }, 200)
+      }, 450)
       break
     case "back":
       parentElement.previousElementSibling.scrollIntoView({

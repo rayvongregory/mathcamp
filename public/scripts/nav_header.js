@@ -25,6 +25,7 @@ const accountBtn = asideLinks.querySelector("[href='/account']")
 const createLessonBtn = asideLinks.querySelector("[href='/create/lesson']")
 const createExerciseBtn = asideLinks.querySelector("[href='/create/exercise']")
 const draftsBtn = asideLinks.querySelector("[href='/drafts']")
+const helpBtn = nav.querySelector("[href='/help']")
 const logoutBtn = document.getElementById("logout")
 let root = document.documentElement.style
 let role = "user"
@@ -65,6 +66,7 @@ const getDisplayName = async () => {
         createLessonBtn.classList.remove("hide")
         createExerciseBtn.classList.remove("hide")
         draftsBtn.classList.remove("hide")
+        helpBtn.setAttribute("href", "/help/admin")
       }
     } catch (error) {
       console.log(error)
@@ -274,6 +276,7 @@ const checkWindowSize = () => {
         navSearchContainer.remove()
         nav.insertAdjacentElement("afterend", navSearchContainer)
       }
+      aside.style.height = `${body.scrollHeight}px`
       break
     case "small":
       navSearch.innerHTML = '<i class="fas fa-search"></i>Search'
@@ -302,6 +305,7 @@ const checkWindowSize = () => {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
       }
+      aside.style.height = `${body.scrollHeight}px`
       break
     case "medium":
       navSearch.innerHTML = '<i class="fas fa-search"></i>'
@@ -321,6 +325,7 @@ const checkWindowSize = () => {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
       }
+      aside.style.height = `${body.scrollHeight}px`
       break
     case "big":
       navSearch.innerHTML = '<i class="fas fa-search"></i>'
@@ -347,6 +352,7 @@ const checkWindowSize = () => {
         aside.remove()
         nav.insertAdjacentElement("beforebegin", aside)
       }
+      aside.style.height = `${body.scrollHeight}px`
       break
     case "large":
       if (navSearchContainer.classList.contains("hide")) {

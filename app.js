@@ -7,7 +7,7 @@ const learnRouter = require("./routes/resource")
 const practiceRouter = require("./routes/resource")
 const exercisesRouter = require("./routes/exercise")
 const draftsRouter = require("./routes/drafts")
-const helpRouter = require("./routes/help")
+const commentRouter = require("./routes/comment")
 const searchRouter = require("./routes/search")
 const authRouter = require("./routes/auth")
 const usersRouter = require("./routes/users")
@@ -29,7 +29,7 @@ app.set("view engine", "ejs")
 app.use("/api/v1/lessons", lessonsRouter) //protect this route
 app.use("/api/v1/exercises", exercisesRouter) //protect this route
 app.use("/api/v1/drafts", draftsRouter) //protect this route
-app.use("/api/v1/help", helpRouter)
+app.use("/api/v1/comment", commentRouter)
 app.use("/api/v1/search", searchRouter)
 app.use("/api/v1/token", tokenRouter)
 app.use("/api/v1/auth", authRouter) //register, login, logout
@@ -48,6 +48,13 @@ app.use("/account", (req, res, next) => {
   res.render("pages/auth", {
     title: "Account",
     bannerTitle: "Account",
+  })
+})
+
+app.use("/help/admin", (req, res, next) => {
+  res.render("pages/help-admin", {
+    title: "Help",
+    bannerTitle: "Help",
   })
 })
 
