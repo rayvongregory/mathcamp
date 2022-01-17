@@ -143,9 +143,11 @@ const pick4 = (list) => {
   picked4.push(["answer", list.answer])
   let mangledList = { ...list }
   delete mangledList.answer
-  mangledList = shuffle(Object.keys(mangledList))
+  let keys = Object.entries(mangledList)
+  mangledList = shuffle([keys])
+  mangledList = mangledList.flat()
   for (let i = 0; i < 3; i++) {
-    let key = mangledList.shift()
+    let key = mangledList[i][0]
     picked4.push([key, list[key]])
   }
   picked4 = shuffle([picked4])
