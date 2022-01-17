@@ -38,11 +38,6 @@ const commentSchema = new Schema(
         },
       },
     ],
-    status: {
-      type: String,
-      enum: ["new", "read", "replied"],
-      default: "new",
-    },
   },
   { timestamps: true }
 )

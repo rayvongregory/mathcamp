@@ -129,7 +129,7 @@ const registerUser = async (req, res) => {
     from: '"Math Camp" <support@mathcamp.com>',
     to: user.email,
     subject: "Welcome to Math Camp",
-    text: `Hi, ${name}!\n\n\rClick the link below to complete registration.\n\r${url}`,
+    text: `Hi, ${name}!\n\n\rUse the link below to complete registration.\n\r${url}`,
     html: data,
   })
   res.status(StatusCodes.OK).json({ name })

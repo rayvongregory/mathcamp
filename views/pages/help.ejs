@@ -4,6 +4,7 @@
     <%- include('../partials/head'); %> <%- include('../partials/help_tinymce');
     %>
     <link rel="stylesheet" href="/styles/secondary.css" />
+    <link rel="stylesheet" href="/styles/help_uni.css" />
     <link rel="stylesheet" href="/styles/help.css" />
   </head>
   <body>
@@ -11,8 +12,9 @@
     include('../partials/banner'); %>
     <div class="msg"><%=msg%></div>
     <%- include('../partials/message_board'); %> <%-
-    include('../partials/footer'); %>
+    include('../partials/footer'); %> <%-
+    include('../partials/universal_scripts'); %>
+    <script src="/scripts/help_uni.js"></script>
     <script src="/scripts/help.js"></script>
-    <%- include('../partials/universal_scripts'); %>
   </body>
 </html>

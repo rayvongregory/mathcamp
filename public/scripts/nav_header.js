@@ -27,13 +27,13 @@ const createExerciseBtn = asideLinks.querySelector("[href='/create/exercise']")
 const draftsBtn = asideLinks.querySelector("[href='/drafts']")
 const helpBtn = nav.querySelector("[href='/help']")
 const logoutBtn = document.getElementById("logout")
-let root = document.documentElement.style
-let role = "user"
-let menuOpen = false
-const token = localStorage.getItem("token")
-let justLoaded = true
-let breakpoints = { tiny: 320, small: 576, medium: 768, big: 992, large: 1200 }
-let lastWindowSize = 1,
+let root = document.documentElement.style,
+  role = "user",
+  menuOpen = false,
+  token = localStorage.getItem("token"),
+  justLoaded = true,
+  breakpoints = { tiny: 320, small: 576, medium: 768, big: 992, large: 1200 },
+  lastWindowSize = 1,
   currentWindowSize = 1,
   speed = 0,
   particleMod = 0

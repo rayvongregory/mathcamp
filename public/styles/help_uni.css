@@ -1,0 +1,165 @@
+.front {
+    padding: 10px 15px;
+}
+.front, 
+.back {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.front .larger {
+    padding: 10px;
+}
+.larger {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.smaller {
+    font-size: 12px;
+    width: fit-content;
+    pointer-events: none;
+}
+
+.front .sub {
+    margin: 10px;
+    padding-right: 8px;
+}
+
+.sub {
+    width: 100%;
+    font-size: 15px;
+    font-family: "Segoe UI";
+}
+
+.front .flex {
+    display: flex;
+    justify-content: end;
+    margin: 30px 10px 5px;
+    gap: 1rem;
+}
+
+.back {
+    padding: 20px 25px;
+    justify-content: space-between;
+}
+
+.back textarea {
+    width: 100%;
+    padding: 7px;
+    resize: none;
+    border-radius: 3px;
+    border: 1px solid var(--neutralMid);
+    font-size: 14px;
+    font-family: "Segoe UI";
+    outline: none;
+}
+
+.back .flex {
+    margin: 10px 5px 0;
+    display: flex;
+}
+
+.back .flex button:first-of-type {
+    margin-right: auto;
+}
+
+.back .flex[name="denied"] {
+    position: relative;
+}
+
+.back .flex[name="denied"]::after {
+    content: "Cannot send an empty message";
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--deepRed);
+    font-size: 14px;
+    width: fit-content;
+    white-space: nowrap;
+}
+
+button[name="yes"] {
+    margin-left: 12px;
+}
+
+button[name="no"]::after {
+    content: "Are you sure?";
+    position: absolute;
+    top: -21px;
+    right: -14.5px;
+    width: fit-content;
+    color: var(--deepRed);
+    white-space: nowrap;
+}
+
+button[name="no"] {
+position: relative;
+}
+
+.replies {
+    position: relative;
+    top: -10px;
+    padding-bottom: 3px;
+}
+
+.reply {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: calc(100% - 1rem);
+	max-width: 576px;
+	margin: auto 0 0 1rem;
+	border-radius: 5px;
+	border: var(--border);
+	background-color: var(--neutralLight);
+	box-shadow: var(--boxShadow);
+    opacity: 1;
+}
+
+.reply.smaller {
+    height: unset;
+    max-height: unset;
+    padding-bottom: 10px;
+}
+
+.reply + .reply {
+    margin-top: 5px;
+}
+
+.reply .larger {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.reply .flex {
+    display: flex;
+    gap: 1rem;
+}
+
+p[contenteditable] {
+    display: inline-block;
+    border: 1px solid #8f8f9d;
+}
+
+p[contenteditable].sub {
+    margin: 0;
+}
+
+.reply p.sub {
+    height: 40px;
+}
+
+.reply p[contenteditable].sub {
+    padding: 0;
+    margin: 0 15px 0 10px;
+    width: calc(100% - 20px);
+    overflow-y: scroll;
+    scrollbar-width: thin
+}

@@ -1,6 +1,7 @@
 require("dotenv").config()
 const jwt = require("jsonwebtoken")
 const User = require("../models/User")
+const Comment = require("../models/Comment")
 const { StatusCodes } = require("http-status-codes")
 
 const getAllUsers = async (req, res) => {
@@ -81,7 +82,6 @@ const deleteUser = async (req, res) => {
   //when user decides to delete their account
   const { token } = req.params
   const { pwd } = req.body
-  console.log(req.body)
   let email = jwt.decode(token).email //! decode does not verify, nor does it require the secret string
   const user = await User.findOne({ email })
   if (!user) {
@@ -92,6 +92,10 @@ const deleteUser = async (req, res) => {
     if (match) {
       let a = await User.findOneAndDelete({ email })
       user.removeRefreshToken()
+      let comments = await Comment.find({ sender: user.id })
+      comments.forEach(async (c) => {
+        await Comment.findOneAndDelete({ id: c.id })
+      })
       return res.status(StatusCodes.OK).json({
         success: true,
         a,

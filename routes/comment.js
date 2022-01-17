@@ -2,19 +2,19 @@ const express = require("express")
 const router = express.Router()
 const {
   getUserComments,
-  getUserComment,
   postComment,
   editComment,
   deleteComment,
   reply,
   editReply,
   deleteReply,
-  getAllComments_admin,
+  getComment_admin,
 } = require("../controllers/comment")
 
-router.route("/").post(postComment).patch(editComment).delete(deleteComment)
-router.route("/:id").patch(reply)
+router.route("/").post(postComment).patch(editComment)
+router.route("/:id").patch(reply).delete(deleteComment)
+router.route("/:id/reply/:num").patch(editReply).delete(deleteReply)
 router.route("/:token").get(getUserComments)
-router.route("/admin").get(getAllComments_admin)
+router.route("/admin/:id").get(getComment_admin)
 
 module.exports = router

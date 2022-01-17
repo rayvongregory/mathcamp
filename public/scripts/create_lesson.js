@@ -167,8 +167,10 @@ const dragEnd = (e) => {
 
 const turnOnObserver = () => {
   observer = new MutationObserver((m) => {
-    allowSave(true)
-    observer.disconnect()
+    if (!m[0].target.classList.contains("CodeMirror-cursors")) {
+      allowSave(true)
+      observer.disconnect()
+    }
   })
   let config = { childList: true, subtree: true }
   document.querySelectorAll(".CodeMirror").forEach((cm) => {

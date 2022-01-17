@@ -32,7 +32,6 @@
         width: fit-content;
         font-size: clamp(18px, 5.2vw, 24px);
         color: #494a4b;
-        text-transform: capitalize;
       }
       p {
         font-size: clamp(14px, 3.5vw, 16px);
@@ -56,9 +55,9 @@
   <body>
     <h1>Math Camp</h1>
     <div>
-      <h3>Hi, <%=name%>!</h3>
-      <p>Click the button below to complete registration.</p>
-      <a href="<%=url%>">Verify</a>
+      <h3><%=name%> just <%=action%>!</h3>
+      <p>Click the button below to see what they said.</p>
+      <a href="<%=url%>">See comment</a>
     </div>
   </body>
 </html>

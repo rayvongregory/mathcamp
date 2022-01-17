@@ -1,18 +1,12 @@
 const noAccess = document.getElementById("no-access")
 const access = document.getElementById("access")
-const commentsSection = document.getElementById("comments")
+const commentsSection = document.getElementById("comment")
 const newMsgBtn = document.getElementById("new-msg-btn")
 const newMsg = document.getElementById("new-msg")
 const submitQBtn = document.getElementById("submit-q")
 const questionInput = document.getElementById("question")
 const detailsTextarea = document.getElementById("details")
 let displayName
-
-//util
-const setAria = (el, string) => {
-  el.setAttribute("aria-label", string)
-  el.setAttribute("title", string)
-}
 
 const allowSubmit = (e) => {
   let { value } = e.target
@@ -41,6 +35,7 @@ const getRole = async () => {
     noAccess.remove()
     addListeners()
     getComments()
+    newMsgBtn.classList.add("reveal")
   } else {
     noAccess.classList.add("reveal")
     access.remove()
@@ -76,7 +71,7 @@ const addComments = (list) => {
       replies: { length },
       _id: liId,
     } = item
-    const li = document.createElement("li")
+    const div = document.createElement("div")
     const title = document.createElement("p")
     const sub = document.createElement("p")
     const flexContainer_f = document.createElement("div")
@@ -97,7 +92,7 @@ const addComments = (list) => {
     delBtn.addEventListener("pointerup", deleteComment)
     setAria(replyBtn, "Reply")
     let numReplies = document.createElement("button")
-    li.setAttribute("data-id", liId)
+    div.setAttribute("data-id", liId)
     title.setAttribute("class", "larger")
     sub.setAttribute("class", "sub")
     numReplies.setAttribute("class", "smaller")
@@ -139,23 +134,23 @@ const addComments = (list) => {
     flexContainer_b.appendChild(backBtn)
     flexContainer_b.appendChild(submitBtn)
     back.appendChild(flexContainer_b)
-    li.appendChild(front)
-    li.appendChild(back)
+    div.appendChild(front)
+    div.appendChild(back)
     if (list.length === 1) {
-      commentsSection.insertAdjacentElement("afterbegin", li)
+      commentsSection.insertAdjacentElement("afterbegin", div)
     } else {
-      commentsSection.appendChild(li)
+      commentsSection.appendChild(div)
     }
     if (replies.length > 0) {
       replies.forEach((r) => {
-        const { sender, reply, _id: replyId } = r
-        addReply(sender, reply, replyId, liId)
+        const { sender, reply } = r
+        addReply(sender, reply, liId)
       })
     }
   })
 }
 
-const addReply = (sender, reply, replyId, liId) => {
+const addReply = (sender, reply, liId) => {
   let repliesDiv = document.querySelector(`[data-id="${liId}"] + .replies`)
   let comment = document.querySelector(`[data-id="${liId}"]`)
   if (!repliesDiv) {
@@ -165,32 +160,38 @@ const addReply = (sender, reply, replyId, liId) => {
   }
   let replyDiv = document.createElement("div")
   replyDiv.setAttribute("class", "reply")
-  replyDiv.setAttribute("data-id", replyId)
-  const flexContainer = document.createElement("div")
-  flexContainer.setAttribute("class", "flex")
-  const editBtn = document.createElement("button")
-  editBtn.textContent = "Edit"
-  editBtn.setAttribute("name", "edit")
-  editBtn.addEventListener("pointerup", editReply)
-  const delBtn = document.createElement("button")
-  delBtn.textContent = "Delete"
-  delBtn.setAttribute("name", "del")
-  delBtn.addEventListener("pointerup", deleteReply)
-  let replier = document.createElement("p")
+  replyDiv.setAttribute("data-reply-number", repliesDiv.childElementCount)
+  let flexContainer,
+    editBtn,
+    delBtn,
+    replier = document.createElement("p")
   replier.setAttribute("class", "larger")
   if (sender === "user") {
     replier.textContent = displayName
+    flexContainer = document.createElement("div")
+    flexContainer.setAttribute("class", "flex")
+    editBtn = document.createElement("button")
+    editBtn.textContent = "Edit"
+    editBtn.setAttribute("name", "edit")
+    editBtn.addEventListener("pointerup", editReply)
+    delBtn = document.createElement("button")
+    delBtn.textContent = "Delete"
+    delBtn.setAttribute("name", "del")
+    delBtn.addEventListener("pointerup", deleteReply)
   } else {
-    replier.textContent = sender
+    replier.textContent = `${sender}@MC`
+    replyDiv.classList.add("smaller")
   }
   let msg = document.createElement("p")
   msg.setAttribute("class", "sub")
   msg.textContent = reply
-  flexContainer.appendChild(replier)
-  flexContainer.appendChild(editBtn)
-  flexContainer.appendChild(delBtn)
-  replyDiv.appendChild(flexContainer)
+  replyDiv.appendChild(replier)
   replyDiv.appendChild(msg)
+  if (flexContainer) {
+    flexContainer.appendChild(editBtn)
+    flexContainer.appendChild(delBtn)
+    replyDiv.appendChild(flexContainer)
+  }
   repliesDiv.appendChild(replyDiv)
   let numReplies = repliesDiv.childElementCount
   let numRepliesBtn = comment.querySelector("button.smaller")
@@ -219,6 +220,9 @@ const submitQ = async (e) => {
       details,
     })
     addComments([newComment])
+    questionInput.value = ""
+    detailsTextarea.value = ""
+    newMsgBtn.dispatchEvent(new Event("pointerup"))
   } catch (err) {
     console.log(err)
   }
@@ -231,6 +235,16 @@ const getComments = async (e) => {
       data: { comments },
     } = await axios.get(`/api/v1/comment/${token.split(" ")[1]}`)
     addComments(comments)
+    if (path.split("/")[2]) {
+      const comment = document.querySelector(
+        `div[data-id="${path.split("/")[2]}"]`
+      )
+      comment
+        .querySelector("button.clickable")
+        .dispatchEvent(new Event("pointerup"))
+      const { nextElementSibling: replies } = comment
+      replies.scrollIntoView({ behavior: "smooth", block: "end" })
+    }
   } catch (err) {
     console.log(err)
   }
@@ -254,57 +268,6 @@ const showReplies = (e) => {
   replies.classList.toggle("reveal")
 }
 
-const reply = async (e) => {
-  const { target } = e
-  const {
-    name,
-    parentElement: { parentElement },
-  } = target
-  switch (name) {
-    case "reply":
-      const { nextElementSibling: n } = parentElement
-      n.scrollIntoView({
-        block: "nearest",
-        inline: "nearest",
-      })
-      break
-    case "back":
-      const { previousElementSibling: p } = parentElement
-      p.scrollIntoView({
-        block: "nearest",
-        inline: "nearest",
-      })
-      break
-    default:
-      let textArea = parentElement.querySelector("textarea")
-      let { value } = textArea
-      let { id } = parentElement.parentElement.dataset
-      value = value.trim()
-      if (value) {
-        try {
-          const {
-            data: { sender, reply, _id: replyId },
-          } = await axios.patch(`/api/v1/comment/${id}`, {
-            token: token.split(" ")[1],
-            reply: value,
-          })
-          addReply(sender, reply, replyId, id)
-          textArea.value = ""
-          const { previousElementSibling: p } = parentElement
-          p.scrollIntoView({
-            block: "nearest",
-            inline: "nearest",
-          })
-        } catch (err) {
-          console.log(err)
-        }
-      } else {
-        console.log("nothing here")
-      }
-      break
-  }
-}
-
 //update
 const editComment = async (e) => {
   const { target } = e
@@ -323,8 +286,7 @@ const editComment = async (e) => {
       nextElementSibling.setAttribute("name", "cancel")
       nextElementSibling.textContent = "Cancel"
       break
-    default:
-      // save
+    case "save":
       const { prevVal } = p.dataset
       let { textContent } = p
       textContent = textContent.trim()
@@ -347,21 +309,61 @@ const editComment = async (e) => {
       nextElementSibling.setAttribute("name", "del")
       nextElementSibling.textContent = "Delete"
       break
+    case "yes":
+      const { parentElement: li } = target.parentElement.parentElement
+      const { id } = li.dataset
+      try {
+        const {
+          data: { msg },
+        } = await axios.delete(`/api/v1/comment/${id}`)
+        li.replaceChildren()
+        li.classList.add("center")
+        li.textContent = msg
+        const { nextElementSibling: next } = li
+        if (next && next.classList.contains("replies")) {
+          next.remove()
+        }
+        setTimeout(() => {
+          li.remove()
+        }, 1400)
+      } catch (err) {
+        console.log(err)
+      }
   }
-}
-
-const editReply = async (e) => {
-  console.log("clicked")
-  const { target } = e
 }
 
 //delete
 const deleteComment = async (e) => {
-  console.log("clicked")
-}
-
-const deleteReply = async (e) => {
-  console.log("clicked")
+  const { target } = e
+  const { name } = target
+  const {
+    parentElement: { parentElement },
+    previousElementSibling,
+  } = target
+  let p = parentElement.querySelector("p.sub")
+  switch (name) {
+    case "cancel":
+      p.textContent = p.dataset.prevVal
+      p.removeAttribute("contenteditable")
+      delete p.dataset.prevVal
+      target.setAttribute("name", "del")
+      target.textContent = "Delete"
+      previousElementSibling.setAttribute("name", "edit")
+      previousElementSibling.textContent = "Edit"
+      break
+    case "del":
+      target.setAttribute("name", "no")
+      target.textContent = "No"
+      previousElementSibling.setAttribute("name", "yes")
+      previousElementSibling.textContent = "Yes"
+      break
+    default:
+      target.setAttribute("name", "del")
+      target.textContent = "Delete"
+      previousElementSibling.setAttribute("name", "edit")
+      previousElementSibling.textContent = "Edit"
+      break
+  }
 }
 
 const init = () => {

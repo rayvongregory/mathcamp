@@ -1,6 +1,6 @@
 #help {
     position: relative;
-    min-height: min(325px, calc(100vh - 238px));
+    min-height: calc(100vh - 250px);
     margin: auto;
     padding: 1rem 10px;
     display: flex;
@@ -51,23 +51,24 @@
 }
 
 #access {
-    position: relative;
     width: 100%;
     height: 100%;
 }
 
-#comments {
+#comment {
     width: 100%;
     max-width: 576px;
     margin: auto;
     list-style: none;
 }
 
-#comments li {
+#comment > div[data-id] {
     position: relative;
     display: flex;
     width: 100%;
     max-width: 576px;
+    height: 173px;
+    max-height: 173px;
     margin: auto;
     border-radius: 5px;
     border: var(--border);
@@ -76,109 +77,60 @@
     box-shadow: var(--boxShadow);
     scroll-behavior: smooth;
     overflow: hidden;
-    
+    transition: opacity 0.3s linear 0.8s, max-height 0.4s linear 1s, margin-top 0.4s linear 1s;
+    opacity: 1;
 }
 
-#comments li + li {
+#comment div[data-id].center,
+.reply.center {
+    justify-content: center;
+    align-items: center;
+    max-height: 0px;
+    margin-top: 0;
+    color: var(--deepRed);
+    opacity: 0;
+}
+
+#comment div[data-id] ~ div[data-id] {
     margin-top: 1rem;
 }
 
-#comments >:last-child {
+#comment div[data-id]:first-of-type.center + div[data-id],
+.replies div[data-id]:first-of-type.center + .reply {
+    margin-top: 0;
+}
+
+#comment >:last-child {
     margin-bottom: 55px;
-}
-
-.front,
-.back {
-    width: 100%;
-    flex-shrink: 0;
-}
-
-.back {
-    padding: 20px 25px;
-}
-
-.front {
-    display: flex;
-    flex-direction: column;
-    padding: 10px 15px;
-}
-
-.front .flex {
-    display: flex;
-    margin: 15px 10px 5px;
-    gap: 1rem;
 }
 
 .front .flex >:nth-child(2) {
     margin-right: auto;
 }
 
-#comments li > div button,
-#comments li + div button {
+#comment div[data-id] > div button,
+#comment div[data-id] + div button {
     border: none;
     background-color: transparent;
     cursor: pointer;
 }
 
-.larger {
-    font-size: 18px;
-    font-weight: 600;
+.front .sub {
+    height: 40px;
 }
 
-.front .larger {
-    margin-bottom: 10px;
-}
-
-.front p {
-    padding: 10px;
-}
-
-.sub {
-    width: 100%;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    font-size: 15px;
-    font-family: "Segoe UI";
-    overflow: hidden;
-}
-
-.smaller {
-    font-size: 12px;
-    width: fit-content;
-    pointer-events: none;
+.reply:not(.smaller) .sub {
+    overflow-y: scroll;
+    scrollbar-width: thin;
 }
 
 .smaller.clickable {
     pointer-events: all;
 }
 
-.back textarea {
-    width: 100%;
-    padding: 7px;
-    resize: none;
-    border-radius: 3px;
-    border: 1px solid var(--neutralMid);
-    font-size: 14px;
-    font-family: "Segoe UI";
-    outline: none;
-}
-
-.back .flex {
-    margin: 10px 5px 0;
-    display: flex;
-}
-
-.back .flex button:first-of-type {
-    margin-right: auto;
-}
-
 .replies {
-    position: relative;
-    top: -10px;
     opacity: 0;
     max-height: 0;
-    padding-bottom: 3px;
     transition: max-height 0.3s ease-in-out;
     overflow: hidden;
 }
@@ -189,40 +141,31 @@
 }
 
 .reply {
-    position: relative;
-    width: calc(100% - 1rem);
-    max-width: 576px;
-    margin: auto 0 0 1rem;;
-    padding: 10px 15px 10px 10px;
-    border-radius: 5px;
-    border: var(--border);
-    background-color: var(--neutralLight);
-    box-shadow: var(--boxShadow);
+    max-height: 140px;
+    height: 140px;
+    overflow: hidden;
+    transition: opacity 0.3s linear 0.8s, max-height 0.4s linear 1s, margin-top 0.4s linear 1s;
 }
 
 .reply .larger {
-    width: calc(100% - 80px);
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 10px 15px 0 10px;
 }
 
 .reply .flex {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 10px;
-}
-
-.reply + .reply {
-    margin-top: 5px;
-}
-
-p[contenteditable] {
-    display: inline-block;
-    border: 1px solid #8f8f9d;
+    margin: 20px 15px 0 10px;
 }
 
 p[contenteditable].sub {
-    min-height: 41.3333px;
+    overflow-y: scroll;
+}
+
+.front p[contenteditable].sub {
+    padding: 9.5px;
+    height: 59px;
+}
+
+.reply p.sub {
+    padding: 1px 10.5px 0;
 }
 
 #new-msg-btn {
@@ -231,18 +174,23 @@ p[contenteditable].sub {
     width: 40px;
     height: 40px;
     position: absolute;
-    right: 1px;
-    bottom: 0px;
+    right: 5px;
+    bottom: 18px;
     border: var(--tinymceBorder);
     padding: 10px;
     border-radius: 10px;
     background-color: white;
     color: var(--deepTeal);
     font-size: 25px;
-    z-index: 2;
+    z-index: 1;
     cursor: pointer;
-    transition: bottom 0.4s ease-in-out;
     pointer-events: all;
+    opacity: 0;
+    transition: bottom 0.4s ease-in-out, opacity 0.3s ease-in-out 1s;
+}
+
+#new-msg-btn.reveal {
+    opacity: 1;
 }
 
 #new-msg-btn i {
@@ -250,7 +198,7 @@ p[contenteditable].sub {
 }
 
 #new-msg-btn.rotate {
-    bottom: 252px;
+    bottom: 272px;
     color: var(--deepRed)
 }
 
@@ -260,11 +208,11 @@ p[contenteditable].sub {
 
 #new-msg {
     position: absolute;
-    right: 20px;
-    bottom: 0px;
+    right: 25px;
+    bottom: 20px;
     display: flex;
     flex-direction: column;
-    width: 225px;
+    width: 240px;
     min-height: 0;
     height: 0;
     border-radius: 10px;
@@ -341,17 +289,25 @@ p[contenteditable].sub {
 @media (min-width: 320px) {
     #help {
         padding: 2rem 1rem 1rem;
-        min-height: min(325px, calc(100vh - 227px));
+        min-height: calc(100vh - 223px);
     }
 
     #new-msg {
-        width: 250px;
+        width: 275px;
     }
 }
 
 @media (min-width: 576px) {
     #help {
         padding: 2rem 2rem 1rem;
-        min-height: min(325px, calc(100vh - 225px));
+    }
+
+    #new-msg-btn {
+        right: 20px
+    }
+
+    #new-msg {
+        right: 39px;
+        width: 300px
     }
 }
