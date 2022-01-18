@@ -1,0 +1,15 @@
+<section>
+  <h3 class="status-code"><%=code%></h3>
+  <% if(code === 403) { %>
+  <p>
+    We don't know you yet. <br />
+    Let's change that!
+  </p>
+  <a href="/register">Register now</a>
+  <% } else if(code === 400 && title !== "Already Verified") { %>
+  <p>Something isn't right here...</p>
+  <% } else if(code === 400 && title === "Already Verified") {%>
+  <p>It looks like you've already verified your account.</p>
+  <a href="/login">Sign in now</a>
+  <% } %>
+</section>

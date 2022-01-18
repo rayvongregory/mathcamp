@@ -15,7 +15,6 @@ const getDisplayName = async (req, res) => {
   res.status(StatusCodes.OK).json({
     displayName: decoded.displayName,
     role: decoded.role,
-    avatar: decoded.avatar,
   })
 }
 

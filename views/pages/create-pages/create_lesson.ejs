@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html class="invis" lang="en">
+  <head>
+    <%- include('../../partials/main-site-partials/head'); %>
+    <link rel="stylesheet" href="/styles/main-site-styles/secondary.css" />
+    <link rel="stylesheet" href="/styles/create-styles/create.css" />
+    <link rel="stylesheet" href="/codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="/styles/create-styles/create_lesson.css" />
+    <script src="/codemirror/lib/codemirror.js"></script>
+    <script src="/codemirror/mode/javascript/javascript.js"></script>
+  </head>
+  <body>
+    <%- include('../../partials/main-site-partials/aside'); %> <%-
+    include('../../partials/main-site-partials/nav'); %> <%-
+    include('../../partials/main-site-partials/banner'); %>
+    <div class="too-small">
+      <p>Please enlarge browser window to continue editing this resource.</p>
+    </div>
+    <div class="create-wrapper">
+      <%- include('../../partials/create-partials/resource_title_tags'); %>
+      <div class="three-one-grid">
+        <%- include('../../partials/create-partials/lesson_editor'); %> <%-
+        include('../../partials/create-partials/publish_lesson_requirements');
+        %> <%- include('../../partials/create-partials/snippets'); %>
+      </div>
+    </div>
+    <%- include('../../partials/main-site-partials/universal_scripts'); %>
+    <script src="/scripts/create-scripts/create.js"></script>
+    <script src="/scripts/create-scripts/create_lesson.js"></script>
+  </body>
+</html>

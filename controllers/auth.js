@@ -1,11 +1,11 @@
 require("dotenv")
 const User = require("../models/User")
-const { ObjectId } = require("mongoose").Types
 const { StatusCodes } = require("http-status-codes")
 const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
 const ejs = require("ejs")
 const path = require("path")
+const crypto = require("crypto")
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body
@@ -15,7 +15,7 @@ const loginUser = async (req, res) => {
       .status(StatusCodes.UNAUTHORIZED)
       .json({ msg: "Invalid credentials, please try again." })
   }
-  if (!user.confirmed) {
+  if (!user.isVerified) {
     return res.status(StatusCodes.OK).json({
       msg: "You must complete the registration process before you can login. Please click the link we sent to your email to complete registration. ",
       confirmed: false,
@@ -25,7 +25,7 @@ const loginUser = async (req, res) => {
   if (match) {
     const refreshToken = user.generateRefreshToken()
     const accessToken = user.generateAccessToken()
-    user.getAvatar()
+    user.lastLogin = Date.now()
     await user.save()
     return res.status(StatusCodes.OK).json({
       accessToken,
@@ -45,7 +45,7 @@ const logoutUser = async (req, res) => {
   const email = jwt.decode(token.split(" ")[1]).email
   const user = await User.findOneAndUpdate(
     { email },
-    { lastLogout: new Date() }
+    { lastLogout: Date.now() }
   )
   if (!user) {
     return res
@@ -59,58 +59,52 @@ const logoutUser = async (req, res) => {
   // we will delete the user's refresh token here and clear local storage
 }
 
-const verifyId = async (req, res, next) => {
-  const { id } = req.params
-  try {
-    let objId = new ObjectId(id)
-    if (objId == id) {
-      req.body.valid = true
-    } else {
-      req.body.valid = false
-    }
-  } catch (err) {
-    req.body.valid = false
-  }
-  next()
-}
-
 const verifyUser = async (req, res) => {
-  const { valid } = req.body
-  const { id } = req.params
-  if (!valid) {
-    return res.status(StatusCodes.BAD_REQUEST)
-  }
-  const user = await User.findById(id)
+  const { verificationToken } = req.body
+  const { email } = req.params
+  const user = await User.findOne({ email })
   if (!user) {
-    return res.status(StatusCodes.UNAUTHORIZED)
+    return res.status(StatusCodes.FORBIDDEN).json({ responseURL: "/forbidden" })
   }
-  if (user.confirmed) {
-    return res.status(StatusCodes.OK).json({
-      msg: "Looks like you've already verified your account. Please sign in.",
-    })
+  if (user.isVerified && user.verificationToken === verificationToken) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ responseURL: "/already-verified", name: user.name.split(" ")[0] })
   }
-  user.confirmed = true
-  await user.save()
-  res.status(StatusCodes.OK).json({
-    msg: "You have completed the registration process and you may now sign in. ",
-  })
+  if (user.isVerified && user.verificationToken !== verificationToken) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ responseURL: "/bad-request" })
+  }
+  if (user.verificationToken === verificationToken) {
+    user.isVerified = true
+    user.verified = Date.now()
+    await user.save()
+    return res
+      .status(StatusCodes.ACCEPTED)
+      .json({ responseURL: "/welcome", name: user.name.split(" ")[0] })
+  }
+  res.status(StatusCodes.BAD_REQUEST).json({ responseURL: "/bad-request" })
 }
 
 const registerUser = async (req, res) => {
-  const { email } = req.body
+  let { name, email, password } = req.body
   let user = await User.findOne({ email })
   if (user) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .json({ msg: `There is already an account associated with this email.` })
   }
-  user = new User(req.body)
+  const verificationToken = crypto.randomBytes(40).toString("hex")
+  user = new User({ name, email, password, verificationToken })
   await user.hashPassword()
   user.createDisplayName()
-  user.getAvatar()
   await user.save()
   const { id } = user
-  const url = `${req.protocol}://${req.get("host")}${req.url}/${id}`
+  //according to john, we want to send a token instead of an id
+  const url = `${req.protocol}://${req.get(
+    "host"
+  )}/verify-user?v-token=${verificationToken}&email=${email}`
   const transporter = nodemailer.createTransport({
     host: "smtp.ethereal.email",
     port: 587,
@@ -119,8 +113,11 @@ const registerUser = async (req, res) => {
       pass: process.env.pass,
     },
   })
-  const name = user.name.split(" ")[0]
-  const file = path.join(__dirname, "../views/pages/verify_email.ejs")
+  name = user.name.split(" ")[0]
+  const file = path.join(
+    __dirname,
+    "../views/pages/auth-pages/verify_email.ejs"
+  )
   const data = await ejs.renderFile(file, {
     name,
     url,
@@ -132,12 +129,13 @@ const registerUser = async (req, res) => {
     text: `Hi, ${name}!\n\n\rUse the link below to complete registration.\n\r${url}`,
     html: data,
   })
-  res.status(StatusCodes.OK).json({ name })
+  res
+    .status(StatusCodes.CREATED)
+    .json({ msg: "Please check your email to verify your account.", name })
 }
 
 module.exports = {
   loginUser,
-  verifyId,
   verifyUser,
   registerUser,
   logoutUser,

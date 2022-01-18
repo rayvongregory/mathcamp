@@ -1,6 +1,5 @@
 const mongoose = require("mongoose")
 const { Schema } = mongoose
-const gravatar = require("gravatar")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const redis = require("redis")
@@ -25,9 +24,6 @@ const userSchema = new Schema(
       required: [true, "Please provide an email address."],
       unique: true,
     },
-    avatar: {
-      type: String,
-    },
     password: {
       type: String,
       // match: [
@@ -45,13 +41,15 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Please provide a display name for this user"],
     },
-    confirmed: {
+    verificationToken: String,
+    isVerified: {
       type: Boolean,
       default: false,
     },
+    verified: Date,
     lastLogin: {
       type: Date,
-      default: new Date(),
+      default: null,
     },
     lastLogout: {
       type: Date,
@@ -64,14 +62,6 @@ const userSchema = new Schema(
 userSchema.methods.createDisplayName = function () {
   let names = this.name.split(" ")
   this.displayName = `${names[0]}  ${names[1][0]}.`
-}
-
-userSchema.methods.getAvatar = function () {
-  this.avatar = gravatar.url(
-    this.contactEmail,
-    { s: "40", r: "g", d: "retro" },
-    true
-  )
 }
 
 userSchema.methods.hashPassword = async function () {

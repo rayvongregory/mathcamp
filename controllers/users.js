@@ -90,15 +90,14 @@ const deleteUser = async (req, res) => {
   if (pwd) {
     const match = await user.matchPasswords(pwd)
     if (match) {
-      let a = await User.findOneAndDelete({ email })
+      await User.findOneAndDelete({ email })
       user.removeRefreshToken()
       let comments = await Comment.find({ sender: user.id })
-      comments.forEach(async (c) => {
-        await Comment.findOneAndDelete({ id: c.id })
-      })
+      for (let c of comments) {
+        await Comment.findOneAndDelete({ _id: c.id })
+      }
       return res.status(StatusCodes.OK).json({
         success: true,
-        a,
         msg: "Account deleted",
       })
     }

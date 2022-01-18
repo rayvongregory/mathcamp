@@ -8,7 +8,7 @@ const getResource = (req, res) => {
     title = "Practice"
     bannerTitle = "Practice"
   }
-  res.render("pages/lesson_exercise", {
+  res.render("pages/main-site-pages/lesson_exercise", {
     title,
     bannerTitle,
   })
@@ -26,7 +26,7 @@ const getAllResources = (req, res) => {
     title = "Practice"
     bannerTitle = "Practice"
   }
-  res.render("pages/learn_practice", {
+  res.render("pages/main-site-pages/learn_practice", {
     msg,
     title,
     bannerTitle,

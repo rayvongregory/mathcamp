@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html class="invis" lang="en">
+  <head>
+    <%- include('../../partials/main-site-partials/head'); %>
+    <link rel="stylesheet" href="/styles/main-site-styles/secondary.css" />
+    <link rel="stylesheet" href="/styles/auth-styles/auth.css" />
+  </head>
+  <body>
+    <%- include('../../partials/main-site-partials/aside'); %> <%-
+    include('../../partials/main-site-partials/nav'); %> <%-
+    include('../../partials/auth-partials/auth_banner'); %> <% if(title ===
+    "Login") { %> <%- include('../../partials/auth-partials/login_form') %> <% }
+    else if(title === "Register") { %> <%-
+    include('../../partials/auth-partials/register_form') %> <% } else { %> <%-
+    include('../../partials/auth-partials/info_form') %> <% } %> <% if(title ===
+    "Login") { %>
+    <canvas class="background"></canvas>
+    <% } else if(title === "Register") { %>
+    <canvas class="background r"></canvas>
+    <% } %> <%- include('../../partials/main-site-partials/universal_scripts');
+    %>
+    <script src="/scripts/auth-scripts/auth.js"></script>
+    <% if(title === "Login") { %>
+    <script type="module" src="/scripts/auth-scripts/login.js"></script>
+    <% } else if(title === "Register") { %>
+    <script type="module" src="/scripts/auth-scripts/register.js"></script>
+    <% } else if(title === "Account") { %>
+    <script type="module" src="/scripts/auth-scripts/account.js"></script>
+    <% } %>
+  </body>
+</html>

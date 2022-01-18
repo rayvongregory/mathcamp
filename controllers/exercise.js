@@ -34,13 +34,11 @@ const getExercise = async (req, res) => {
 const postExercise = async (req, res) => {
   let { title } = req.body
   let exercise = await Exercise.findOne({ title })
-
   if (exercise) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       msg: "An exercise with this title already exists. Please choose another name for this exercise.",
     })
   }
-
   exercise = new Exercise(req.body)
   await exercise.save()
   res

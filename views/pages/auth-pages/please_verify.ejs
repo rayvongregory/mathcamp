@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html class="invis" lang="en">
+  <head>
+    <%- include('../../partials/main-site-partials/head'); %>
+    <link rel="stylesheet" href="/styles/main-site-styles/secondary.css" />
+    <link rel="stylesheet" href="/styles/auth-styles/confirm.css" />
+  </head>
+  <body>
+    <%- include('../../partials/main-site-partials/aside'); %> <%-
+    include('../../partials/main-site-partials/nav'); %> <%-
+    include('../../partials/main-site-partials/banner'); %>
+    <div id="confirm">
+      <p>
+        Please click the link we sent to your email to complete registration.
+      </p>
+    </div>
+    <%- include('../../partials/main-site-partials/universal_scripts'); %>
+    <script src="/scripts/auth-scripts/please-verify.js"></script>
+  </body>
+</html>

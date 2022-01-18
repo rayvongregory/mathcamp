@@ -13,7 +13,10 @@ const transporter = nodemailer.createTransport({
     pass: process.env.pass,
   },
 })
-const file = path.join(__dirname, "../views/pages/new_comment.ejs")
+const file = path.join(
+  __dirname,
+  "../views/pages/main-site-pages/new_comment.ejs"
+)
 
 const getUserComments = async (req, res) => {
   const { token } = req.params
@@ -234,17 +237,16 @@ const deleteReply = async (req, res) => {
 
 const getComment_admin = async (req, res) => {
   const { id } = req.params
-  try {
-    await Comment.findById(id, async (err, doc) => {
-      if (err) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ msg: "No such comment" })
-      }
-      let { displayName } = await User.findById(doc.sender, "displayName")
-      res.status(StatusCodes.OK).json({ thread: doc, displayName })
-    })
-  } catch (err) {}
+  const { valid } = req.body
+  if (!valid) {
+    return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such comment" })
+  }
+  let comment = await Comment.findById(id)
+  if (!comment) {
+    return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such comment" })
+  }
+  let { displayName } = await User.findById(comment.sender, "displayName")
+  res.status(StatusCodes.OK).json({ thread: comment, displayName })
 }
 
 module.exports = {

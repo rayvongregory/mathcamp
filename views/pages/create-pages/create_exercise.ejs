@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html class="invis" lang="en">
+  <head>
+    <%- include('../../partials/main-site-partials/head'); %>
+    <link rel="stylesheet" href="/styles/main-site-styles/secondary.css" />
+    <link rel="stylesheet" href="/styles/create-styles/create_exercise.css" />
+    <link rel="stylesheet" href="/styles/create-styles/overlay.css" />
+    <link rel="stylesheet" href="/styles/create-styles/create.css" />
+    <script src="/mathtype/mathtype-generic/wirisplugin-generic.js"></script>
+  </head>
+  <body>
+    <%- include('../../partials/create-partials/overlay'); %> <%-
+    include('../../partials/main-site-partials/aside'); %> <%-
+    include('../../partials/main-site-partials/nav'); %> <%-
+    include('../../partials/main-site-partials/banner'); %>
+    <div class="too-small">
+      <p>Please enlarge browser window to continue editing this resource.</p>
+    </div>
+    <div class="create-wrapper">
+      <%- include('../../partials/create-partials/resource_title_tags'); %>
+      <div class="four-one-grid">
+        <%-include('../../partials/create-partials/question'); %>
+        <%-include('../../partials/create-partials/correct_answer'); %>
+        <%-include('../../partials/create-partials/create_choices'); %> <%-
+        include('../../partials/create-partials/publish_question_requirements');
+        %>
+      </div>
+      <div class="three-two-grid">
+        <%- include('../../partials/create-partials/problem_set'); %> <%-
+        include('../../partials/create-partials/publish_exercise_requirements');
+        %>
+      </div>
+    </div>
+    <%- include('../../partials/main-site-partials/universal_scripts'); %>
+    <script src="/scripts/create-scripts/question_section.js"></script>
+    <script src="/scripts/create-scripts/answer_section.js"></script>
+    <script src="/scripts/create-scripts/choices_section.js"></script>
+    <script src="/scripts/create-scripts/problem_set_section.js"></script>
+    <script src="/scripts/create-scripts/create.js"></script>
+    <script src="/scripts/create-scripts/create_exercise.js"></script>
+  </body>
+</html>

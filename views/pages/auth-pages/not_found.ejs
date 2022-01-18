@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html class="invis" lang="en">
+  <head>
+    <%- include('../../partials/main-site-partials/head'); %>
+    <link rel="stylesheet" href="/styles/main-site-styles/secondary.css" />
+    <link rel="stylesheet" href="/styles/auth-styles/verify.css" />
+  </head>
+  <body>
+    <%- include('../../partials/main-site-partials/aside'); %> <%-
+    include('../../partials/main-site-partials/nav'); %>
+    <header class="secondary">
+      <canvas class="background"></canvas>
+      <h1>Math Camp</h1>
+    </header>
+    <%- include('../../partials/auth-partials/not_found'); %> <%-
+    include('../../partials/main-site-partials/footer'); %> <%-
+    include('../../partials/main-site-partials/universal_scripts'); %>
+    <script src="/scripts/auth-scripts/referrer.js"></script>
+  </body>
+</html>
