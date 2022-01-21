@@ -36,9 +36,9 @@ const reply = async (e) => {
           const {
             data: { sender, reply },
           } = await axios.patch(`/api/v1/comment/${id}`, {
-            token: token.split(" ")[1],
             reply: value,
           })
+          console.log(sender, reply)
           addReply(sender, reply, id)
           textArea.value = ""
           let next = li.nextElementSibling
@@ -92,7 +92,6 @@ const editReply = async (e) => {
           await axios.patch(
             `/api/v1/comment/${commentId}/reply/${replyNumber}`,
             {
-              token: token.split(" ")[1],
               reply: textContent,
             }
           )

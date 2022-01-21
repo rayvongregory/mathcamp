@@ -2,11 +2,8 @@ const mongoose = require("mongoose")
 const { Schema } = mongoose
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const redis = require("redis")
 const refreshTokens = require("../db/redis-cache")
-const { promisify } = require("util")
-const getAsync = promisify(refreshTokens.get).bind(refreshTokens)
-const scanAsync = promisify(refreshTokens.scan).bind(refreshTokens)
+const crypto = require("crypto")
 
 const userSchema = new Schema(
   {
@@ -26,10 +23,10 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      // match: [
-      //   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-      //   "Password must contain at least 8 characters, at least one uppercase letter, at least one lowercase letter, at least one digit, and at least one special character",
-      // ],
+      match: [
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+        "Password must contain at least 8 characters, at least one uppercase letter, at least one lowercase letter, at least one digit, and at least one special character",
+      ],
       required: [true, "Please provide a valid password."],
     },
     role: {
@@ -41,7 +38,7 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Please provide a display name for this user"],
     },
-    verificationToken: String,
+    verificationString: String,
     isVerified: {
       type: Boolean,
       default: false,
@@ -58,11 +55,6 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 )
-
-userSchema.methods.createDisplayName = function () {
-  let names = this.name.split(" ")
-  this.displayName = `${names[0]}  ${names[1][0]}.`
-}
 
 userSchema.methods.hashPassword = async function () {
   this.password = await bcrypt.hash(this.password, 10)
@@ -82,64 +74,26 @@ userSchema.methods.updateTime = function (event) {
   }
 }
 
-userSchema.methods.generateAccessToken = function () {
-  return (
-    "Bearer " +
-    jwt.sign(
-      {
-        role: this.role,
-        email: this.email,
-        displayName: this.displayName,
-        avatar: this.avatar,
-      },
-      process.env.JWT_ACCESS_SECRET,
-      {
-        // expiresIn: "5s",
-        expiresIn: "15m",
-      }
-    )
-  )
-}
-
-userSchema.methods.generateTempToken = async function () {
-  return jwt.sign(
-    {
-      id: this._id,
-    },
-    process.env.JWT_ACCESS_SECRET,
-    {
-      expiresIn: "15d",
-    }
-  )
-}
-
-userSchema.methods.generateRefreshToken = async function () {
-  // this function will handle all operations regarding refresh tokens
+userSchema.methods.generateRedisToken = async function (id, ip, userAgent) {
+  let key = crypto.randomBytes(40).toString("hex")
   refreshTokens.set(
-    `${this._id}`,
+    key,
     (this.refreshToken = jwt.sign(
-      { id: this._id },
-      process.env.JWT_REFRESH_SECRET,
-      { expiresIn: "1d" }
-      // { expiresIn: "3s" }
+      { id, ip, userAgent },
+      process.env.JWT_SECRET
     ))
   )
-  return await getAsync(`${this._id}`)
+  return key
 }
 
-userSchema.methods.removeRefreshToken = async function () {
-  // refreshTokens.get(`${this._id}`, redis.print)
-  // this function removes the user's refresh token from redis cache on logout
+userSchema.methods.generateTokens = function (id, key) {
+  const accessToken = jwt.sign({ id }, process.env.JWT_SECRET)
+  const refreshToken = jwt.sign({ id, key }, process.env.JWT_SECRET)
+  return { accessToken, refreshToken }
+}
 
-  let token = await getAsync(`${this._id}`)
-  token = jwt.verify(token, process.env.JWT_REFRESH_SECRET)
-  // console.log(138, token)
-
-  //! get the token, set its expiration time to the current time and then delete
-  //! it from the cache
-  // refreshTokens.del(`${this._id}`)
-  //maybe add more to this if necessary but I think this is all we need since the
-  //del functiondoesn't throw an error
+userSchema.methods.removeRedisToken = async function (key) {
+  refreshTokens.del(key)
 }
 
 module.exports = mongoose.model("User", userSchema)

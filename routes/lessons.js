@@ -7,14 +7,14 @@ const {
   updateLesson,
   deleteLesson,
 } = require("../controllers/lessons")
+const { isAdmin, handleUnexpectedRole } = require("../middleware/verifyRole")
 
-const authenticationMiddleware = require("../middleware/auth")
-
-// router.route("/").get(getAllLessons).post(authenticationMiddleware, postLesson)
-router.route("/").post(postLesson)
+router.route("/").post(isAdmin, handleUnexpectedRole, postLesson)
 router.route("/:gr").get(getAllLessons)
-router.route("/id/:id").get(getLesson).patch(updateLesson).delete(deleteLesson)
-// .patch(authenticationMiddleware, updateLesson)
-// .delete(authenticationMiddleware, deleteLesson)
+router
+  .route("/id/:id")
+  .get(getLesson)
+  .patch(isAdmin, handleUnexpectedRole, updateLesson)
+  .delete(isAdmin, handleUnexpectedRole, deleteLesson)
 
 module.exports = router

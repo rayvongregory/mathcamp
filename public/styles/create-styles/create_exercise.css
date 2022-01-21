@@ -1,3 +1,11 @@
+#problem_set section.invis,
+#no_problems_yet.invis,
+.invis {
+    max-height: 0;
+    padding: 0;
+    border: none;
+}
+
 .three-two-grid {
     display: grid;
     grid-template-columns: minmax(0,3fr) minmax(0, 2fr);
@@ -259,7 +267,6 @@
 
 #problem_set {
     display: grid;
-    gap: 10px;
     height: fit-content;
 }
 
@@ -273,6 +280,10 @@
     padding: 1rem;
     background-color: white;
     border: var(--tinymceBorder);
+}
+
+#problem_set section:not(section.invis) ~ section:not(section.invis) {
+    margin-top: 10px;
 }
 
 #problem_set section ul {
@@ -474,9 +485,12 @@ input.flash::placeholder {
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 10px;
     border: var(--tinymceBorder);
     background-color: white;
+}
+
+#no_problems_yet h3 {
+    padding: 10px;
 }
 
 #problem_set .header {

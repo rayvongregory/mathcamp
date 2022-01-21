@@ -317,21 +317,6 @@ const setAria = (btn, val) => {
   btn.setAttribute("title", val)
 }
 
-const getRole = async () => {
-  let t = localStorage.getItem("token")
-  try {
-    const {
-      data: { role },
-    } = await axios.get(`/api/v1/token/${t.split(" ")[1]}`)
-    if (role !== "admin") {
-      window.location.href = "/"
-    }
-  } catch (err) {
-    console.log(err)
-    window.location.href = "/"
-  }
-}
-
 titleInput.addEventListener("input", titleChanged)
 tagsInput.addEventListener("keyup", addTag)
 subjectSelect.addEventListener("input", subjectChanged)

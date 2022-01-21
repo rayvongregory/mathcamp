@@ -4,23 +4,6 @@ const notFound = document.getElementById("not_found")
 const found = document.getElementById("found")
 let username
 
-const getRole = async () => {
-  if (token) {
-    try {
-      const {
-        data: { role },
-      } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
-      if (role !== "admin") {
-        window.location.href = "/help"
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  } else {
-    window.location.href = "/"
-  }
-}
-
 const addComment = (thread) => {
   const {
     comment: { question, details },
@@ -166,9 +149,7 @@ const getComment = async () => {
   }
 }
 
-const init = () => {
-  getRole()
+window.addEventListener("load", () => {
   getComment()
-}
-
-window.addEventListener("load", init)
+  removeHTMLInvis()
+})

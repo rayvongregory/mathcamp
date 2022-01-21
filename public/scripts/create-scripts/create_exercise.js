@@ -294,7 +294,6 @@ const draftExercise = () => {
 }
 
 const init = async () => {
-  getRole()
   await getChapters()
   addMathType()
   let tas = [qTA, aTA, cTA]
@@ -309,6 +308,7 @@ const init = async () => {
     await getInfo(resourceId)
     allowSave(false)
   }
+  removeHTMLInvis()
 }
 
 const unsavedChanges = (e) => {

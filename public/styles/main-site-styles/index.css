@@ -233,7 +233,7 @@ body {
     }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 800px) {
     #info {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 1rem;

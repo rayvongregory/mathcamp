@@ -6,7 +6,7 @@ const newMsg = document.getElementById("new-msg")
 const submitQBtn = document.getElementById("submit-q")
 const questionInput = document.getElementById("question")
 const detailsTextarea = document.getElementById("details")
-let displayName
+let displayName = document.querySelector("#name-wrapper h3")
 
 const allowSubmit = (e) => {
   let { value } = e.target
@@ -15,30 +15,6 @@ const allowSubmit = (e) => {
     submitQBtn.classList.add("allow")
   } else if (!value && submitQBtn.classList.contains("allow")) {
     submitQBtn.classList.remove("allow")
-  }
-}
-
-const getRole = async () => {
-  if (token) {
-    try {
-      const {
-        data: { role, displayName: d },
-      } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
-      if (role === "admin") {
-        window.location.href = "/help/admin"
-      }
-      displayName = d
-    } catch (err) {
-      console.log(err)
-    }
-    access.classList.add("reveal")
-    noAccess.remove()
-    addListeners()
-    getComments()
-    newMsgBtn.classList.add("reveal")
-  } else {
-    noAccess.classList.add("reveal")
-    access.remove()
   }
 }
 
@@ -167,7 +143,7 @@ const addReply = (sender, reply, liId) => {
     replier = document.createElement("p")
   replier.setAttribute("class", "larger")
   if (sender === "user") {
-    replier.textContent = displayName
+    replier.textContent = displayName.textContent
     flexContainer = document.createElement("div")
     flexContainer.setAttribute("class", "flex")
     editBtn = document.createElement("button")
@@ -215,7 +191,6 @@ const submitQ = async (e) => {
     const {
       data: { newComment },
     } = await axios.post("/api/v1/comment", {
-      token: token.split(" ")[1],
       question,
       details,
     })
@@ -229,25 +204,30 @@ const submitQ = async (e) => {
 }
 
 //read
-const getComments = async (e) => {
-  try {
-    const {
-      data: { comments },
-    } = await axios.get(`/api/v1/comment/${token.split(" ")[1]}`)
-    addComments(comments)
-    if (path.split("/")[2]) {
-      const comment = document.querySelector(
-        `div[data-id="${path.split("/")[2]}"]`
-      )
-      comment
-        .querySelector("button.clickable")
-        .dispatchEvent(new Event("pointerup"))
-      const { nextElementSibling: replies } = comment
-      replies.scrollIntoView({ behavior: "smooth", block: "end" })
-    }
-  } catch (err) {
-    console.log(err)
-  }
+const getComments = (e) => {
+  axios
+    .get("/api/v1/comment")
+    .then((res) => {
+      const { comments } = res.data
+      if (comments.length > 0) addComments(comments)
+      if (dirs[2]) {
+        const comment = document.querySelector(`div[data-id="${dirs[2]}"]`)
+        comment
+          .querySelector("button.clickable")
+          .dispatchEvent(new Event("pointerup"))
+        const { nextElementSibling: replies } = comment
+        replies.scrollIntoView({ behavior: "smooth", block: "end" })
+      }
+      access.classList.add("reveal")
+      noAccess.remove()
+      addListeners()
+      newMsgBtn.classList.add("reveal")
+    })
+    .catch((err) => {
+      console.log(err)
+      access.remove()
+      noAccess.classList.add("reveal")
+    })
 }
 
 const showReplies = (e) => {
@@ -293,8 +273,7 @@ const editComment = async (e) => {
       if (prevVal !== textContent) {
         try {
           const { id } = p.parentElement.parentElement.dataset
-          await axios.patch(`/api/v1/comment`, {
-            token: token.split(" ")[1],
+          await axios.patch("/api/v1/comment", {
             id,
             details: textContent,
           })
@@ -366,8 +345,7 @@ const deleteComment = async (e) => {
   }
 }
 
-const init = () => {
-  getRole()
-}
-
-window.addEventListener("load", init)
+window.addEventListener("load", () => {
+  getComments()
+  removeHTMLInvis()
+})

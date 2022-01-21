@@ -13,36 +13,10 @@ const id = path.split("/")[2],
     calc2: "Calculus 2",
   }
 
-const addEditBtn = () => {
-  const fixedDiv = document.createElement("div")
-  const editBtn = document.createElement("a")
-  fixedDiv.setAttribute("id", "fixed")
-  editBtn.setAttribute("id", "edit-btn")
-  editBtn.setAttribute("href", `/drafts/lesson/${id}`)
-  editBtn.innerHTML = '<i class="fas fa-edit"></i>'
-  fixedDiv.appendChild(editBtn)
-  resource.appendChild(fixedDiv)
-}
-
-const getRole = async () => {
-  let t = localStorage.getItem("token")
-  if (!t) return
-  try {
-    const {
-      data: { role },
-    } = await axios.get(`/api/v1/token/${t.split(" ")[1]}`)
-    if (role === "admin") {
-      addEditBtn()
-    }
-  } catch (err) {
-    console.log(err)
-  }
-}
-
 const getLessonInfo = async () => {
   try {
     const { data } = await axios.get(`/api/v1/lessons/id/${path.split("/")[2]}`)
-    const { html, css, js, title, subject, chapter, section } = data
+    const { html, css, js, title, subject, chapter, section, role } = data
     const style = document.createElement("style")
     const script_1 = document.createElement("script")
     const script_2 = document.createElement("script")
@@ -74,10 +48,13 @@ const getLessonInfo = async () => {
       `<section class="title"> <h3>${title}</h3><p>${subs[subject]} &#8226; Chapter ${chapter} &#8226; Section ${section}</p></section>` +
       html
     body.insertAdjacentElement("beforeend", script_2)
-    await getRole()
+    if (role === "admin") addEditBtn(resource)
   } catch (err) {
     console.log(err)
   }
 }
 
-window.addEventListener("load", getLessonInfo)
+window.addEventListener("load", async () => {
+  await getLessonInfo()
+  removeHTMLInvis()
+})

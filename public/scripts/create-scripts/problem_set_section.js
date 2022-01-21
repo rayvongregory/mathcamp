@@ -41,10 +41,10 @@ const toggleList = (e) => {
   document.activeElement.blur()
   const { target } = e
   let list = target.parentElement.nextElementSibling
-  if (list.classList.contains("hide")) {
-    list.classList.remove("hide")
+  if (list.classList.contains("invis")) {
+    list.classList.remove("invis")
   } else {
-    list.classList.add("hide")
+    list.classList.add("invis")
   }
 }
 
@@ -184,16 +184,16 @@ const createProblemItem = (diff, id = null, satisfied = null) => {
 }
 
 const unhideSection = (section) => {
-  if (section.classList.contains("hide")) {
-    section.classList.remove("hide")
+  if (section.classList.contains("invis")) {
+    section.classList.remove("invis")
   }
-  if (section.parentElement.classList.contains("hide"))
-    section.parentElement.classList.remove("hide")
+  if (section.parentElement.classList.contains("invis"))
+    section.parentElement.classList.remove("invis")
 }
 
 const appendThisToThat = (el, diff) => {
-  if (!noProblemsYet.classList.contains("hide")) {
-    noProblemsYet.classList.add("hide")
+  if (!noProblemsYet.classList.contains("invis")) {
+    noProblemsYet.classList.add("invis")
   }
   switch (diff) {
     case "easy":
@@ -484,7 +484,7 @@ const prevProblem = (e) => {
   overlayQ.innerHTML = q
   let pickedCs = pick5(cs)
   addToGrid(pickedCs)
-  overlay.classList.remove("hide")
+  overlay.classList.remove("invis")
   overlayBtn.classList.remove("hide")
 }
 
@@ -495,7 +495,7 @@ const closeOverlay = () => {
   btns.forEach((btn) => {
     btn.remove()
   })
-  overlay.classList.add("hide")
+  overlay.classList.add("invis")
   overlayBtn.classList.add("hide")
 }
 
@@ -568,9 +568,9 @@ const deleteProblemItem = (problemItem) => {
   otherProblemItem = list.querySelector("li")
   if (!otherProblemItem) {
     let section = list.parentElement
-    section.classList.add("hide")
+    section.classList.add("invis")
     if (!problemSet.querySelector("li")) {
-      noProblemsYet.classList.remove("hide")
+      noProblemsYet.classList.remove("invis")
       checkList(allMeetReqs, "uncheck")
       checkReqs()
     }

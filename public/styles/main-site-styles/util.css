@@ -43,11 +43,11 @@ i {
     pointer-events: none;
 }
 
-.hide {
-    display: none !important;
+.hide, .hide > * {
+    display: none;
 }
 
-.invis {
+.invis, .invis * {
     visibility: hidden;
 }
 

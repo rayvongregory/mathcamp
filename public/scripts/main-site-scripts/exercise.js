@@ -44,17 +44,6 @@ let ez = {
     calc2: "Calculus 2",
   }
 
-const addEditBtn = () => {
-  const fixedDiv = document.createElement("div")
-  const editBtn = document.createElement("a")
-  fixedDiv.setAttribute("id", "fixed")
-  editBtn.setAttribute("id", "edit-btn")
-  editBtn.setAttribute("href", `/drafts/exercise/${id}`)
-  editBtn.innerHTML = '<i class="fas fa-edit"></i>'
-  fixedDiv.appendChild(editBtn)
-  resource.appendChild(fixedDiv)
-}
-
 const selectDifficulty = (e) => {
   const { target } = e
   const { id } = target
@@ -185,25 +174,10 @@ const answerQ = (e) => {
   target.classList.remove("selected")
 }
 
-const getRole = async () => {
-  let t = localStorage.getItem("token")
-  if (!t) return
-  try {
-    const {
-      data: { role },
-    } = await axios.get(`/api/v1/token/${t.split(" ")[1]}`)
-    if (role === "admin") {
-      addEditBtn()
-    }
-  } catch (err) {
-    console.log(err)
-  }
-}
-
 const getExerciseInfo = async () => {
   try {
     const {
-      data: { title, subject, chapter, section, problems },
+      data: { title, subject, chapter, section, problems, role },
     } = await axios.get(`/api/v1/exercises/id/${path.split("/")[2]}`)
     titleH3.textContent = title
     titleP.innerHTML = `${subs[subject]} &#8226; Chapter ${chapter} &#8226; Section ${section}`
@@ -214,13 +188,16 @@ const getExerciseInfo = async () => {
     adv.qs = Object.entries(advanced)
     shuffle([ez.qs, stan.qs, hard.qs, adv.qs])
     createFirstQuestions()
-    await getRole()
+    if (role === "admin") addEditBtn(resource)
   } catch (err) {
     console.log(err)
   }
 }
 
-window.addEventListener("load", getExerciseInfo)
+window.addEventListener("load", async () => {
+  await getExerciseInfo()
+  removeHTMLInvis()
+})
 difficultyBtns.forEach((btn) => {
   btn.addEventListener("pointerup", selectDifficulty)
 })

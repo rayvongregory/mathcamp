@@ -263,17 +263,18 @@ const init = () => {
       if (resources.classList.contains("reveal")) {
         resources.classList.remove("reveal")
       }
-      loadSpinner.classList.remove("hide")
+      loadSpinner.classList.remove("invis")
       selectGrade(e)
       await getAllResources()
       determineColumns()
       setColumns()
-      loadSpinner.classList.add("hide")
+      loadSpinner.classList.add("invis")
       if (!resources.classList.contains("reveal")) {
         resources.classList.add("reveal")
       }
     })
   })
+  removeHTMLInvis()
 }
 
 window.addEventListener("load", init)

@@ -280,11 +280,11 @@ aside a:active, #logout:active {
     }
 
     #name-wrapper {
-        justify-content: space-around;
+        justify-content: space-between;
         min-width: 185px;
         max-width: 300px;
         height: 30px;
-        padding: 0 5px;
+        padding: 0 7px;
         border: var(--border);
         border-color: rgba(0, 0, 0, 0.15);
         background-color: white;
@@ -308,7 +308,6 @@ aside a:active, #logout:active {
         min-width: 100px;
         max-width: 250px;
         text-align: center;
-        padding: 0 15px;
         flex-shrink: 0;
         font-size: 1.25rem;
     }

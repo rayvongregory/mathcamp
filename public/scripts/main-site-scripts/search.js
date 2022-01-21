@@ -101,7 +101,10 @@ const handleChange = async (e) => {
   document.activeElement.blur()
 }
 
-window.addEventListener("load", getResults)
+window.addEventListener("load", () => {
+  getResults()
+  removeHTMLInvis()
+})
 input.addEventListener("input", changeURL)
 input.addEventListener("keydown", handleChange)
 srchBtn.addEventListener("click", handleChange)

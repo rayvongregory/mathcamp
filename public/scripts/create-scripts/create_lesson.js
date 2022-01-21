@@ -239,7 +239,6 @@ const init = async () => {
     p.write(h + c + j)
     p.close()
   })
-  getRole()
   await getChapters()
   if (path.split("/")[3]) {
     resourceId = path.split("/")[3]
@@ -251,6 +250,7 @@ const init = async () => {
   cssEditor.classList.add("hide")
   jsEditor.classList.add("hide")
   imgInput.addEventListener("change", handleFileSelect)
+  removeHTMLInvis()
 }
 
 const handleFileSelect = (e) => {

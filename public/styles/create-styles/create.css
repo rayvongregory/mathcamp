@@ -122,6 +122,10 @@ footer {
     list-style: none;
 }
 
+#tags-section.hide {
+    display: none;
+}
+
 #tags-section button {
     display: flex;
     align-items: center;

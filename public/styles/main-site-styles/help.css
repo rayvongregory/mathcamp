@@ -186,7 +186,7 @@ p[contenteditable].sub {
     cursor: pointer;
     pointer-events: all;
     opacity: 0;
-    transition: bottom 0.4s ease-in-out, opacity 0.3s ease-in-out 1s;
+    transition: bottom 0.4s ease-in-out, opacity 0.3s ease-in-out;
 }
 
 #new-msg-btn.reveal {

@@ -12,7 +12,6 @@ const getAllExercises = async (req, res) => {
 }
 
 const getExercise = async (req, res) => {
-  let { referer } = req.headers
   const { id } = req.params
   const exercise = await Exercise.findById(id)
   if (!exercise) {
@@ -22,13 +21,9 @@ const getExercise = async (req, res) => {
   }
   const { title, tags, subject, chapter, section, problems, usedPIDs } =
     exercise
-  let obj
-  if (referer.split("/")[3] === "practice") {
-    obj = { title, subject, chapter, section, problems }
-  } else {
-    obj = { title, tags, subject, chapter, section, problems, usedPIDs }
-  }
-  res.status(StatusCodes.OK).json(obj)
+  res
+    .status(StatusCodes.OK)
+    .json({ title, tags, subject, chapter, section, problems, usedPIDs })
 }
 
 const postExercise = async (req, res) => {

@@ -15,7 +15,7 @@ const getAccountInfo = async () => {
   try {
     const {
       data: { fname, lname, dname, email },
-    } = await axios.get(`/api/v1/users/${token.split(" ")[1]}`)
+    } = await axios.get("/api/v1/auth/account")
     firstName.innerText = fname
     lastName.innerText = lname
     displayName.innerText = dname
@@ -111,13 +111,12 @@ const handleUpdate = async () => {
   if (name !== `${firstName.innerText} ${lastName.innerText}` || dname) {
     response.innerText = "Updating your name(s)..."
     try {
-      const { data } = await axios.patch(
-        `/api/v1/users/${token.split(" ")[1]}`,
-        {
-          name,
-          displayName: dname,
-        }
-      )
+      const {
+        data: { msg },
+      } = await axios.patch("/api/v1/auth/account", {
+        newName: name,
+        newDisplayName: dname,
+      })
       if (!fname) {
       } else {
         firstName.innerText = fname
@@ -132,9 +131,7 @@ const handleUpdate = async () => {
         nameWrapH3.previousElementSibling.innerText = dname[0]
         asideLinks.style.width = `${nameWrap.offsetWidth}px`
       }
-      authorized(data.msg, true)
-      localStorage.setItem("token", data.accessToken)
-      token = data.accessToken
+      authorized(msg, true)
     } catch (err) {
       console.error(err)
     }
@@ -146,13 +143,10 @@ const handleUpdate = async () => {
   } else if (email && email !== accountEmail.innerText) {
     response.innerText = "Updating your email..."
     try {
-      const { data } = await axios.patch(
-        `/api/v1/users/${token.split(" ")[1]}`,
-        { email }
-      )
-      localStorage.setItem("token", data.accessToken)
-      token = data.accessToken
-      authorized(data.msg, true)
+      const {
+        data: { msg },
+      } = await axios.patch("/api/v1/auth/account", { newEmail: email })
+      authorized(msg, true)
       accountEmail.innerText = email
     } catch (err) {
       console.error(err)
@@ -162,7 +156,6 @@ const handleUpdate = async () => {
       )
     }
   }
-  // currentpassword, newpassword, & confirmednewpassword
   let { password, npassword, cnpassword } = formData
   if (
     !(password && npassword && cnpassword) &&
@@ -178,21 +171,19 @@ const handleUpdate = async () => {
   if (password && npassword) {
     response.innerText = "Updating your password..."
     try {
-      const { data } = await axios.patch(
-        `/api/v1/users/${token.split(" ")[1]}`,
-        {
-          currentPassword: password,
-          newPassword: npassword,
-        }
-      )
-      authorized(data.msg, true)
+      const {
+        data: { msg },
+      } = await axios.patch("/api/v1/auth/account", {
+        currentPassword: password,
+        newPassword: npassword,
+      })
+      authorized(msg, true)
     } catch (err) {
       unauthorized("Current password is incorrect. Please try again.", true)
       console.error(err)
     }
   }
 
-  //! don't reload the page, that's lazy
   for (let button of editBtns) {
     let i = button.querySelector("i")
     if (i && i.classList.contains("fa-trash")) {
@@ -241,16 +232,16 @@ const handleDelete = async (e) => {
         )
       }
       try {
-        const { data } = await axios.delete(
-          `/api/v1/users/${token.split(" ")[1]}`,
-          { data: { pwd } }
-        )
-        localStorage.removeItem("token")
+        const {
+          data: { msg },
+        } = await axios.delete("/api/v1/auth/account", {
+          data: { pwd },
+        })
         setTimeout(() => {
           setTimeout(() => {
             window.location.href = "/login"
           }, 1000)
-          authorized(data.msg, true)
+          authorized(msg, true)
         }, 1000)
       } catch (err) {
         console.error(err)
@@ -279,4 +270,7 @@ backBtn.addEventListener("pointerup", handleDelete)
 confBtn.addEventListener("pointerup", handleDelete)
 submit.addEventListener("click", handleUpdate)
 discardBtn.addEventListener("click", handleDiscardAll)
-window.onload = getAccountInfo()
+window.addEventListener("load", async () => {
+  await getAccountInfo()
+  removeHTMLInvis()
+})

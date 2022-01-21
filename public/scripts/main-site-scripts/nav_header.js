@@ -1,6 +1,5 @@
 const path = window.location.pathname
-const html = document.querySelector("html")
-const body = html.querySelector("body")
+const body = document.querySelector("body")
 const nav = body.querySelector("nav")
 const buttons = document.querySelector(".buttons")
 const navSearch = document.getElementById("nav-search-btn")
@@ -28,9 +27,7 @@ const draftsBtn = asideLinks.querySelector("[href='/drafts']")
 const helpBtn = nav.querySelector("[href='/help']")
 const logoutBtn = document.getElementById("logout")
 let root = document.documentElement.style,
-  role = "user",
   menuOpen = false,
-  token = localStorage.getItem("token"),
   justLoaded = true,
   breakpoints = { tiny: 320, small: 576, medium: 768, big: 992, large: 1200 },
   lastWindowSize = 1,
@@ -40,47 +37,12 @@ let root = document.documentElement.style,
 
 logoutBtn.addEventListener("pointerup", async () => {
   try {
-    const { data } = await axios.patch("/api/v1/auth/logout", {
-      token,
-    })
-    localStorage.removeItem("token")
+    const { data } = await axios.patch("/api/v1/auth/logout")
     window.location.href = "/login"
   } catch (err) {
     console.error(err)
   }
 })
-
-const getDisplayName = async () => {
-  if (token) {
-    try {
-      const { data } = await axios.get(`/api/v1/token/${token.split(" ")[1]}`)
-      nameWrapH3.innerText = data.displayName
-      nameWrapIcon.textContent = data.displayName[0]
-      role = data.role
-      loginBtn.classList.add("hide")
-      registerBtn.classList.add("hide")
-      accountBtn.classList.remove("hide")
-      logoutBtn.classList.remove("hide")
-      if (role === "admin") {
-        createLessonBtn.classList.remove("hide")
-        createExerciseBtn.classList.remove("hide")
-        draftsBtn.classList.remove("hide")
-        helpBtn.setAttribute("href", "/help/admin")
-      }
-    } catch (error) {
-      console.log(error)
-      // localStorage.removeItem("token")
-      // location.reload()
-    }
-  } else {
-    nameWrapH3.innerText = "Guest"
-  }
-  html.classList.remove("invis")
-  let noClass = document.querySelectorAll('[class=""]')
-  noClass.forEach((el) => {
-    el.removeAttribute("class")
-  })
-}
 
 aside.addEventListener("pointerup", () => {
   if (lastWindowSize === "large") {
@@ -460,7 +422,6 @@ const submitSearch = (e) => {
 
 const navInit = () => {
   checkWindowSize()
-  getDisplayName()
   if (path === "/login" || path === "/register") {
     speed = 0.5
     particleMod = 15
@@ -468,7 +429,6 @@ const navInit = () => {
   if (path === "/") {
     particleMod = 3
   }
-
   Particles.init({
     selector: ".background",
     maxParticles: 25 + particleMod,

@@ -19,9 +19,8 @@ const file = path.join(
 )
 
 const getUserComments = async (req, res) => {
-  const { token } = req.params
-  const { email } = jwt.decode(token)
-  let user = await User.findOne({ email }, "id")
+  const { userId: id } = req.body
+  let user = await User.findById(id, "id")
   if (!user) {
     return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such user" })
   }
@@ -32,9 +31,9 @@ const getUserComments = async (req, res) => {
 }
 
 const postComment = async (req, res) => {
-  const { token, question, details } = req.body
-  const { email } = jwt.decode(token)
-  let user = await User.findOne({ email }, "id name")
+  const { userId: id } = req.body
+  const { question, details } = req.body
+  let user = await User.findById(id, "id name")
   if (!user) {
     return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such user" })
   }
@@ -63,14 +62,12 @@ const postComment = async (req, res) => {
 }
 
 const editComment = async (req, res) => {
-  // maybe just want to verify the token instead of finding the user because that really doesn't matter for this
-  const { token, id, details } = req.body
-  const { email } = jwt.decode(token)
-  let user = await User.findOne({ email }, "id name")
+  const { userId, id: commentId, details } = req.body
+  let user = await User.findById(userId, "id name")
   if (!user) {
     return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such user" })
   }
-  const comment = await Comment.findById(id)
+  const comment = await Comment.findOne({ _id: commentId, sender: userId })
   if (!comment) {
     return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such comment" })
   }
@@ -96,8 +93,9 @@ const editComment = async (req, res) => {
 }
 
 const deleteComment = async (req, res) => {
+  const { userId } = req.body
   const { id } = req.params
-  await Comment.findByIdAndDelete(id, (err, doc) => {
+  await Comment.findOneAndDelete({ _id: id, sender: userId }, (err, doc) => {
     if (err) {
       res.status(StatusCodes.NOT_FOUND).json({ msg: "No such comment" })
     } else {
@@ -107,25 +105,23 @@ const deleteComment = async (req, res) => {
 }
 
 const reply = async (req, res) => {
-  const { id } = req.params
-  const { token, reply } = req.body
-  const { email } = jwt.decode(token)
-  let user = await User.findOne({ email }, "id name")
+  const { id: commentId } = req.params
+  const { userId, reply, role } = req.body
+  let user = await User.findById(userId, "email name")
   if (!user) {
     return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such user" })
   }
-  const comment = await Comment.findById(id)
+  const comment = await Comment.findById(commentId)
   if (!comment) {
     return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such comment" })
   }
-  const { role: sender } = jwt.decode(token)
   let { replies } = comment
-  replies.push({ sender, reply })
+  replies.push({ sender: role, reply })
+
   await comment.save()
-  switch (sender) {
+  switch (role) {
     case "admin":
-      const { email } = await User.findById(comment.sender)
-      let url = `${req.protocol}://${req.get("host")}/help/${id}`
+      let url = `${req.protocol}://${req.get("host")}/help/${commentId}`
       let data = await ejs.renderFile(file, {
         name: "admin@MC",
         action: "responded to your comment",
@@ -133,16 +129,16 @@ const reply = async (req, res) => {
       })
       transporter.sendMail({
         from: '"Math Camp" <support@mathcamp.com>',
-        to: email,
+        to: user.email,
         subject: `New message from Math Camp`,
         text: `Use the link below to see what they said.\n\n\r ${url}`,
         html: data,
       })
       break
     default:
-      let u = `${req.protocol}://${req.get("host")}${req.url}help/admin/${
-        comment.id
-      }`
+      let u = `${req.protocol}://${req.get("host")}${
+        req.url
+      }help/admin/${commentId}`
       const name = user.name.split(" ")[0]
       let d = await ejs.renderFile(file, {
         name,
@@ -158,18 +154,16 @@ const reply = async (req, res) => {
       })
       break
   }
-  res.status(StatusCodes.OK).json({ sender, reply })
+  res.status(StatusCodes.OK).json({ sender: role, reply })
 }
 
 const editReply = async (req, res) => {
   const { id, num } = req.params
-  const { token, reply } = req.body
-  const { email } = jwt.decode(token)
-  let user = await User.findOne({ email }, "id name role")
+  const { userId, reply } = req.body
+  let user = await User.findById(userId, "id name role")
   if (!user) {
     return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such user" })
   }
-  // use token for validation... probably could use some middleware for that
   const comment = await Comment.findById(id)
   if (!comment) {
     return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such comment" })

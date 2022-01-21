@@ -4,18 +4,25 @@ const form = document.querySelectorAll(
 const seeBtns = document.querySelectorAll('[aria-label="See"]')
 const submit = document.getElementById("submit")
 const response = document.getElementById("response")
-const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+// const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
 let formData = {}
+
 const unauthorized = (string, remove = false) => {
   if (response.classList.contains("success")) {
     response.classList.remove("success")
   }
+  if (!response.classList.contains("show")) {
+    response.classList.add("show")
+  }
   response.classList.add("unauthorized")
-  response.innerText = string
+  response.innerHTML = string
   if (remove) {
     setTimeout(() => {
       response.innerText = ""
       response.classList.remove("unauthorized")
+      if (response.classList.contains("show")) {
+        response.classList.remove("show")
+      }
     }, 3000)
   }
 }
@@ -24,12 +31,18 @@ const authorized = (string, remove = false) => {
   if (response.classList.contains("unauthorized")) {
     response.classList.remove("unauthorized")
   }
+  if (!response.classList.contains("show")) {
+    response.classList.add("show")
+  }
   response.classList.add("success")
   response.innerText = string
   if (remove) {
     setTimeout(() => {
       response.innerText = ""
       response.classList.remove("success")
+      if (response.classList.contains("show")) {
+        response.classList.remove("show")
+      }
     }, 3000)
   }
 }
@@ -41,18 +54,6 @@ const backHome = (string = "Redirecting to home page...") => {
     }, 1000)
     response.innerText = string
   }, 1000)
-}
-
-const checkToken = () => {
-  if (token) {
-    if (path === "/register" || path === "/login") {
-      return (window.location.href = "/")
-    }
-  } else {
-    if (path === "/account") {
-      return (window.location.href = "/login")
-    }
-  }
 }
 
 const handleData = () => {
@@ -97,5 +98,3 @@ const rmvSpace = (e) => {
 seeBtns.forEach((btn) => {
   btn.addEventListener("pointerup", seePassword)
 })
-
-checkToken()

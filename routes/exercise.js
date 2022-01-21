@@ -7,14 +7,14 @@ const {
   updateExercise,
   deleteExercise,
 } = require("../controllers/exercise")
+const { isAdmin, handleUnexpectedRole } = require("../middleware/verifyRole")
 
-router.route("/").post(postExercise)
+router.route("/").post(isAdmin, handleUnexpectedRole, postExercise)
 router.route("/:gr").get(getAllExercises)
-
 router
   .route("/id/:id")
   .get(getExercise)
-  .patch(updateExercise)
-  .delete(deleteExercise)
+  .patch(isAdmin, handleUnexpectedRole, updateExercise)
+  .delete(isAdmin, handleUnexpectedRole, deleteExercise)
 
 module.exports = router

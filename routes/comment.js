@@ -12,11 +12,28 @@ const {
 } = require("../controllers/comment")
 
 const verifyId = require("../middleware/verifyObjectId")
+const {
+  isUser,
+  isAdmin,
+  isLoggedIn,
+  handleUnexpectedRole,
+} = require("../middleware/verifyRole")
 
-router.route("/").post(postComment).patch(editComment)
-router.route("/:id").patch(reply).delete(deleteComment)
-router.route("/:id/reply/:num").patch(editReply).delete(deleteReply)
-router.route("/:token").get(getUserComments)
-router.route("/admin/:id").get(verifyId, getComment_admin)
+router
+  .route("/")
+  .get(isUser, handleUnexpectedRole, getUserComments)
+  .post(isLoggedIn, handleUnexpectedRole, postComment)
+  .patch(isLoggedIn, handleUnexpectedRole, editComment)
+router
+  .route("/:id")
+  .patch(isLoggedIn, handleUnexpectedRole, reply)
+  .delete(isLoggedIn, handleUnexpectedRole, deleteComment)
+router
+  .route("/:id/reply/:num")
+  .patch(isLoggedIn, handleUnexpectedRole, editReply)
+  .delete(isLoggedIn, handleUnexpectedRole, deleteReply)
+router
+  .route("/admin/:id")
+  .get(verifyId, isAdmin, handleUnexpectedRole, getComment_admin)
 
 module.exports = router

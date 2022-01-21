@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="invis" lang="en">
+<html lang="en">
   <head>
     <%- include('../../partials/main-site-partials/head'); %>
     <link rel="stylesheet" href="/styles/main-site-styles/secondary.css" />
@@ -8,11 +8,13 @@
   <body>
     <%- include('../../partials/main-site-partials/aside'); %> <%-
     include('../../partials/main-site-partials/nav'); %> <%-
-    include('../../partials/main-site-partials/banner'); %> <%-
-    include('../../partials/auth-partials/welcome'); %> <%-
-    include('../../partials/main-site-partials/footer'); %> <%-
+    include('../../partials/main-site-partials/banner'); %>
+    <section>
+      <h2>Welcome back!</h2>
+      <p>Your account has been verified and you may now log in.</p>
+      <a href="/login">Login</a>
+    </section>
+    <%- include('../../partials/main-site-partials/footer'); %> <%-
     include('../../partials/main-site-partials/universal_scripts'); %>
-    <script src="/scripts/auth-scripts/referrer.js"></script>
-    <script src="/scripts/auth-scripts/welcome.js"></script>
   </body>
 </html>

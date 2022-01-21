@@ -1,4 +1,4 @@
-const handleLogin = async () => {
+const handleLogin = () => {
   handleData()
   for (let value in formData) {
     if (!formData[value]) {
@@ -6,26 +6,33 @@ const handleLogin = async () => {
     }
   }
   response.innerText = "Logging in..."
+  response.classList.add("show")
   let { email, password } = formData
   email = email.toLowerCase()
-  try {
-    const {
-      data: { msg, accessToken, confirmed },
-    } = await axios.post(`/api/v1/auth${path}`, {
+  axios
+    .post("api/v1/auth/login", {
       email,
       password,
     })
-    if (confirmed) {
-      authorized(msg)
-      localStorage.setItem("token", accessToken)
+    .then((res) => {
+      const { displayName } = res.data
+      authorized(`Welcome back, ${displayName.split(" ")[0]}.`)
       backHome()
-    } else {
-      unauthorized(msg)
-    }
-  } catch (error) {
-    console.error(error)
-    unauthorized("Invalid credentials. Please try again.")
-  }
+    })
+    .catch((err) => {
+      const {
+        status,
+        data: { msg },
+      } = err.response
+      switch (status) {
+        case 401:
+          unauthorized(msg)
+          break
+        default:
+          console.log(err)
+          break
+      }
+    })
 }
 
 form.forEach((field) => {
@@ -36,5 +43,5 @@ form.forEach((field) => {
     }
   })
 })
-
+removeHTMLInvis()
 submit.addEventListener("click", handleLogin)

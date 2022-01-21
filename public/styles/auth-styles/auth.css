@@ -3,7 +3,7 @@
 }
 
 .unauthorized {
-    color: darkred
+    color: var(--deepRed);
 }
 
 .background {
@@ -46,7 +46,8 @@
 }
 
 .grid.login, 
-.grid.register {
+.grid.register,
+.grid.registered {
     padding: 0.75rem;
     border: var(--border);
     box-shadow: var(--boxShadow);
@@ -54,6 +55,29 @@
     z-index: 1;
     background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(1px);
+}
+
+.grid.registered {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 90%;
+    padding: 1rem 1rem 2rem;
+    max-width: 576px;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.65);
+    color: var(--neutralDark);
+}
+
+.grid.registered h2 {
+    grid-column: 1/span 8;
+    text-align: center;
+}
+
+.grid.registered h2 + p {
+    grid-column: 1/span 8;
+    text-align: center;
+
 }
 
 .infowrap {
@@ -103,8 +127,8 @@
     border: var(--border);
     box-shadow: var(--boxShadow);
     background-color: white;
-border-radius: 3px;
-pointer-events: none;
+    border-radius: 3px;
+    pointer-events: none;
 }
 
 .flexwrap.p {
@@ -224,6 +248,10 @@ pointer-events: none;
     margin-right: 10px;
 }
 
+.fdc.hide {
+    display: none;
+}
+
 .center-h {
     align-self: center;
 }
@@ -268,6 +296,10 @@ pointer-events: none;
     background-color: white;
 }
 
+.save_discard_buttons.hide {
+    display: none;
+}
+
 .save_discard_buttons button {
     display: flex;
     flex-direction: column;
@@ -308,9 +340,16 @@ pointer-events: none;
 }
 
 #response {
-    height: 3ch;
     text-align: center;
-    margin: 15px 0;
+    display: grid;
+    gap: 1rem;
+    background-color: white;
+    border-radius: 3px;
+}
+
+#response.show {
+    padding: 1rem;
+    border: var(--tinymceBorder);
 }
 
 .grid.login #response, 

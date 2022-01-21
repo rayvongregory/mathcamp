@@ -4,3 +4,5 @@ scroll.addEventListener("pointerup", () => {
   document.activeElement.blur()
   info.scrollIntoView()
 })
+
+removeHTMLInvis()

@@ -1,6 +1,5 @@
 const express = require("express")
 const router = express.Router()
-const authenticationMiddleware = require("../middleware/auth")
 
 router.route("/").get((req, res, next) => {
   res.render("pages/create-pages/drafts", {

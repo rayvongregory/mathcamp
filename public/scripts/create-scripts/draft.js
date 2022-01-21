@@ -21,13 +21,20 @@ const getDrafts = async () => {
     lessons = l
     exercises = e
     setGrid()
+    if (lessons.length === 0 && exercises.length === 0) {
+      draftsLessons.remove()
+      draftsExercises.remove()
+      return
+    } else {
+      nothingHere.remove()
+    }
     if (lessons.length === 0) {
-      draftsLessons.classList.add("hide")
+      draftsLessons.remove()
     } else {
       addTo(draftsLessons, lessons, "lesson")
     }
     if (exercises.length === 0) {
-      draftsExercises.classList.add("hide")
+      draftsExercises.remove()
     } else {
       addTo(draftsExercises, exercises, "exercise")
     }
@@ -203,8 +210,7 @@ const removeFromList = (type, id) => {
   }
 }
 
-if (!token) {
-  window.location.href = "/"
-}
-
-getDrafts()
+window.addEventListener("load", () => {
+  getDrafts()
+  removeHTMLInvis()
+})
