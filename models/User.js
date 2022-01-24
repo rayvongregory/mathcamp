@@ -24,7 +24,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       match: [
-        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[~#=_{}/<>,.;:`+'"|?(!\[@$)%^\]&*-]).{8,}$/,
         "Password must contain at least 8 characters, at least one uppercase letter, at least one lowercase letter, at least one digit, and at least one special character",
       ],
       required: [true, "Please provide a valid password."],

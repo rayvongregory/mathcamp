@@ -65,6 +65,10 @@ nav {
     bottom: 15px;
 }
 
+.nav___search-container.hide {
+    display: none;
+}
+
 .nav___search {
     display: flex;
     min-width: 200px;

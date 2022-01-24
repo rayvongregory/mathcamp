@@ -24,14 +24,7 @@ const handleLogin = () => {
         status,
         data: { msg },
       } = err.response
-      switch (status) {
-        case 401:
-          unauthorized(msg)
-          break
-        default:
-          console.log(err)
-          break
-      }
+      unauthorized(msg)
     })
 }
 

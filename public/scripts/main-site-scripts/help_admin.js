@@ -1,4 +1,5 @@
 const commentId = path.split("/")[3]
+console.log(commentId)
 const checkEmail = document.getElementById("check_email")
 const notFound = document.getElementById("not_found")
 const found = document.getElementById("found")

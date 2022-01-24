@@ -42,9 +42,7 @@ const postComment = async (req, res) => {
     comment: { question, details },
   })
   await newComment.save()
-  const url = `${req.protocol}://${req.get("host")}${req.url}help/admin/${
-    newComment.id
-  }`
+  const url = `${req.protocol}://${req.get("host")}/help/admin/${newComment.id}`
   const name = user.name.split(" ")[0]
   const data = await ejs.renderFile(file, {
     name,
@@ -73,9 +71,8 @@ const editComment = async (req, res) => {
   }
   comment.comment.details = details
   await comment.save()
-  const url = `${req.protocol}://${req.get("host")}${req.url}help/admin/${
-    comment.id
-  }`
+  const url = `${req.protocol}://${req.get("host")}/help/admin/${comment.id}`
+
   const name = user.name.split(" ")[0]
   const data = await ejs.renderFile(file, {
     name,
@@ -115,13 +112,15 @@ const reply = async (req, res) => {
   if (!comment) {
     return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such comment" })
   }
-  let { replies } = comment
+  let { replies, sender } = comment
+  sender = await User.findById(sender, "email")
   replies.push({ sender: role, reply })
 
   await comment.save()
   switch (role) {
     case "admin":
       let url = `${req.protocol}://${req.get("host")}/help/${commentId}`
+
       let data = await ejs.renderFile(file, {
         name: "admin@MC",
         action: "responded to your comment",
@@ -129,16 +128,14 @@ const reply = async (req, res) => {
       })
       transporter.sendMail({
         from: '"Math Camp" <support@mathcamp.com>',
-        to: user.email,
+        to: sender.email,
         subject: `New message from Math Camp`,
         text: `Use the link below to see what they said.\n\n\r ${url}`,
         html: data,
       })
       break
     default:
-      let u = `${req.protocol}://${req.get("host")}${
-        req.url
-      }help/admin/${commentId}`
+      let u = `${req.protocol}://${req.get("host")}/help/admin/${commentId}`
       const name = user.name.split(" ")[0]
       let d = await ejs.renderFile(file, {
         name,
@@ -214,8 +211,6 @@ const editReply = async (req, res) => {
 
 const deleteReply = async (req, res) => {
   const { id, num } = req.params
-  const { token } = req.body
-  // use token for validation... probably could use some middleware for that
   const comment = await Comment.findById(id)
   if (!comment) {
     return res.status(StatusCodes.NOT_FOUND).json({ msg: "No such comment" })
