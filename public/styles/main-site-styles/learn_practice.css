@@ -152,6 +152,10 @@
     width: 100%;
 }
 
+.col.hide {
+    display: none;
+}
+
 .load-wrapp {
     position: fixed;
     width: 100%;
