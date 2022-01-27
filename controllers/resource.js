@@ -18,11 +18,11 @@ const getAllResources = (req, res) => {
   const { baseUrl } = req
   let msg, title, bannerTitle
   if (baseUrl === "/learn") {
-    msg = "Engage in our adaptive learning exercises."
+    msg = "Browse our articles and video lessons."
     title = "Learn"
     bannerTitle = "Learn"
   } else {
-    msg = "Browse our articles and video lessons."
+    msg = "Engage in our adaptive learning exercises."
     title = "Practice"
     bannerTitle = "Practice"
   }
