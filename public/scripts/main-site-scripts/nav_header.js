@@ -461,6 +461,7 @@ const navInit = () => {
       },
     ],
   })
+  window.dispatchEvent(new Event("resize"))
 }
 
 window.addEventListener("load", navInit)
