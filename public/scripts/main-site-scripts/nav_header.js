@@ -461,7 +461,9 @@ const navInit = () => {
       },
     ],
   })
-  window.dispatchEvent(new Event("resize"))
+  if (path === "/login" || path === "/register") {
+    window.dispatchEvent(new Event("resize"))
+  }
 }
 
 window.addEventListener("load", navInit)
