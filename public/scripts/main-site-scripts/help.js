@@ -120,13 +120,13 @@ const addComments = (list) => {
     if (replies.length > 0) {
       replies.forEach((r) => {
         const { sender, reply } = r
-        addReply(sender, reply, liId)
+        addReply(sender, reply, liId, true)
       })
     }
   })
 }
 
-const addReply = (sender, reply, liId) => {
+const addReply = (sender, reply, liId, hide = false) => {
   let repliesDiv = document.querySelector(`[data-id="${liId}"] + .replies`)
   let comment = document.querySelector(`[data-id="${liId}"]`)
   if (!repliesDiv) {
@@ -169,6 +169,9 @@ const addReply = (sender, reply, liId) => {
     replyDiv.appendChild(flexContainer)
   }
   repliesDiv.appendChild(replyDiv)
+  if (hide) {
+    repliesDiv.classList.add("hide")
+  }
   let numReplies = repliesDiv.childElementCount
   let numRepliesBtn = comment.querySelector("button.smaller")
   numRepliesBtn.addEventListener("pointerup", showReplies)
@@ -209,7 +212,12 @@ const getComments = (e) => {
     .get("/api/v1/comment")
     .then((res) => {
       const { comments } = res.data
-      if (comments.length > 0) addComments(comments)
+      if (comments.length > 0) {
+        addComments(comments)
+        commentsSection
+          .querySelector(":scope > :nth-last-child(2)")
+          .classList.add("more-bottom-margin")
+      }
       if (dirs[2]) {
         const comment = document.querySelector(`div[data-id="${dirs[2]}"]`)
         comment
@@ -234,18 +242,21 @@ const showReplies = (e) => {
   const { target } = e
   const { nextElementSibling: replies } =
     target.parentElement.parentElement.parentElement
-  switch (replies.classList.contains("reveal")) {
+  replies.classList.toggle("hide")
+  switch (replies.classList.contains("hide")) {
     case true:
-      replies.setAttribute("style", "")
+      if (commentsSection.lastElementChild === replies) {
+        replies.previousElementSibling.classList.add("more-bottom-margin")
+      }
       setAria(target, "See replies")
       break
     default:
-      const { scrollHeight } = replies
-      replies.setAttribute("style", `max-height: ${scrollHeight}px`)
       setAria(target, "Hide replies")
+      if (commentsSection.lastElementChild === replies) {
+        replies.previousElementSibling.classList.remove("more-bottom-margin")
+      }
       break
   }
-  replies.classList.toggle("reveal")
 }
 
 //update

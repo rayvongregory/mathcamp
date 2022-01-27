@@ -38,13 +38,9 @@ const reply = async (e) => {
           } = await axios.patch(`/api/v1/comment/${id}`, {
             reply: value,
           })
-          console.log(sender, reply)
           addReply(sender, reply, id)
           textArea.value = ""
           let next = li.nextElementSibling
-          if (next && next.classList.contains("reveal")) {
-            next.setAttribute("style", `max-height: ${next.scrollHeight}px`)
-          }
           const { previousElementSibling: p } = parentElement
           p.scrollIntoView({
             block: "nearest",

@@ -67,8 +67,7 @@
     display: flex;
     width: 100%;
     max-width: 576px;
-    height: 173px;
-    max-height: 173px;
+    min-height: 173px;
     margin: auto;
     border-radius: 5px;
     border: var(--border);
@@ -76,9 +75,9 @@
     color: var(--neutralDark);
     box-shadow: var(--boxShadow);
     scroll-behavior: smooth;
-    overflow: hidden;
     transition: opacity 0.3s linear 0.8s, max-height 0.4s linear 1s, margin-top 0.4s linear 1s;
     opacity: 1;
+    overflow: hidden;
 }
 
 #comment div[data-id].center,
@@ -100,7 +99,8 @@
     margin-top: 0;
 }
 
-#comment >:last-child {
+#comment >:last-child,
+#comment >div[data-id].more-bottom-margin{
     margin-bottom: 55px;
 }
 
@@ -115,36 +115,8 @@
     cursor: pointer;
 }
 
-.front .sub {
-    height: 40px;
-}
-
-.reply:not(.smaller) .sub {
-    overflow-y: scroll;
-    scrollbar-width: thin;
-}
-
 .smaller.clickable {
     pointer-events: all;
-}
-
-.replies {
-    opacity: 0;
-    max-height: 0;
-    transition: max-height 0.3s ease-in-out;
-    overflow: hidden;
-}
-
-.replies.reveal {
-    transition: opacity 0.2s ease-in-out;
-    opacity: 1;
-}
-
-.reply {
-    max-height: 140px;
-    height: 140px;
-    overflow: hidden;
-    transition: opacity 0.3s linear 0.8s, max-height 0.4s linear 1s, margin-top 0.4s linear 1s;
 }
 
 .reply .larger {
@@ -152,16 +124,12 @@
 }
 
 .reply .flex {
-    margin: 20px 15px 0 10px;
-}
-
-p[contenteditable].sub {
-    overflow-y: scroll;
+    margin: 20px 15px 5px 10px;
 }
 
 .front p[contenteditable].sub {
     padding: 9.5px;
-    height: 59px;
+    margin-bottom: auto;
 }
 
 .reply p.sub {
